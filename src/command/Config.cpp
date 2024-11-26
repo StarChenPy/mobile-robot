@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-namespace RobotGenius {
+namespace robot {
 
 ConfigVarBase::ptr Config::LookupBase(const std::string &name) {
     RWMutexType::ReadLock lock(GetMutex());
@@ -57,11 +57,11 @@ void Config::LoadFromYaml(const YAML::Node &root) {
 }
 
 static std::map<std::string, uint64_t> s_file2modifytime;
-static RobotGenius::Mutex s_mutex;
+static robot::Mutex s_mutex;
 
 void Config::LoadFromConfDir(const std::string &path, bool force) {
     // std::string absoulte_path =
-    // RobotGenius::EnvMgr::instance()->getAbsolutePath(path);
+    // robot::EnvMgr::instance()->getAbsolutePath(path);
     std::string absoulte_path = "";
     std::vector<std::string> files;
     FSUtil::listAllFile(files, absoulte_path, ".yml");
@@ -70,7 +70,7 @@ void Config::LoadFromConfDir(const std::string &path, bool force) {
         {
             struct stat st;
             lstat(i.c_str(), &st);
-            RobotGenius::Mutex::Lock lock(s_mutex);
+            robot::Mutex::Lock lock(s_mutex);
             if (!force && s_file2modifytime[i] == (uint64_t)st.st_mtime) {
                 continue;
             }
@@ -94,4 +94,4 @@ void Config::Visit(std::function<void(ConfigVarBase::ptr)> cb) {
     }
 }
 
-} // namespace RobotGenius
+} // namespace robot

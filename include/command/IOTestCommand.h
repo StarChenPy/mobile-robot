@@ -16,7 +16,7 @@
 #include "system/Robot.h"
 
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 
 class IOTestCommand : public CommandBase {
   public:

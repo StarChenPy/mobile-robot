@@ -11,7 +11,7 @@
 
 #include "command/group/ParallelRaceGroup.h"
 
-namespace RobotGenius {
+namespace robot {
 
 ParallelRaceGroup::ParallelRaceGroup() {
     m_commands_.clear();
@@ -57,7 +57,7 @@ Command::ptr ParallelRaceGroup::reset() {
     ParallelRaceGroup::ptr RG = createParallelRaceGroup();
     for (auto command : m_commands_) {
         command = command->reset();
-        RG->AddCommands(command);
+        RG->addCommands(command);
     }
     return RG;
 }
@@ -65,4 +65,4 @@ ParallelRaceGroup::ptr createParallelRaceGroup() {
     ParallelRaceGroup::ptr parallel = std::make_shared<ParallelRaceGroup>();
     return parallel;
 }
-} // namespace RobotGenius
+} // namespace robot

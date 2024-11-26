@@ -17,7 +17,7 @@
 
 // #include "command/LidarReadCommand.h"
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 
 class LidarCalibCommand : public CommandBase {
   public:

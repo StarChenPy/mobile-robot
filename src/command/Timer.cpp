@@ -12,7 +12,7 @@
 #include "command/Timer.h"
 #include "command/Command.h"
 
-namespace RobotGenius {
+namespace robot {
 
 Timer::Timer(uint64_t next) : m_next_(next) {}
 
@@ -116,7 +116,7 @@ bool TimerManager::hasTimer() {
 
 void TimerManager::handleExpiredTimers(
     std::vector<Timer::Ptr> &expired, uint64_t now_ms,
-    std::set<RobotGenius::Timer::Ptr, RobotGenius::Timer::Comparator>::iterator &it) {
+    std::set<robot::Timer::Ptr, robot::Timer::Comparator>::iterator &it) {
     expired.clear();
     RWMutexType::ReadLock lock(m_mutex_);
     if (m_timers_.empty()) {
@@ -191,4 +191,4 @@ void TimerManager::listExpiredCb(std::vector<Command::ptr> &cbs) {
     // }
 }
 
-} // namespace RobotGenius
+} // namespace robot

@@ -17,7 +17,7 @@
 
 // #include "command/LidarReadCommand.h"
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 
 class AlongRightWallCommand : public CommandBase {
   public:

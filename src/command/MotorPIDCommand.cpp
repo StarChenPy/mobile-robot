@@ -439,7 +439,7 @@ Command::ptr ResetTurnMotorDistance(int32_t setpoint) {
     // turn_motor_pid_command = std::make_shared<TurnMotorPIDCommand>();
     // ParallelDeadlineGroup::ptr DG =
     // std::make_shared<ParallelDeadlineGroup>();
-    // DG->AddCommands(read_turn_enc_command->withTimer(20),turn_motor_pid_command->withTimer(20));
+    // DG->addCommands(read_turn_enc_command->withTimer(20),turn_motor_pid_command->withTimer(20));
     // DG->setDeadlineCommand(reset_turn_command->withTimer(20));
     return reset_turn_command->withTimer(20);
 }

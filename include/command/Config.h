@@ -26,7 +26,7 @@
 #include "Thread.h"
 #include "Util.h"
 
-namespace RobotGenius {
+namespace robot {
 
 /**
  * @brief 配置变量的基类
@@ -532,4 +532,4 @@ class Config {
         return s_mutex;
     }
 };
-} // namespace RobotGenius
+} // namespace robot

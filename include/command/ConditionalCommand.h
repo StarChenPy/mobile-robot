@@ -13,7 +13,7 @@
 #include <functional>
 #include <memory>
 
-namespace RobotGenius {
+namespace robot {
 class ConditionalComamand : public CommandBase {
 
   public:
@@ -33,4 +33,4 @@ class ConditionalComamand : public CommandBase {
     CommandBase::Ptr m_on_false_command_;
     std::function<bool()> m_condition_;
 };
-} // namespace RobotGenius
+} // namespace robot

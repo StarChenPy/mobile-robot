@@ -13,8 +13,9 @@
 #include "command/TimerCommand.h"
 #include "command/group/ParallelDeadlineGroup.h"
 #include <iostream>
+#include <memory>
 #include <string>
-namespace RobotGenius {
+namespace robot {
 Command::~Command() {}
 Command::Command(const Command &rhs) { m_isscheduled_ = false; }
 
@@ -29,7 +30,7 @@ bool Command::schedule() {
     // m_state = State::INIT;
     // std::cout << "C++:" << getPtr() << std::endl;
     // getPtr();
-    // if (m_isscheduled_) {
+    // if (isScheduled) {
     //   return false;
     // }
     // setScheduleStatus(true);
@@ -41,19 +42,13 @@ bool Command::schedule() {
 Command::ptr Command::getPtr() {
     try {
         std::shared_ptr<Command> selfPtr = shared_from_this();
-        // std::cout << "C++:" << selfPtr.get()<< std::endl;
         return selfPtr;
     } catch (const std::bad_weak_ptr &) {
-        // std::cout << "C++:" << this<< std::endl;
         return std::shared_ptr<Command>(this);
     }
 }
 Command::ptr Command::withTimer(uint64_t ms) {
-    //  if (m_is_group_) {
-    //    std::cout << "Group command cannot have timer" << std::endl;
-    //    return nullptr;
-    //  }
-    return TimerCommand::Ptr(new TimerCommand(ms, getPtr()));
+    return std::make_shared<TimerCommand>(ms, getPtr());
 }
 
 int Command::getThreadId() { return getThreadId(); }
@@ -67,4 +62,4 @@ void Command::cancel() {
     else
         Scheduler::GetInstance().tickle();
 }
-} // namespace RobotGenius
+} // namespace robot

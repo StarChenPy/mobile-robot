@@ -14,7 +14,7 @@
 #include <memory>
 #include <vector>
 
-namespace RobotGenius {
+namespace robot {
 class ParallelRaceGroup : public CommandGroupBase {
   public:
     typedef std::shared_ptr<ParallelRaceGroup> ptr;
@@ -33,4 +33,4 @@ class ParallelRaceGroup : public CommandGroupBase {
 
 ParallelRaceGroup::ptr createParallelRaceGroup();
 
-} // namespace RobotGenius
+} // namespace robot

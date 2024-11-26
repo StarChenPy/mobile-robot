@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-namespace RobotGenius {
+namespace robot {
 class Command;
 class TimerManager;
 
@@ -139,7 +139,7 @@ class TimerManager {
      *
      */
     void handleExpiredTimers(std::vector<Timer::Ptr> &expired, uint64_t now_ms,
-                             std::set<RobotGenius::Timer::Ptr, RobotGenius::Timer::Comparator>::iterator &it);
+                             std::set<robot::Timer::Ptr, robot::Timer::Comparator>::iterator &it);
 
   protected:
     ///  锁
@@ -152,4 +152,4 @@ class TimerManager {
     uint64_t m_previouseTime = 0;
 };
 
-} // namespace RobotGenius
+} // namespace robot

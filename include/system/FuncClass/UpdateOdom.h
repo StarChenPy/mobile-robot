@@ -10,12 +10,12 @@
  */
 
 #pragma once
-// #include "robotgenius/RobotGenius.h"
+// #include "robotgenius/robot.h"
 #include "RobotCfg.h"
 #include "params.h"
 // #include "system/Robot.h"
 using namespace std;
-// using namespace RobotGenius;
+// using namespace robot;
 
 class UpdateOdom {
   public:

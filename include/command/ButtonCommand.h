@@ -16,12 +16,12 @@
 #include "system/Robot.h"
 
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 using namespace VMX;
 
 class EStopCommand : public CommandBase {
   public:
-    typedef std::shared_ptr<EStopCommand> Ptr;
+    typedef std::shared_ptr<EStopCommand> ptr;
     EStopCommand() {}
     ~EStopCommand() {}
 

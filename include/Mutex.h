@@ -21,7 +21,7 @@
 #include <string>
 #include <utility>
 
-namespace RobotGenius {
+namespace robot {
 
 class Semaphore : public Noncopyable {
   public:
@@ -189,4 +189,4 @@ class CASLock : public Noncopyable {
     volatile std::atomic_flag m_mutex_;
 };
 
-} //  namespace RobotGenius
+} //  namespace robot

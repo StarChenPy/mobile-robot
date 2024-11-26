@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <vector>
 
-namespace RobotGenius {
+namespace robot {
 
 class Command;
 class CommandGroupBase;
@@ -174,4 +174,4 @@ class Scheduler : public TimerManager {
 void schedulerManagerStart(size_t threads = 1, bool use_caller = true, const std::string name = "");
 void schedulerManagerStop();
 
-} //  namespace RobotGenius
+} //  namespace robot

@@ -394,12 +394,12 @@ void LabviewCommand::initialize() {
     uint8_t updata_status = COMMEND_WAIT;
     LABVIEW::LabviewStatusShareAddress->write(updata_status);
 
-    init_time = RobotGenius::getCurrentMs();
+    init_time = robot::getCurrentMs();
     std::cout << "LabviewCommand initialize!" << std::endl;
     is_finished = false;
 }
 void LabviewCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     cur_time_s = static_cast<double>(time - init_time) / 1000.0;
@@ -414,7 +414,7 @@ void LabviewCommand::execute() {
     // static uint8_t Labview_cnt = 0;
     // Labview_cnt++;
     // if(Labview_cnt > 9){
-    //   std::cout << "RobotGenius Current Time: " << cur_time_s << std::endl;
+    //   std::cout << "robot Current Time: " << cur_time_s << std::endl;
     //   Labview_cnt = 0;
     // }
 }

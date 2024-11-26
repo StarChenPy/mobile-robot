@@ -14,12 +14,12 @@
 #include <memory>
 #include <string>
 
-namespace RobotGenius {
+namespace robot {
 
 class TimerCommand : public CommandBase {
 
   public:
-    typedef std::shared_ptr<TimerCommand> Ptr;
+    typedef std::shared_ptr<TimerCommand> ptr;
     TimerCommand(uint64_t ms, Command::ptr command);
     //   void setCommand(Command::ptr command);
     virtual ~TimerCommand() {}
@@ -35,4 +35,4 @@ class TimerCommand : public CommandBase {
     uint64_t m_ms_;
 };
 
-} // namespace RobotGenius
+} // namespace robot

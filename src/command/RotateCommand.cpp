@@ -18,7 +18,7 @@ void RotateCommand::execute() {
     Robot::GetInstance().setRightMotorSpeed(R_setpoint);
     Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "RotateCommand execute dt = " << dt << std::endl;

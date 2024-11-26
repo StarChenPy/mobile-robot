@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 
-namespace RobotGenius {
+namespace robot {
 
 class SequentialCommandGroup : public CommandGroupBase {
   public:
@@ -38,4 +38,4 @@ class SequentialCommandGroup : public CommandGroupBase {
 };
 std::shared_ptr<SequentialCommandGroup> createSequentialCommandGroup();
 
-} // namespace RobotGenius
+} // namespace robot

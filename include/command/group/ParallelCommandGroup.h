@@ -15,7 +15,7 @@
 #include <memory>
 #include <vector>
 
-namespace RobotGenius {
+namespace robot {
 
 class ParallelCommandGroup : public CommandGroupBase {
   public:
@@ -36,4 +36,4 @@ class ParallelCommandGroup : public CommandGroupBase {
 
 ParallelCommandGroup::Ptr createParallelCommandGroup();
 
-} // namespace RobotGenius
+} // namespace robot

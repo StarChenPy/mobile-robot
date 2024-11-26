@@ -11,7 +11,7 @@
 
 #pragma once
 
-namespace RobotGenius {
+namespace robot {
 
 /**
  * @brief 对象无法拷贝,赋值
@@ -39,4 +39,4 @@ class Noncopyable {
     Noncopyable &operator=(const Noncopyable &) = delete;
 };
 
-} //  namespace RobotGenius
+} //  namespace robot

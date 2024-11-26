@@ -10,7 +10,7 @@
  */
 #include "command/InterruptibleCommand.h"
 #include "command/Scheduler.h"
-namespace RobotGenius {
+namespace robot {
 InterruptibleCommand::InterruptibleCommand(Command::ptr primary_command, Command::ptr interrupt_condition,
                                            Command::ptr fallback_command) {
 
@@ -109,4 +109,4 @@ bool InterruptibleCommand::isFinished() {
     }
     return m_primary_command_->isFinisheddec();
 }
-} // namespace RobotGenius
+} // namespace robot

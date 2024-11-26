@@ -21,7 +21,7 @@ void TrackingPointCommand::execute() {
     // 打印
     Robot::GetInstance().odom->print();
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "TrackingPointCommand execute dt = " << dt << std::endl;
@@ -43,7 +43,7 @@ bool TrackingPointCommand::isFinished() {
     if (command_status == COMMEND_CANCEL) {
         is_finished = true;
     }
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     if (Robot::GetInstance().getStopSignal()) {
         stopAll();
     }
@@ -64,7 +64,7 @@ Command::ptr createTrackingPointCommand(Pose target_pose, double v, double e_dis
 Command::ptr createTrackingVectorCommand(const vector<Pose> &points) {
     SequentialCommandGroup::Ptr S = std::make_shared<SequentialCommandGroup>();
     for (int i = 0; i < points.size(); i++) {
-        S->AddCommands(std::make_shared<TrackingPointCommand>(points[i])->withTimer(100));
+        S->addCommands(std::make_shared<TrackingPointCommand>(points[i])->withTimer(100));
     }
     return S;
 }
@@ -72,7 +72,7 @@ Command::ptr createTrackingVectorCommand(const vector<Pose> &points,
                                          double v) { //第二个参数是设定速度
     SequentialCommandGroup::Ptr S = std::make_shared<SequentialCommandGroup>();
     for (int i = 0; i < points.size(); i++) {
-        S->AddCommands(std::make_shared<TrackingPointCommand>(points[i], v)->withTimer(100));
+        S->addCommands(std::make_shared<TrackingPointCommand>(points[i], v)->withTimer(100));
     }
     return S;
 }
@@ -143,7 +143,7 @@ void TrackingXYCommand::execute() {
     // 打印
     // Robot::instance().odom->print();
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "TrackingXYCommand execute dt = " << dt << std::endl;
@@ -185,7 +185,7 @@ Command::ptr createTrackingXYCommand(Pose target_pose, double v, double e_dis,
 Command::ptr createTrackingVectorXYCommand(const vector<Pose> &points) {
     SequentialCommandGroup::Ptr S = std::make_shared<SequentialCommandGroup>();
     for (int i = 0; i < points.size(); i++) {
-        S->AddCommands(std::make_shared<TrackingXYCommand>(points[i])->withTimer(100));
+        S->addCommands(std::make_shared<TrackingXYCommand>(points[i])->withTimer(100));
     }
     return S;
 }
@@ -193,7 +193,7 @@ Command::ptr createTrackingVectorXYCommand(const vector<Pose> &points,
                                            double v) { //第二个参数是设定速度
     SequentialCommandGroup::Ptr S = std::make_shared<SequentialCommandGroup>();
     for (int i = 0; i < points.size(); i++) {
-        S->AddCommands(std::make_shared<TrackingXYCommand>(points[i], v)->withTimer(100));
+        S->addCommands(std::make_shared<TrackingXYCommand>(points[i], v)->withTimer(100));
     }
     return S;
 }

@@ -6,6 +6,11 @@ project(mobile-robot LANGUAGES C CXX)
 # 编译时显示详细信息（调试时可打开）
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_MAKE_PROGRAM ninja)
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
+
 # 设置可执行文件输出路径
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # 设置库文件输出路径

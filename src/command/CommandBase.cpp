@@ -11,12 +11,12 @@
 #include "command/CommandBase.h"
 #include "command/Scheduler.h"
 
-namespace RobotGenius {
+namespace robot {
 CommandBase::~CommandBase() {
-    if (m_isscheduled_) {
+    if (isScheduled) {
         cancel();
     }
 }
 bool CommandBase::isFinished() { return true; }
 
-} // namespace RobotGenius
+} // namespace robot

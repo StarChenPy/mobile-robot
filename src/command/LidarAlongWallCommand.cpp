@@ -29,7 +29,7 @@ void AlongRightWallCommand::execute() {
         Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
     }
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "AlongRightWallCommand execute dt = " << dt << std::endl;
@@ -83,7 +83,7 @@ void AlongLeftWallCommand::execute() {
         Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
     }
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "AlongLeftWallCommand execute dt = " << dt << std::endl;
@@ -133,7 +133,7 @@ Command::ptr createLidarAlongLeftWallCommand(double speed, double d) {
 
 Command::ptr LidarReadAlongLeftWallCommandDG(double speed, double d) {
     ParallelDeadlineGroup::ptr DG = std::make_shared<ParallelDeadlineGroup>();
-    DG->AddCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
+    DG->addCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
     DG->setDeadlineCommand(std::make_shared<AlongLeftWallCommand>(speed, d)->withTimer(100));
     return DG;
 }
@@ -144,7 +144,7 @@ Command::ptr createLidarAlongRightWallCommand(double speed, double d) {
 
 Command::ptr LidarReadAlongRightWallCommandDG(double speed, double d) {
     ParallelDeadlineGroup::ptr DG = std::make_shared<ParallelDeadlineGroup>();
-    DG->AddCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
+    DG->addCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
     DG->setDeadlineCommand(std::make_shared<AlongRightWallCommand>(speed, d)->withTimer(100));
     return DG;
 }

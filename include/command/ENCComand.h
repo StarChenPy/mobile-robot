@@ -15,7 +15,7 @@
 #include "params.h"
 
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 
 class readLeftENCCommand : public CommandBase {
   public:

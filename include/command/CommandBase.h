@@ -15,7 +15,7 @@
 #include "command/group/CommandGroupBase.h"
 #include <iostream>
 #include <memory>
-namespace RobotGenius {
+namespace robot {
 class CommandBase : public Command {
   public:
     typedef std::shared_ptr<CommandBase> Ptr;
@@ -37,7 +37,7 @@ class CommandBase : public Command {
     virtual bool isFinished();
 
   protected:
-    bool m_isscheduled_ = false;
+    bool isScheduled = false;
 };
 
-} // namespace RobotGenius
+} // namespace robot

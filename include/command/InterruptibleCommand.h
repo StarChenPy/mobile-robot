@@ -15,7 +15,7 @@
 #include <memory>
 #include <string>
 
-namespace RobotGenius {
+namespace robot {
 
 class InterruptibleCommand : public CommandBase {
 
@@ -39,4 +39,4 @@ class InterruptibleCommand : public CommandBase {
     Status m_status = Status::BEFORE;
 };
 
-} // namespace RobotGenius
+} // namespace robot

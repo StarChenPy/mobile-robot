@@ -10,7 +10,7 @@
  */
 #include "command/group/ParallelDeadlineGroup.h"
 
-namespace RobotGenius {
+namespace robot {
 
 ParallelDeadlineGroup::ParallelDeadlineGroup() {
     m_commands_.clear();
@@ -82,7 +82,7 @@ Command::ptr ParallelDeadlineGroup::reset() {
     ParallelDeadlineGroup::ptr DG = createParallelDeadlineGroup();
     for (auto command : m_commands_) {
         command = command->reset();
-        DG->AddCommands(command);
+        DG->addCommands(command);
     }
     if (is_schedule_deadline_command_)
         m_deadline_command_ = m_deadline_command_->reset();
@@ -95,4 +95,4 @@ ParallelDeadlineGroup::ptr createParallelDeadlineGroup() {
     return parallel_deadline_group;
 }
 
-} // namespace RobotGenius
+} // namespace robot

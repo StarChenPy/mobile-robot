@@ -8,7 +8,7 @@ void ClampServoCommand::initialize() {
     is_finished = false;
 }
 void ClampServoCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
 
@@ -72,7 +72,7 @@ void TelescopicServoCommand::initialize() {
     is_finished = false;
 }
 void TelescopicServoCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
 
@@ -136,7 +136,7 @@ void RaiseServoCommand::initialize() {
     is_finished = false;
 }
 void RaiseServoCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
 
@@ -200,7 +200,7 @@ void RotatingServoCommand::initialize() {
     is_finished = false;
 }
 void RotatingServoCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
 

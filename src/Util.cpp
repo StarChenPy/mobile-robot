@@ -22,7 +22,7 @@
 
 #include "Util.h"
 
-namespace RobotGenius {
+namespace robot {
 
 pid_t getThreadId() { return syscall(SYS_gettid); }
 
@@ -238,4 +238,4 @@ bool FSUtil::openForWrite(std::ofstream &ofs, const std::string &filename, std::
     return ofs.is_open();
 }
 
-} //  namespace RobotGenius
+} //  namespace robot

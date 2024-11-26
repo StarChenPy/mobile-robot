@@ -16,7 +16,7 @@
 
 // #include "hook.h"
 
-namespace RobotGenius {
+namespace robot {
 
 void printBorder(int width) { std::cout << "+" << std::setfill('=') << std::setw(width - 1) << "+" << std::endl; }
 
@@ -78,7 +78,7 @@ Scheduler::Scheduler(size_t threads, bool use_caller, const std::string name) : 
         // HGSYS_ASSERT(GetThis() == nullptr);
         t_scheduler = this;
 
-        RobotGenius::Thread::SetName(m_name_);
+        robot::Thread::SetName(m_name_);
         // HGSYS_LOG_INFO(g_logger) << "create root_thread:" << m_rootThread_;
         m_threadIds_.push_back(m_rootThread_);
     } else {
@@ -196,7 +196,7 @@ void Scheduler::run() {
     // bool  need_to_active = false;
     ///  Scheduler构造函数已经初始化在use_caller上的线程主协程
     ///  但是非use_caller上的线程主协程无初始化，所以需要在run中进行判断并且初始化线程主协程
-    // HGSYS_LOG_INFO(g_logger) << "thread_id=" << RobotGenius::getThreadId();
+    // HGSYS_LOG_INFO(g_logger) << "thread_id=" << robot::getThreadId();
     while (true) {
         cmd.reset();
         tickle_me = false;
@@ -343,7 +343,7 @@ void Scheduler::idle() {
     // }
     // HGSYS_LOG_INFO(g_logger) << "next_timeout=" << next_timeout;
     int rt = 0;
-    // std::cout << RobotGenius::getThreadId() << " idle" << std::endl;
+    // std::cout << robot::getThreadId() << " idle" << std::endl;
     // do {
     // std::cout << "tickle:" << rt << std::endl;
     // tickle();
@@ -403,4 +403,4 @@ void schedulerManagerStart(size_t threads, bool use_caller, const std::string na
     Scheduler::GetInstance(threads, use_caller, name).start();
 }
 void schedulerManagerStop() { Scheduler::GetInstance().stop(); }
-} //  namespace RobotGenius
+} //  namespace robot

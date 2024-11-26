@@ -25,7 +25,7 @@ void LidarCalibCommand::execute() {
     Robot::GetInstance().setRightMotorSpeed(R_setpoint);
     Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "LidarCalibCommand execute dt = " << dt << std::endl;
@@ -55,7 +55,7 @@ Command::ptr createLidarCalibCommand(double d) { return std::make_shared<LidarCa
 
 Command::ptr LidarReadCalibDG(double d) {
     ParallelDeadlineGroup::ptr DG = std::make_shared<ParallelDeadlineGroup>();
-    DG->AddCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
+    DG->addCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
     DG->setDeadlineCommand(std::make_shared<LidarCalibCommand>(d)->withTimer(100));
     return DG;
 }

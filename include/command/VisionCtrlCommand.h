@@ -17,7 +17,7 @@
 
 #include "command/Vision/VisionCommand.h"
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 
 class VisionCtrlCommand : public CommandBase {
   public:

@@ -10,7 +10,7 @@
  */
 #include "command/group/ParallelCommandGroup.h"
 
-namespace RobotGenius {
+namespace robot {
 
 ParallelCommandGroup::ParallelCommandGroup() {
     m_commands_.clear();
@@ -55,7 +55,7 @@ Command::ptr ParallelCommandGroup::reset() {
     ParallelCommandGroup::Ptr PG = createParallelCommandGroup();
     for (auto command : m_commands_) {
         command = command->reset();
-        PG->AddCommands(command);
+        PG->addCommands(command);
     }
     return PG;
 }
@@ -63,4 +63,4 @@ ParallelCommandGroup::Ptr createParallelCommandGroup() {
     ParallelCommandGroup::Ptr parallel_command_group = std::make_shared<ParallelCommandGroup>();
     return parallel_command_group;
 }
-} //  namespace RobotGenius
+} //  namespace robot

@@ -12,7 +12,7 @@
 #include "Command.h"
 #include <memory>
 
-namespace RobotGenius {
+namespace robot {
 template <typename T> class SelectCommand : public CommandBase {
   public:
     typedef std::shared_ptr<SelectCommand> Ptr;
@@ -57,4 +57,4 @@ template <typename T> void SelectCommand<T>::initialize() {
     }
 }
 
-} // namespace RobotGenius
+} // namespace robot

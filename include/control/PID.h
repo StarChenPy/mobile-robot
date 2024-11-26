@@ -13,7 +13,7 @@
 #include <memory>
 #include <queue>
 
-namespace RobotGenius {
+namespace robot {
 class PID {
   public:
     typedef std::shared_ptr<PID> ptr;
@@ -75,4 +75,4 @@ class PidFilter {
     int32_t m_data_index_;
 };
 
-} //  namespace RobotGenius
+} //  namespace robot

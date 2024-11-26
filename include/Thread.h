@@ -20,7 +20,7 @@
 #include <string>
 #include <thread>
 
-namespace RobotGenius {
+namespace robot {
 
 class Thread {
   public:
@@ -101,4 +101,4 @@ class Thread {
     Semaphore m_semaphore_;
 };
 
-} //  namespace RobotGenius
+} //  namespace robot

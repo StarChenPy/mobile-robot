@@ -5,7 +5,7 @@ void UpdataOdomCommand::initialize() {
     Robot::GetInstance().odom->zeroPose();
 }
 void UpdataOdomCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // 获取相应数据

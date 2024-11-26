@@ -15,7 +15,7 @@
 #include "command/Vision/utils.h"
 
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 
 class Vision {
   public:

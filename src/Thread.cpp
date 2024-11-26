@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 
-namespace RobotGenius {
+namespace robot {
 
 static thread_local Thread *t_thread = nullptr;
 static thread_local std::string t_thread_name = "UNKNOW";
@@ -69,7 +69,7 @@ void *Thread::run(void *arg) {
     Thread *thread = reinterpret_cast<Thread *>(arg);
     t_thread = thread;
     t_thread_name = thread->m_name_;
-    thread->m_id_ = RobotGenius::getThreadId();
+    thread->m_id_ = robot::getThreadId();
     pthread_setname_np(pthread_self(), thread->m_name_.substr(0, 15).c_str());
 
     std::function<void()> cb;
@@ -81,4 +81,4 @@ void *Thread::run(void *arg) {
     return nullptr;
 }
 
-} //  namespace RobotGenius
+} //  namespace robot

@@ -32,7 +32,7 @@ void StartCommand::initialize() {
     Button->setEnable();
 }
 void StartCommand::execute() {
-    uint64_t time = RobotGenius::getCurrentMs();
+    uint64_t time = robot::getCurrentMs();
     m_last_time = time;
 
     Button->read();

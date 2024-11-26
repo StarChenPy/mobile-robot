@@ -12,7 +12,7 @@
 #include "command/TimerCommand.h"
 #include "command/Scheduler.h"
 
-namespace RobotGenius {
+namespace robot {
 
 TimerCommand::TimerCommand(uint64_t ms, Command::ptr command) : m_ms_(ms) {
     m_work_command_ = command;
@@ -37,7 +37,6 @@ void TimerCommand::execute() {
     m_state = Command::State::HOLDON;
 }
 void TimerCommand::end() {
-    // m_work_command_->m_state = Command::State::FINISHED;
     if (!m_work_command_->isFinished()) {
         m_work_command_->cancel();
         if (m_timer_.get()) {
@@ -55,4 +54,4 @@ bool TimerCommand::isFinished() {
     return m_work_command_->isFinished();
 }
 
-} // namespace RobotGenius
+} // namespace robot

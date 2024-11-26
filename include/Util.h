@@ -29,7 +29,7 @@
 #include <vector>
 #define millisecond int64_t
 
-namespace RobotGenius {
+namespace robot {
 
 /**
  * @brief 获取线程id
@@ -63,4 +63,4 @@ class FSUtil {
     static bool openForWrite(std::ofstream &ofs, const std::string &filename, std::ios_base::openmode mode);
 };
 
-} //  namespace RobotGenius
+} //  namespace robot

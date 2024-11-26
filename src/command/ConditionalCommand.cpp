@@ -9,7 +9,7 @@
  *
  */
 #include "command/ConditionalCommand.h"
-namespace RobotGenius {
+namespace robot {
 
 ConditionalComamand::ConditionalComamand(std::function<bool()> condition, CommandBase::Ptr on_true_command,
                                          CommandBase::Ptr on_false_command)
@@ -24,4 +24,4 @@ void ConditionalComamand::end() { m_work_command_->end(); }
 
 bool ConditionalComamand::isFinished() { return m_work_command_->isFinished(); }
 
-} // namespace RobotGenius
+} // namespace robot

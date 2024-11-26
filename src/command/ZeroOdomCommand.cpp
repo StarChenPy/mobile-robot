@@ -9,7 +9,7 @@ void ZeroOdomCommand::initialize() {
     Robot::GetInstance().setLeftMotorSpeed(0);
 }
 void ZeroOdomCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
 
@@ -47,7 +47,7 @@ void SetOdomCommand::initialize() {
     Robot::GetInstance().setLeftMotorSpeed(0);
 }
 void SetOdomCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
 

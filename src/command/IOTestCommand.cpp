@@ -240,7 +240,7 @@ void IOTestCommand::initialize() {
     Button->setEnable();
 }
 void IOTestCommand::execute() {
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
 

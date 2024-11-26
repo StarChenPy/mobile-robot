@@ -10,7 +10,7 @@
 #include "system/SysParams.h"
 
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 using namespace VMX;
 using namespace Titan;
 using namespace Sensor;

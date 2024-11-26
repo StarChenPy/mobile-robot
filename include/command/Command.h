@@ -12,7 +12,7 @@
 #include "Timer.h"
 #include "Util.h"
 #include <memory>
-namespace RobotGenius {
+namespace robot {
 
 class Command : public std::enable_shared_from_this<Command> {
   public:
@@ -63,4 +63,4 @@ class Command : public std::enable_shared_from_this<Command> {
     bool gloabl_stop_ = false;
 };
 
-} // namespace RobotGenius
+} // namespace robot

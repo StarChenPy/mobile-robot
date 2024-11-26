@@ -14,7 +14,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-namespace RobotGenius {
+namespace robot {
 
 class CommandGroupBase : public Command {
   public:
@@ -23,12 +23,12 @@ class CommandGroupBase : public Command {
   public:
     CommandGroupBase();
     template <typename... Rest> void AddCommands(Command::ptr first, Rest... rest) {
-        AddCommands(first);   // 添加第一个命令
-        AddCommands(rest...); // 递归调用展开剩余参数
+        addCommands(first);   // 添加第一个命令
+        addCommands(rest...); // 递归调用展开剩余参数
     }
     void AddCommands() {}
     void AddCommands(std::vector<Command::ptr> commands);
-    void AddCommands(Command::ptr command);
+    void addCommands(Command::ptr command);
     void AddEndCommand(Command::ptr command) { m_next_command_ = command; }
 
     /**
@@ -42,4 +42,4 @@ class CommandGroupBase : public Command {
     std::vector<Command::ptr> m_commands_;
     Command::ptr m_next_command_;
 };
-} // namespace RobotGenius
+} // namespace robot

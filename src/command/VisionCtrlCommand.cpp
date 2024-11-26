@@ -36,7 +36,7 @@ void VisionCtrlCommand::execute() {
     Robot::GetInstance().setRightMotorSpeed(R_setpoint);
     Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
@@ -85,7 +85,7 @@ void VisionIdentifyCommand::execute() {
         std::cout << "!!!No fruit: " << Class_names[fruit_label] << std::endl;
     }
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
@@ -132,7 +132,7 @@ void VisionMoveCommand::execute() {
     Robot::GetInstance().setRightMotorSpeed(R_setpoint);
     Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
@@ -183,7 +183,7 @@ void VisionHeightCtrlCommand::execute() {
     Robot::GetInstance().LiftMotorDistancePID(m_setpoint);
     std::cout << "Lift ENC: " << LiftENC->get() << " Lift set_point_: " << m_setpoint << std::endl;
 
-    int time = RobotGenius::getCurrentMs();
+    int time = robot::getCurrentMs();
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionHeightCtrlCommand execute dt = " << dt << std::endl;

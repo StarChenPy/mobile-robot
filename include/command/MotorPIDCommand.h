@@ -14,7 +14,7 @@
 #include "params.h"
 #include "system/Robot.h"
 using namespace std;
-using namespace RobotGenius;
+using namespace robot;
 
 class LeftMotorPIDCommand : public CommandBase {
   public:

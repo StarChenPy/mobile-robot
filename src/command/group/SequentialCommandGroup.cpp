@@ -11,7 +11,7 @@
 
 #include "command/group/SequentialCommandGroup.h"
 
-namespace RobotGenius {
+namespace robot {
 
 void SequentialCommandGroup::initialize() {
     // std::cout << "SequentialCommandGroup initialize" << std::endl;
@@ -76,7 +76,7 @@ Command::ptr SequentialCommandGroup::reset() {
     SequentialCommandGroup::Ptr Seq = createSequentialCommandGroup();
     for (auto command : m_commands_) {
         command = command->reset();
-        Seq->AddCommands(command);
+        Seq->addCommands(command);
     }
     return Seq;
 }
@@ -84,4 +84,4 @@ std::shared_ptr<SequentialCommandGroup> createSequentialCommandGroup() {
     SequentialCommandGroup::Ptr sequential_command_group = std::make_shared<SequentialCommandGroup>();
     return sequential_command_group;
 }
-} //  namespace RobotGenius
+} //  namespace robot

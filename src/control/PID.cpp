@@ -11,7 +11,7 @@
 
 #include "control/PID.h"
 #include <iostream>
-namespace RobotGenius {
+namespace robot {
 
 PID::PID(double dt_s) : dt_s_(dt_s) {
     assert(dt_s > 0);
@@ -146,4 +146,4 @@ double PidFilter::filter(double input) {
 
     return sum / m_max_size_;
 }
-} //  namespace RobotGenius
+} //  namespace robot
