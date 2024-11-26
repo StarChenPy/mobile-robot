@@ -1,28 +1,21 @@
 #pragma once
+#include <MNN/ImageProcess.hpp>
+#include <MNN/Interpreter.hpp>
 #include <MNN/MNNDefine.h>
 #include <MNN/MNNForwardType.h>
-#include <MNN/Interpreter.hpp>
-#include <MNN/ImageProcess.hpp>
 #include <opencv2/opencv.hpp>
-//#include <cv/cv.hpp>
 
-#include <MNN/expr/Module.hpp>
 #include <MNN/expr/Executor.hpp>
 #include <MNN/expr/ExprCreator.hpp>
-// #include <MNN/expr/Executor.hpp>
-// #include <opencv2/opencv.hpp>
+#include <MNN/expr/Module.hpp>
 #include <sys/time.h>
-#include <omp.h>
 
-
-typedef struct
-{
+typedef struct {
     float x1, y1, x2, y2, score;
     int label;
 } BoxInfo;
 
-typedef struct
-{
+typedef struct {
     int inpSize, maxSide, Padw, Padh;
     float ratio;
 } MatInfo;

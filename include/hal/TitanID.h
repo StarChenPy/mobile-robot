@@ -78,4 +78,4 @@
 #define HG_CURRENT HG_BASE + (HG_OFFSET * 46)
 #define HG_MCU_TEMP HG_BASE + (HG_OFFSET * 47)
 
-#endif  //  SRC_TITANID_H_
+#endif //  SRC_TITANID_H_

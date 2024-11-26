@@ -1,14 +1,13 @@
 #pragma once
-#include "share.h"
 #include "RobotGenius.h"
+#include "share.h"
 #include "system/LidarDrive.h"
 
-#include <sensor/ultrasound.h>
 #include <hal/Titan.h>
+#include <sensor/ultrasound.h>
 #include <unistd.h>
 
 #include "system/SysParams.h"
-
 
 using namespace std;
 using namespace RobotGenius;
@@ -16,62 +15,56 @@ using namespace VMX;
 using namespace Titan;
 using namespace Sensor;
 
-
 // 底盘左轮电机
-extern  Motor::ptr LeftMotor;
-extern  ENC::ptr LeftENC;
+extern Motor::ptr LeftMotor;
+extern ENC::ptr LeftENC;
 // 底盘右轮电机
-extern  Motor::ptr RightMotor;
-extern  ENC::ptr RightENC;
+extern Motor::ptr RightMotor;
+extern ENC::ptr RightENC;
 // OMS旋转电机
-extern  Motor::ptr TurnMotor;
-extern  ENC::ptr TurnENC;
+extern Motor::ptr TurnMotor;
+extern ENC::ptr TurnENC;
 // OMS升降电机
-extern  Motor::ptr LiftMotor;
-extern  ENC::ptr LiftENC;
-
-
+extern Motor::ptr LiftMotor;
+extern ENC::ptr LiftENC;
 
 // 夹手舵机
-extern  PWM::ptr ClampServo ;
+extern PWM::ptr ClampServo;
 // 抬手舵机
-extern  PWM::ptr RaiseServo;
+extern PWM::ptr RaiseServo;
 // 伸缩舵机
-extern  PWM::ptr TelescopicServo;
+extern PWM::ptr TelescopicServo;
 // 旋转舵机
-extern  PWM::ptr RotatingServo;
+extern PWM::ptr RotatingServo;
 
 // 升降上限位
-extern  DI::ptr LiftLimit;
+extern DI::ptr LiftLimit;
 // 升降下限位
-extern  AI::ptr LiftDownLimit;
+extern AI::ptr LiftDownLimit;
 // 播种触发限位
-extern  DI::ptr SeedingLimit;
+extern DI::ptr SeedingLimit;
 // 旋转触发限位
-extern  AI::ptr TurningLimit;
+extern AI::ptr TurningLimit;
 
 // 急停触发限位
-extern  DI::ptr StopLimit;
+extern DI::ptr StopLimit;
 // 红外线读取
 extern AI::ptr IR_left;
 extern AI::ptr IR_right;
 
 // 激光雷达
-extern  Sensor::LiDAR::Ptr lidar;
+extern Sensor::LiDAR::Ptr lidar;
 
-
-
-
-//Start按钮灯光
-extern  PWM::ptr StartLed;
-//ResetLed按钮灯光
-extern  PWM::ptr ResetLed;
-//StopLed按钮灯光
-extern  PWM::ptr StopLed;
+// Start按钮灯光
+extern PWM::ptr StartLed;
+// ResetLed按钮灯光
+extern PWM::ptr ResetLed;
+// StopLed按钮灯光
+extern PWM::ptr StopLed;
 //按钮信号
-extern  TitanQuandLimit::ptr Button;
+extern TitanQuandLimit::ptr Button;
 
 //右超声波
-extern  Ultrasound::Ptr Rightus;
+extern Ultrasound::Ptr Rightus;
 //左超声波
-extern  Ultrasound::Ptr Leftus;
+extern Ultrasound::Ptr Leftus;
