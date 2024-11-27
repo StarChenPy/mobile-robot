@@ -21,7 +21,7 @@ void UpdataOdomCommand::execute() {
     LABVIEW::UpdateOdomShareAddress->write(labview_pose);
 
     // std::cout << "UpdataOdomCommand execute dt = " << static_cast<double>(dt)
-    // << std::endl; is_finished = true;
+    // << std::endl; isFinished_ = true;
 }
 void UpdataOdomCommand::end() {
     std::cout << "!!!!!!!!!!!!!!!!!UpdataOdomCommand end!!!!!!!!!!!!!!!!!!!!" << std::endl;

@@ -13,16 +13,16 @@
 namespace robot {
 
 ParallelDeadlineGroup::ParallelDeadlineGroup() {
-    m_commands_.clear();
-    m_is_group_ = true;
+    commands_.clear();
+    isGroup_ = true;
 }
 void ParallelDeadlineGroup::initialize() {
     if (isFinished()) {
         return;
     }
-    if (is_schedule_deadline_command_)
+    if (isScheduleDeadlineCommand_)
         m_deadline_command_->schedule();
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         if (!command->isFinished()) {
             command->schedule();
         }
@@ -31,28 +31,28 @@ void ParallelDeadlineGroup::initialize() {
 
 void ParallelDeadlineGroup::execute() {
     // std::cout << "ParallelDeadlineGroup execute" << std::endl;
-    m_state = Command::State::HOLDON;
+    state_ = Command::State::PAUSED;
 }
 
 void ParallelDeadlineGroup::end() {
     // std::cout <<  "ParallelDeadlineGroup:end" << std::endl;
-    for (auto command : m_commands_) {
-        if (!command->isFinisheddec()) {
+    for (auto command : commands_) {
+        if (!command->isFinishedDec()) {
             command->cancel();
         }
-        if (command->m_state != Command::State::STOP) {
+        if (command->state_ != Command::State::STOP) {
             command->schedule();
         }
         // std::cout <<  "ParallelDeadlineGroup:end" << std::endl;
     }
-    if (!m_deadline_command_->isFinisheddec()) {
+    if (!m_deadline_command_->isFinishedDec()) {
         m_deadline_command_->cancel();
     }
-    if (m_deadline_command_->m_state != Command::State::STOP) {
-        if (is_schedule_deadline_command_)
+    if (m_deadline_command_->state_ != Command::State::STOP) {
+        if (isScheduleDeadlineCommand_)
             m_deadline_command_->schedule();
     }
-    m_commands_.clear();
+    commands_.clear();
     if (m_next_command_.get()) {
         m_next_command_->schedule();
     }
@@ -61,8 +61,8 @@ bool ParallelDeadlineGroup::isFinished() {
     if (!m_deadline_command_) {
         return true;
     }
-    if (m_deadline_command_->isFinisheddec()) {
-        for (auto command : m_commands_) {
+    if (m_deadline_command_->isFinishedDec()) {
+        for (auto command : commands_) {
             command->cancel();
         }
         return true;
@@ -70,21 +70,21 @@ bool ParallelDeadlineGroup::isFinished() {
     return false;
 }
 
-void ParallelDeadlineGroup::disableShceduleDeadlineCommand() { is_schedule_deadline_command_ = false; }
-void ParallelDeadlineGroup::enableShceduleDeadlineCommand() { is_schedule_deadline_command_ = true; }
+void ParallelDeadlineGroup::disableScheduleDeadlineCommand() { isScheduleDeadlineCommand_ = false; }
+void ParallelDeadlineGroup::enableScheduleDeadlineCommand() { isScheduleDeadlineCommand_ = true; }
 void ParallelDeadlineGroup::setDeadlineCommand(Command::ptr command, bool schedule) {
     m_deadline_command_ = command;
-    m_deadline_command_->m_parent = getPtr();
-    is_schedule_deadline_command_ = schedule;
+    m_deadline_command_->parent_ = getPtr();
+    isScheduleDeadlineCommand_ = schedule;
 }
 
 Command::ptr ParallelDeadlineGroup::reset() {
     ParallelDeadlineGroup::ptr DG = createParallelDeadlineGroup();
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         command = command->reset();
-        DG->addCommands(command);
+        DG->addCommand(command);
     }
-    if (is_schedule_deadline_command_)
+    if (isScheduleDeadlineCommand_)
         m_deadline_command_ = m_deadline_command_->reset();
     DG->setDeadlineCommand(m_deadline_command_);
     return DG;

@@ -22,7 +22,7 @@ void RotateCommand::execute() {
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "RotateCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void RotateCommand::end() {
     std::cout << "RotateCommand end!" << std::endl;

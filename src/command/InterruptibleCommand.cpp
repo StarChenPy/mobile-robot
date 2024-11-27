@@ -24,9 +24,9 @@ void InterruptibleCommand::initialize() {
         return;
     }
     //
-    m_primary_command_->m_parent = getPtr();
-    m_interrupt_condition_->m_parent = getPtr();
-    m_fallback_command_->m_parent = getPtr();
+    m_primary_command_->parent_ = getPtr();
+    m_interrupt_condition_->parent_ = getPtr();
+    m_fallback_command_->parent_ = getPtr();
 }
 void InterruptibleCommand::execute() {
     if (!m_interrupt_condition_.get() && !m_primary_command_.get() && m_fallback_command_.get()) {
@@ -36,28 +36,28 @@ void InterruptibleCommand::execute() {
 
     switch (m_status) {
     case Status::BEFORE:
-        if (m_primary_command_->m_state == State::HOLDON)
-            m_primary_command_->m_state = State::RUNNING;
+        if (m_primary_command_->state_ == State::PAUSED)
+            m_primary_command_->state_ = State::RUNNING;
         if (m_primary_command_->getTimer().get())
             m_primary_command_->getTimer()->setPause(false);
         else {
-            // if (m_primary_command_->m_state == State::WAIT)
+            // if (m_primary_command_->state_ == State::WAIT)
             m_primary_command_->schedule();
         }
         if (m_interrupt_condition_->getTimer().get())
             m_interrupt_condition_->getTimer()->setPause(false);
         else {
-            if (m_interrupt_condition_->m_state == State::WAIT)
+            if (m_interrupt_condition_->state_ == State::WAIT)
                 m_interrupt_condition_->schedule();
         }
-        m_state = Command::State::HOLDON;
+        state_ = Command::State::PAUSED;
         m_status = Status::InterruptB;
         break;
     case Status::InterruptB:
-        m_primary_command_->m_state = State::HOLDON;
+        m_primary_command_->state_ = State::PAUSED;
         if (m_primary_command_->getTimer().get())
             m_primary_command_->getTimer()->setPause();
-        if (m_interrupt_condition_->isFinisheddec()) {
+        if (m_interrupt_condition_->isFinishedDec()) {
             m_status = Status::Interrupt;
         }
         break;
@@ -66,24 +66,24 @@ void InterruptibleCommand::execute() {
             m_interrupt_condition_->getTimer()->setPause();
         m_fallback_command_->schedule();
         m_status = Status::InterruptA;
-        m_state = Command::State::HOLDON;
+        state_ = Command::State::PAUSED;
         break;
     case Status::InterruptA:
-        if (m_fallback_command_->isFinisheddec()) {
+        if (m_fallback_command_->isFinishedDec()) {
             m_interrupt_condition_ = m_interrupt_condition_->reset();
             m_fallback_command_ = m_fallback_command_->reset();
             m_status = Status::BEFORE;
             ;
-            m_interrupt_condition_->m_parent = getPtr();
-            m_fallback_command_->m_parent = getPtr();
+            m_interrupt_condition_->parent_ = getPtr();
+            m_fallback_command_->parent_ = getPtr();
         }
         break;
     // case Status::AFTER:
-    //   m_primary_command_->m_state = State::RUNNING;
+    //   m_primary_command_->state_ = State::RUNNING;
     //   if (m_primary_command_->getTimer().get())
     //   m_primary_command_->getTimer()->setPause(false);
     //   m_primary_command_->schedule();
-    //   m_state = Command::State::HOLDON;
+    //   state_ = Command::State::PAUSED;
     //   m_status = Status::BEFORE;
     //   break;
     default:
@@ -95,11 +95,11 @@ void InterruptibleCommand::end() {
         std::cout << "Warn:interrupt command is null" << std::endl;
         return;
     }
-    if (!m_primary_command_->isFinisheddec())
+    if (!m_primary_command_->isFinishedDec())
         m_primary_command_->cancel();
-    if (!m_interrupt_condition_->isFinisheddec())
+    if (!m_interrupt_condition_->isFinishedDec())
         m_interrupt_condition_->cancel();
-    if (!m_fallback_command_->isFinisheddec() && m_fallback_command_->m_state != State::WAIT)
+    if (!m_fallback_command_->isFinishedDec() && m_fallback_command_->state_ != State::WAIT)
         m_fallback_command_->cancel();
 }
 bool InterruptibleCommand::isFinished() {
@@ -107,6 +107,6 @@ bool InterruptibleCommand::isFinished() {
         std::cout << "Warn:interrupt command is null" << std::endl;
         return true;
     }
-    return m_primary_command_->isFinisheddec();
+    return m_primary_command_->isFinishedDec();
 }
 } // namespace robot

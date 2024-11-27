@@ -31,8 +31,8 @@ class LidarCalibCommand : public CommandBase {
     bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    bool isFinished_ = false;
+    int64_t lastTime_;
     double calib_d = 30;
 };
 

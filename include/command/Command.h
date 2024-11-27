@@ -24,7 +24,7 @@ class Command : public std::enable_shared_from_this<Command> {
     Command &operator=(const Command &);
     Command(Command &&) = default;
     Command &operator=(Command &&) = default;
-    enum State { WAIT = 0, INIT = 1, RUNNING = 2, HOLDON = 3, FINISHED = 4, CANCELED = 5, STOP = 6 };
+    enum State { WAIT = 0, INIT = 1, RUNNING = 2, PAUSED = 3, FINISHED = 4, CANCELED = 5, STOP = 6 };
 
   public:
     // virtual bool schedule() = 0;
@@ -33,34 +33,41 @@ class Command : public std::enable_shared_from_this<Command> {
     virtual void end() = 0;
     void cancel();
     virtual bool isFinished() = 0;
-    bool isFinisheddec();
+    bool isFinishedDec();
     Command::ptr getPtr();
+
+    /**
+     * @brief 将命令送进调度器队列
+     *
+     * @return true
+     * @return false
+     */
     virtual bool schedule();
+
     virtual Command::ptr reset() { return nullptr; }
     Command::ptr withTimer(uint64_t ms);
-    std::shared_ptr<Timer> getTimer() { return m_timer_; }
+    std::shared_ptr<Timer> getTimer() { return timer_; }
 
-    Command::State getWorkCommandState() { return m_work_command_->m_state; }
+    Command::State getWorkCommandState() { return workCommand_->state_; }
     uint32_t getPointer() { return reinterpret_cast<uint64_t>(getPtr().get()); }
-    int getThreadId();
-    void stopAll() { gloabl_stop_ = true; }
-    void setScheduleStatus(bool state) { m_isscheduled_ = state; }
+    void stopAll() { globalStop_ = true; }
+    void setScheduleStatus(bool state) { isScheduled_ = state; }
 
   protected:
-    bool m_isscheduled_ = false;
-    bool m_is_group_ = false;
-    bool m_is_schedule = false;
-    std::shared_ptr<Timer> m_timer_;
+    bool isScheduled_ = false;
+    bool isGroup_ = false;
+    bool isSchedule_ = false;
+    std::shared_ptr<Timer> timer_;
 
   public:
-    bool has_timer_ = false;
+    bool hasTimer_ = false;
 
   public:
-    State m_state = State::WAIT;
-    Command::ptr m_parent;
-    Command::ptr m_work_command_;
-    bool m_stop_flag_ = false;
-    bool gloabl_stop_ = false;
+    State state_ = State::WAIT;
+    Command::ptr parent_;
+    Command::ptr workCommand_;
+    bool stopFlag_ = false;
+    bool globalStop_ = false;
 };
 
 } // namespace robot

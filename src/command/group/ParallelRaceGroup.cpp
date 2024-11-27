@@ -14,50 +14,50 @@
 namespace robot {
 
 ParallelRaceGroup::ParallelRaceGroup() {
-    m_commands_.clear();
-    m_is_group_ = true;
+    commands_.clear();
+    isGroup_ = true;
 }
 void ParallelRaceGroup::initialize() {
     // std::cout << "ParallelRaceGroup initialize" << std::endl;
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         command->schedule();
     }
-    m_state = Command::State::HOLDON;
+    state_ = Command::State::PAUSED;
 }
 void ParallelRaceGroup::execute() {
     // std::cout << "ParallelRaceGroup execute" << std::endl;
-    m_state = Command::State::HOLDON;
+    state_ = Command::State::PAUSED;
 }
 
 void ParallelRaceGroup::end() {
-    for (auto command : m_commands_) {
-        if (!command->isFinisheddec()) {
+    for (auto command : commands_) {
+        if (!command->isFinishedDec()) {
             command->cancel();
         }
-        // if (command->m_state != Command::State::STOP) {
+        // if (command->state_ != Command::State::STOP) {
         // command->schedule();
         // }
     }
-    m_commands_.clear();
+    commands_.clear();
     if (m_next_command_.get()) {
         m_next_command_->schedule();
     }
 }
 bool ParallelRaceGroup::isFinished() {
     stop_command_index = 0;
-    for (auto command : m_commands_) {
-        if (command->isFinisheddec()) {
+    for (auto command : commands_) {
+        if (command->isFinishedDec()) {
             stop_command_index++;
             return true;
         }
     }
-    return m_commands_.empty();
+    return commands_.empty();
 }
 Command::ptr ParallelRaceGroup::reset() {
     ParallelRaceGroup::ptr RG = createParallelRaceGroup();
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         command = command->reset();
-        RG->addCommands(command);
+        RG->addCommand(command);
     }
     return RG;
 }

@@ -249,7 +249,7 @@ void IOTestCommand::execute() {
     ctrlIO();
 
     // std::cout << "IOTestCommand execute dt = " << static_cast<double>(dt) <<
-    // std::endl; is_finished = true;
+    // std::endl; isFinished_ = true;
 }
 void IOTestCommand::end() {
     std::cout << "IOTestCommand end!" << std::endl;

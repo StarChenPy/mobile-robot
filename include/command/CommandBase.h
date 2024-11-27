@@ -19,8 +19,8 @@ namespace robot {
 class CommandBase : public Command {
   public:
     typedef std::shared_ptr<CommandBase> Ptr;
-    CommandBase() { m_is_group_ = false; }
-    virtual ~CommandBase();
+    CommandBase() { isGroup_ = false; }
+    ~CommandBase() override;
 
   public:
     /**
@@ -29,12 +29,11 @@ class CommandBase : public Command {
      * @return true
      * @return false
      */
-    // bool schedule() override final;
-    virtual void initialize() {}
-    virtual void execute() {}
-    virtual void end() {}
+    void initialize() override {}
+    void execute() override {}
+    void end() override {}
     virtual void cancel() {}
-    virtual bool isFinished();
+    bool isFinished() override;
 
   protected:
     bool isScheduled = false;

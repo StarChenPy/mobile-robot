@@ -20,7 +20,7 @@ class SequentialCommandGroup : public CommandGroupBase {
     typedef std::shared_ptr<SequentialCommandGroup> Ptr;
     SequentialCommandGroup() {}
     template <class... Types> explicit SequentialCommandGroup(Types... commands) {
-        (m_commands_.push_back(commands), ...);
+        (commands.push_back(commands), ...);
     }
     virtual ~SequentialCommandGroup() {}
 

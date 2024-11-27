@@ -18,7 +18,7 @@ template <typename T> class SelectCommand : public CommandBase {
     typedef std::shared_ptr<SelectCommand> Ptr;
     // SelectCommand(std::function<T()> selector, std::pair<T, Command::ptr>...
     // commands_ptr) : m_selector_(std::move(selector)) {
-    //   (m_commands_.insert(std::move(commands_ptr)), ...);
+    //   (commands_.insert(std::move(commands_ptr)), ...);
     // }
     SelectCommand(std::function<T()> selector, std::vector<std::pair<T, std::unique_ptr<Command>>> &&commands)
         : m_selector_(std::move(selector)) {
@@ -36,10 +36,10 @@ template <typename T> class SelectCommand : public CommandBase {
 
   public:
     void initialize() override;
-    void execute() override { m_work_command_->execute(); }
-    void end() override { m_work_command_->end(); }
+    void execute() override { workCommand_->execute(); }
+    void end() override { workCommand_->end(); }
 
-    bool isFinished() override { return m_work_command_->isFinished(); }
+    bool isFinished() override { return workCommand_->isFinished(); }
 
   private:
     std::function<T()> m_selector_;
@@ -49,10 +49,10 @@ template <typename T> void SelectCommand<T>::initialize() {
     auto key = m_selector_();
     auto it = m_commands_.find(key);
     if (it != m_commands_.end()) {
-        m_work_command_ = it->second;
-        m_work_command_->initialize();
+        workCommand_ = it->second;
+        workCommand_->initialize();
     } else {
-        m_work_command_ = nullptr;
+        workCommand_ = nullptr;
         throw std::runtime_error("SelectCommand: No command found for key " + std::to_string(key));
     }
 }

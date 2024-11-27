@@ -164,7 +164,7 @@ int main() {
   SequentialCommandGroup::Ptr sequential = std::make_shared<SequentialCommandGroup>();
   sequential->AddCommands(
     std::make_shared<CommandTest>("test start", 1)->withTimer(500),
-    // std::make_shared<DGHoldonCommand>(CarDG("Vision Tracking"), "Vision Tracking"),
+    // std::make_shared<DGHoldonCommand>(CarDG("vision Tracking"), "vision Tracking"),
     // std::make_shared<DGHoldonCommand>("Pose(240,0,0)", "fruit", 1),
     RG,
     std::make_shared<CommandTest>("test end", 1)->withTimer(500)

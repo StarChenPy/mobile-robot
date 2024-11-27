@@ -40,7 +40,7 @@ void VisionCtrlCommand::execute() {
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void VisionCtrlCommand::end() {
     std::cout << "VisionCtrlCommand end!" << std::endl;
@@ -75,7 +75,7 @@ void VisionIdentifyCommand::execute() {
             if (boxs[i].label == fruit_label) {
                 // int cx = (boxs[i].x1 + boxs[i].x2) / 2;
                 // int cy = (boxs[i].y1 + boxs[i].y2) / 2;
-                // cv::Point2f XH = Vision::instance().getXh(cx, cy);
+                // cv::Point2f XH = vision::instance().getXh(cx, cy);
                 // std::cout << "X: " << XH.x << " H: " << XH.y << std::endl;
                 is_finished = true;
                 break;
@@ -89,7 +89,7 @@ void VisionIdentifyCommand::execute() {
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void VisionIdentifyCommand::end() { std::cout << "VisionIdentifyCommand end!" << std::endl; }
 bool VisionIdentifyCommand::isFinished() {
@@ -136,7 +136,7 @@ void VisionMoveCommand::execute() {
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void VisionMoveCommand::end() {
     std::cout << "VisionMoveCommand end!" << std::endl;
@@ -187,7 +187,7 @@ void VisionHeightCtrlCommand::execute() {
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "VisionHeightCtrlCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void VisionHeightCtrlCommand::end() {
     std::cout << "VisionHeightCtrlCommand end!" << std::endl;

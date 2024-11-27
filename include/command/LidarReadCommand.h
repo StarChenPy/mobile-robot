@@ -29,8 +29,8 @@ class LidarReadCommand : public CommandBase {
     bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    bool isFinished_ = false;
+    int64_t lastTime_;
 };
 
 Command::ptr createLidarReadCommand();

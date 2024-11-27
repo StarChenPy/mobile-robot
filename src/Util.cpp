@@ -12,12 +12,9 @@
 #include <csignal>
 #include <cstring>
 #include <dirent.h>
-#include <execinfo.h>
-#include <ifaddrs.h>
 #include <iostream>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 #include "Util.h"

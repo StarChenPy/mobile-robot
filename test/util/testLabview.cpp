@@ -67,7 +67,7 @@ int main() {
   DG->setDeadlineCommand(RG);
   DG->schedule();
 
-  // Vision::GetInstance();    //开启摄像头，预加载识别模型
+  // vision::GetInstance();    //开启摄像头，预加载识别模型
 
   sleep(1);
   Scheduler::GetInstance().stop();

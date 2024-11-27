@@ -66,7 +66,7 @@ void Thread::join() {
     }
 }
 void *Thread::run(void *arg) {
-    Thread *thread = reinterpret_cast<Thread *>(arg);
+    auto *thread = reinterpret_cast<Thread *>(arg);
     t_thread = thread;
     t_thread_name = thread->m_name_;
     thread->m_id_ = robot::getThreadId();

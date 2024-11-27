@@ -28,7 +28,7 @@ bool LeftMotorPIDCommand::isFinished() {
 
 RightMotorPIDCommand::RightMotorPIDCommand() {}
 
-void RightMotorPIDCommand::initialize() { is_finished = false; }
+void RightMotorPIDCommand::initialize() { isFinished_ = false; }
 
 void RightMotorPIDCommand::execute() {
     uint8_t command_status;
@@ -50,7 +50,7 @@ bool RightMotorPIDCommand::isFinished() {
     if (Robot::GetInstance().getStopSignal()) {
         stopAll();
     }
-    return is_finished || Robot::GetInstance().getStopSignal();
+    return isFinished_ || Robot::GetInstance().getStopSignal();
 }
 
 TurnMotorPIDCommand::TurnMotorPIDCommand() {}
@@ -439,7 +439,7 @@ Command::ptr ResetTurnMotorDistance(int32_t setpoint) {
     // turn_motor_pid_command = std::make_shared<TurnMotorPIDCommand>();
     // ParallelDeadlineGroup::ptr DG =
     // std::make_shared<ParallelDeadlineGroup>();
-    // DG->addCommands(read_turn_enc_command->withTimer(20),turn_motor_pid_command->withTimer(20));
+    // DG->addCommand(read_turn_enc_command->withTimer(20),turn_motor_pid_command->withTimer(20));
     // DG->setDeadlineCommand(reset_turn_command->withTimer(20));
     return reset_turn_command->withTimer(20);
 }

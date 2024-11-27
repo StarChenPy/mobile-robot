@@ -37,7 +37,7 @@ class Impl {
   public:
     bool inRunLoop = false;
     // std::map<CommandGroupBase::ptr, bool> command_groups;
-    // std::map<Command::ptr, bool> commands;
+    // std::map<Command::ptr, bool> commands_;
     std::vector<Command::ptr> commands;
 };
 

@@ -22,9 +22,9 @@ class ParallelDeadlineGroup : public CommandGroupBase {
     typedef std::shared_ptr<ParallelDeadlineGroup> ptr;
     ParallelDeadlineGroup();
     template <class... Types> explicit ParallelDeadlineGroup(Types... commands) {
-        (m_commands_.push_back(commands), ...);
-        m_deadline_command_ = *m_commands_.begin();
-        m_commands_.erase(m_commands_.begin());
+        (commands_.push_back(commands), ...);
+        m_deadline_command_ = *commands_.begin();
+        commands_.erase(commands_.begin());
     }
     virtual ~ParallelDeadlineGroup() {}
 
@@ -33,14 +33,14 @@ class ParallelDeadlineGroup : public CommandGroupBase {
     void execute() override;
     void end() override;
     bool isFinished() override;
-    void disableShceduleDeadlineCommand();
-    void enableShceduleDeadlineCommand();
+    void disableScheduleDeadlineCommand();
+    void enableScheduleDeadlineCommand();
     void setDeadlineCommand(Command::ptr command, bool schedule = true);
     Command::ptr reset() override;
 
   protected:
     Command::ptr m_deadline_command_;
-    bool is_schedule_deadline_command_ = true;
+    bool isScheduleDeadlineCommand_ = true;
 };
 
 ParallelDeadlineGroup::ptr createParallelDeadlineGroup();

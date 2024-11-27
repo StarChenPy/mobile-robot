@@ -40,8 +40,8 @@ class RightMotorPIDCommand : public CommandBase {
     bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    bool isFinished_ = false;
+    int64_t lastTime_;
 };
 
 class TurnMotorPIDCommand : public CommandBase {
@@ -54,7 +54,7 @@ class TurnMotorPIDCommand : public CommandBase {
     bool isFinished() override;
 
   private:
-    bool is_finished = false;
+    bool isFinished_ = false;
     int64_t m_last_time;
 };
 

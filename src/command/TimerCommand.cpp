@@ -15,43 +15,43 @@
 namespace robot {
 
 TimerCommand::TimerCommand(uint64_t ms, Command::ptr command) : m_ms_(ms) {
-    m_work_command_ = command;
-    m_work_command_->m_state = Command::State::HOLDON;
+    workCommand_ = command;
+    workCommand_->state_ = Command::State::PAUSED;
 }
 Command::ptr TimerCommand::reset() {
-    m_work_command_ = m_work_command_->reset();
-    return std::make_shared<TimerCommand>(m_ms_, m_work_command_);
+    workCommand_ = workCommand_->reset();
+    return std::make_shared<TimerCommand>(m_ms_, workCommand_);
 }
 void TimerCommand::initialize() {
-    m_work_command_->initialize();
-    m_work_command_->has_timer_ = true;
-    m_work_command_->m_state = Command::State::HOLDON;
-    m_timer_ = std::make_shared<Timer>(m_ms_, &Scheduler::GetInstance());
-    m_timer_->setCommand(getPtr());
-    Scheduler::GetInstance().addTimer(m_timer_);
+    workCommand_->initialize();
+    workCommand_->hasTimer_ = true;
+    workCommand_->state_ = Command::State::PAUSED;
+    timer_ = std::make_shared<Timer>(m_ms_, &Scheduler::GetInstance());
+    timer_->setCommand(getPtr());
+    Scheduler::GetInstance().addTimer(timer_);
 }
 void TimerCommand::execute() {
-    m_work_command_->m_state = Command::State::RUNNING;
-    m_work_command_->execute();
-    m_work_command_->m_state = Command::State::HOLDON;
-    m_state = Command::State::HOLDON;
+    workCommand_->state_ = Command::State::RUNNING;
+    workCommand_->execute();
+    workCommand_->state_ = Command::State::PAUSED;
+    state_ = Command::State::PAUSED;
 }
 void TimerCommand::end() {
-    if (!m_work_command_->isFinished()) {
-        m_work_command_->cancel();
-        if (m_timer_.get()) {
-            m_timer_->cancel();
+    if (!workCommand_->isFinished()) {
+        workCommand_->cancel();
+        if (timer_.get()) {
+            timer_->cancel();
         }
     }
-    m_work_command_->end();
-    if (m_timer_.get()) {
-        m_timer_->cancel();
+    workCommand_->end();
+    if (timer_.get()) {
+        timer_->cancel();
     }
 }
 
 bool TimerCommand::isFinished() {
-    // std::cout << m_work_command_->isFinished() << std::endl;
-    return m_work_command_->isFinished();
+    // std::cout << workCommand_->isFinished() << std::endl;
+    return workCommand_->isFinished();
 }
 
 } // namespace robot

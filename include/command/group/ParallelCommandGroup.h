@@ -20,11 +20,12 @@ namespace robot {
 class ParallelCommandGroup : public CommandGroupBase {
   public:
     typedef std::shared_ptr<ParallelCommandGroup> Ptr;
+
     ParallelCommandGroup();
     template <class... Types> explicit ParallelCommandGroup(Types... commands) {
-        (m_commands_.push_back(commands), ...);
+        (commands.push_back(commands), ...);
     }
-    virtual ~ParallelCommandGroup() {}
+    ~ParallelCommandGroup() override = default;
 
   public:
     void initialize() override;

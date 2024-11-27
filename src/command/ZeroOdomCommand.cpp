@@ -22,7 +22,7 @@ void ZeroOdomCommand::execute() {
     is_finished = true;
 
     // std::cout << "ZeroOdomCommand execute dt = " << static_cast<double>(dt)
-    // << std::endl; is_finished = true;
+    // << std::endl; isFinished_ = true;
 }
 void ZeroOdomCommand::end() {
     uint8_t updata_status = COMMEND_END;
@@ -59,7 +59,7 @@ void SetOdomCommand::execute() {
     is_finished = true;
 
     // std::cout << "SetOdomCommand execute dt = " << static_cast<double>(dt) <<
-    // std::endl; is_finished = true;
+    // std::endl; isFinished_ = true;
 }
 void SetOdomCommand::end() {
     uint8_t updata_status = COMMEND_END;

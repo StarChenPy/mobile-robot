@@ -33,7 +33,7 @@ void AlongRightWallCommand::execute() {
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "AlongRightWallCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void AlongRightWallCommand::end() {
     std::cout << "AlongRightWallCommand end!" << std::endl;
@@ -87,7 +87,7 @@ void AlongLeftWallCommand::execute() {
     int dt = time - m_last_time;
     m_last_time = time;
     // std::cout << "AlongLeftWallCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void AlongLeftWallCommand::end() {
     std::cout << "AlongLeftWallCommand end!" << std::endl;
@@ -133,7 +133,7 @@ Command::ptr createLidarAlongLeftWallCommand(double speed, double d) {
 
 Command::ptr LidarReadAlongLeftWallCommandDG(double speed, double d) {
     ParallelDeadlineGroup::ptr DG = std::make_shared<ParallelDeadlineGroup>();
-    DG->addCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
+    DG->addCommand(std::make_shared<LidarReadCommand>()->withTimer(100));
     DG->setDeadlineCommand(std::make_shared<AlongLeftWallCommand>(speed, d)->withTimer(100));
     return DG;
 }
@@ -144,7 +144,7 @@ Command::ptr createLidarAlongRightWallCommand(double speed, double d) {
 
 Command::ptr LidarReadAlongRightWallCommandDG(double speed, double d) {
     ParallelDeadlineGroup::ptr DG = std::make_shared<ParallelDeadlineGroup>();
-    DG->addCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
+    DG->addCommand(std::make_shared<LidarReadCommand>()->withTimer(100));
     DG->setDeadlineCommand(std::make_shared<AlongRightWallCommand>(speed, d)->withTimer(100));
     return DG;
 }

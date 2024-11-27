@@ -224,7 +224,7 @@ void LabviewCommand::TelescopicServoShareCommand() { //伸缩舵机
         LABVIEW::TelescopicServoShareAddress->read(TelescopicServoShare);
         double dis = TelescopicServoShare.val;
         uint16_t time = TelescopicServoShare.time;
-        createcTelescopicServoCommand(dis, time)->schedule();
+        createTelescopicServoCommand(dis, time)->schedule();
     }
 }
 void LabviewCommand::RaiseServoShareCommand() { //摆手舵机

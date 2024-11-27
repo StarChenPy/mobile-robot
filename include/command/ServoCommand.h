@@ -64,8 +64,8 @@ class TelescopicServoCommand : public CommandBase {
 };
 
 // 指令封装  dis:伸缩距离，单位cm
-Command::ptr createcTelescopicServoCommand(double dis);
-Command::ptr createcTelescopicServoCommand(double dis, double cnt_limit);
+Command::ptr createTelescopicServoCommand(double dis);
+Command::ptr createTelescopicServoCommand(double dis, double cnt_limit);
 
 class RaiseServoCommand : public CommandBase {
   public:

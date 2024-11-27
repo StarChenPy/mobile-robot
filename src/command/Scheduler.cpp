@@ -202,7 +202,7 @@ void Scheduler::run() {
         tickle_me = false;
         {
             MutexType::Lock lock(m_mutex_);
-            // m_stopping_ = m_autoStop_ && m_impl->commands.empty() &&
+            // m_stopping_ = m_autoStop_ && m_impl->commands_.empty() &&
             // m_impl->command_groups.empty();
             auto command = m_impl->commands.begin();
             if (command != m_impl->commands.end() && *command) {
@@ -216,8 +216,8 @@ void Scheduler::run() {
             // }
             if (m_stopping_) {
                 if (cmd) {
-                    if (cmd->m_state == Command::State::RUNNING) {
-                        cmd->m_state = Command::State::CANCELED;
+                    if (cmd->state_ == Command::State::RUNNING) {
+                        cmd->state_ = Command::State::CANCELED;
                     }
                 }
             }
@@ -228,31 +228,31 @@ void Scheduler::run() {
             // tickle_me = false;
         }
         if (cmd.get()) {
-            switch (cmd->m_state) {
+            switch (cmd->state_) {
             case Command::State::WAIT:
                 cmd->schedule();
-                cmd->m_state = Command::State::INIT;
+                cmd->state_ = Command::State::INIT;
                 break;
             case Command::State::INIT:
                 cmd->initialize();
-                if (cmd->isFinisheddec()) {
-                    cmd->m_state = Command::State::FINISHED;
-                    if (cmd->m_parent) {
-                        cmd->m_parent->m_state = Command::State::RUNNING;
-                        cmd->m_parent->schedule();
+                if (cmd->isFinishedDec()) {
+                    cmd->state_ = Command::State::FINISHED;
+                    if (cmd->parent_) {
+                        cmd->parent_->state_ = Command::State::RUNNING;
+                        cmd->parent_->schedule();
                     }
                 }
                 cmd->schedule();
-                cmd->m_state = Command::State::RUNNING;
+                cmd->state_ = Command::State::RUNNING;
                 break;
             case Command::State::RUNNING:
-                if (cmd->isFinisheddec()) {
-                    cmd->m_state = Command::State::FINISHED;
+                if (cmd->isFinishedDec()) {
+                    cmd->state_ = Command::State::FINISHED;
                 } else {
-                    if (cmd->m_state != Command::State::HOLDON)
+                    if (cmd->state_ != Command::State::PAUSED)
                         cmd->execute();
                 }
-                if (cmd->m_state != Command::State::HOLDON) {
+                if (cmd->state_ != Command::State::PAUSED) {
                     cmd->schedule();
                 }
                 break;
@@ -260,18 +260,18 @@ void Scheduler::run() {
                 cmd->cancel();
                 break;
             case Command::State::FINISHED:
-                // if (cmd->m_state != Command::State::STOP)  {
+                // if (cmd->state_ != Command::State::STOP)  {
                 cmd->end();
                 // }
 
-                if (cmd->m_parent) {
-                    if (cmd->m_parent->m_state != Command::State::STOP) {
-                        cmd->m_parent->m_state = Command::State::RUNNING;
-                        cmd->m_parent->schedule();
+                if (cmd->parent_) {
+                    if (cmd->parent_->state_ != Command::State::STOP) {
+                        cmd->parent_->state_ = Command::State::RUNNING;
+                        cmd->parent_->schedule();
                     }
-                    cmd->m_parent.reset();
+                    cmd->parent_.reset();
                 }
-                cmd->m_state = Command::State::STOP;
+                cmd->state_ = Command::State::STOP;
                 break;
             default:
                 break;
@@ -286,8 +286,8 @@ void Scheduler::run() {
             MutexType::Lock lock(m_mutex_);
             if (m_autoStop_ && !cmd && m_impl->commands.empty() && !hasTimer() && m_activeThreadCount_ <= 0) {
                 // std::cout << "m_autoStop_:" << m_autoStop_ << std::endl;
-                // std::cout << "m_impl->commands.empty()" <<
-                // m_impl->commands.empty()
+                // std::cout << "m_impl->commands_.empty()" <<
+                // m_impl->commands_.empty()
                 // << std::endl; std::cout << "hasTimer" << hasTimer() <<
                 // std::endl;
                 break;
@@ -296,7 +296,7 @@ void Scheduler::run() {
         if (m_stopping_) {
             m_autoStop_ = true;
             if (cmd) {
-                if (cmd->m_state == Command::State::RUNNING || cmd->m_state == Command::State::INIT) {
+                if (cmd->state_ == Command::State::RUNNING || cmd->state_ == Command::State::INIT) {
                     cmd->cancel();
                 }
                 if (!tickle_me) {
@@ -361,14 +361,14 @@ void Scheduler::idle() {
     listExpiredCb(cbs);
     cbs.erase(
         std::remove_if(cbs.begin(), cbs.end(),
-                       [](const Command::ptr &cb) { return cb->getWorkCommandState() != Command::State::HOLDON; }),
+                       [](const Command::ptr &cb) { return cb->getWorkCommandState() != Command::State::PAUSED; }),
         cbs.end());
     for (auto cb : cbs) {
         // if (cb->getWorkCommandState() == Command::State::RUNNING) {
-        //   cb->m_state = Command::State::HOLDON;
+        //   cb->state_ = Command::State::PAUSED;
         // } else {
-        if (cb->m_state == Command::State::HOLDON && !cb->getTimer()->isPause()) {
-            cb->m_state = Command::State::RUNNING;
+        if (cb->state_ == Command::State::PAUSED && !cb->getTimer()->isPause()) {
+            cb->state_ = Command::State::RUNNING;
         }
 
         // }

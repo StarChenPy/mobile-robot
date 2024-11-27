@@ -23,23 +23,15 @@ class CommandGroupBase : public Command {
   public:
     CommandGroupBase();
     template <typename... Rest> void AddCommands(Command::ptr first, Rest... rest) {
-        addCommands(first);   // 添加第一个命令
-        addCommands(rest...); // 递归调用展开剩余参数
+        addCommand(first);   // 添加第一个命令
+        addCommand(rest...); // 递归调用展开剩余参数
     }
-    void AddCommands() {}
-    void AddCommands(std::vector<Command::ptr> commands);
-    void addCommands(Command::ptr command);
-    void AddEndCommand(Command::ptr command) { m_next_command_ = command; }
-
-    /**
-     * @brief 将命令送进调度器队列
-     *
-     * @return true
-     * @return false
-     */
-    // bool schedule() override final;
+    void addCommands() {}
+    void addCommands(const std::vector<Command::ptr>& commands);
+    void addCommand(const Command::ptr& command);
+    void addEndCommand(Command::ptr command) { m_next_command_ = command; }
   protected:
-    std::vector<Command::ptr> m_commands_;
+    std::vector<Command::ptr> commands_;
     Command::ptr m_next_command_;
 };
 } // namespace robot

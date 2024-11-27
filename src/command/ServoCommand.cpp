@@ -20,7 +20,7 @@ void ClampServoCommand::execute() {
     }
 
     // std::cout << "ClampServoCommand execute dt = " << static_cast<double>(dt)
-    // << std::endl; is_finished = true;
+    // << std::endl; isFinished_ = true;
 }
 void ClampServoCommand::end() {
     std::cout << "ClampServoCommand end" << std::endl;
@@ -84,7 +84,7 @@ void TelescopicServoCommand::execute() {
     }
 
     // std::cout << "TelescopicServoCommand execute dt = " <<
-    // static_cast<double>(dt) << std::endl; is_finished = true;
+    // static_cast<double>(dt) << std::endl; isFinished_ = true;
 }
 void TelescopicServoCommand::end() {
     std::cout << "TelescopicServoCommand end" << std::endl;
@@ -104,7 +104,7 @@ bool TelescopicServoCommand::isFinished() {
 }
 
 // 指令封装  dis:伸缩距离，单位cm
-Command::ptr createcTelescopicServoCommand(double dis) {
+Command::ptr createTelescopicServoCommand(double dis) {
     // if(dis < TELESCOPIC_DIS_MIN - 0.4){
     //   dis = TELESCOPIC_DIS_MIN - 0.4;
     //   std::cout << "伸缩舵机输入过小" << std::endl;
@@ -116,7 +116,7 @@ Command::ptr createcTelescopicServoCommand(double dis) {
     // std::cout << "Telescopic target = " << target << std::endl;
     return std::make_shared<TelescopicServoCommand>(target)->withTimer(100);
 }
-Command::ptr createcTelescopicServoCommand(double dis, double cnt_limit) {
+Command::ptr createTelescopicServoCommand(double dis, double cnt_limit) {
     // if(dis < TELESCOPIC_DIS_MIN){
     //   dis = TELESCOPIC_DIS_MIN;
     //   std::cout << "伸缩舵机输入过小" << std::endl;
@@ -148,7 +148,7 @@ void RaiseServoCommand::execute() {
     }
 
     // std::cout << "RaiseServoCommand execute dt = " << static_cast<double>(dt)
-    // << std::endl; is_finished = true;
+    // << std::endl; isFinished_ = true;
 }
 void RaiseServoCommand::end() {
     std::cout << "RaiseServoCommand end" << std::endl;
@@ -212,7 +212,7 @@ void RotatingServoCommand::execute() {
     }
 
     // std::cout << "RotatingServoCommand execute dt = " <<
-    // static_cast<double>(dt) << std::endl; is_finished = true;
+    // static_cast<double>(dt) << std::endl; isFinished_ = true;
 }
 void RotatingServoCommand::end() {
     std::cout << "RotatingServoCommand end" << std::endl;

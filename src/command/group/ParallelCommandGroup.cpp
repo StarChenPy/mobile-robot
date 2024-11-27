@@ -13,24 +13,24 @@
 namespace robot {
 
 ParallelCommandGroup::ParallelCommandGroup() {
-    m_commands_.clear();
-    m_is_group_ = true;
+    commands_.clear();
+    isGroup_ = true;
 }
 
 void ParallelCommandGroup::initialize() {
     // std::cout << "ParallelCommandGroup initialize" << std::endl;
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         command->schedule();
     }
-    m_state = Command::State::HOLDON;
+    state_ = Command::State::PAUSED;
 }
 void ParallelCommandGroup::execute() {
     // std::cout << "ParallelCommandGroup execute" << std::endl;
-    m_state = Command::State::HOLDON;
+    state_ = Command::State::PAUSED;
 }
 
 bool ParallelCommandGroup::isFinished() {
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         if (!command->isFinished()) {
             return false;
         }
@@ -38,24 +38,24 @@ bool ParallelCommandGroup::isFinished() {
     return true;
 }
 void ParallelCommandGroup::end() {
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         if (!command->isFinished()) {
             command->cancel();
         }
-        if (command->m_state != Command::State::STOP) {
+        if (command->state_ != Command::State::STOP) {
             command->schedule();
         }
     }
-    m_commands_.clear();
+    commands_.clear();
     if (m_next_command_.get()) {
         m_next_command_->schedule();
     }
 }
 Command::ptr ParallelCommandGroup::reset() {
     ParallelCommandGroup::Ptr PG = createParallelCommandGroup();
-    for (auto command : m_commands_) {
+    for (auto command : commands_) {
         command = command->reset();
-        PG->addCommands(command);
+        PG->addCommand(command);
     }
     return PG;
 }

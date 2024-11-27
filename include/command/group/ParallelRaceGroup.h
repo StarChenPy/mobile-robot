@@ -18,7 +18,7 @@ namespace robot {
 class ParallelRaceGroup : public CommandGroupBase {
   public:
     typedef std::shared_ptr<ParallelRaceGroup> ptr;
-    template <class... Types> explicit ParallelRaceGroup(Types... commands) { (m_commands_.push_back(commands), ...); }
+    template <class... Types> explicit ParallelRaceGroup(Types... commands) { (commands.push_back(commands), ...); }
     ParallelRaceGroup();
     ~ParallelRaceGroup() = default;
     void initialize() override;

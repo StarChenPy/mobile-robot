@@ -11,33 +11,23 @@
 #include "command/Command.h"
 #include "command/Scheduler.h"
 #include "command/TimerCommand.h"
-#include "command/group/ParallelDeadlineGroup.h"
-#include <iostream>
 #include <memory>
-#include <string>
+
 namespace robot {
 Command::~Command() {}
-Command::Command(const Command &rhs) { m_isscheduled_ = false; }
+Command::Command(const Command &rhs) { isScheduled_ = false; }
 
 Command &Command::operator=(const Command &rhs) {
-    m_isscheduled_ = false;
+    isScheduled_ = false;
     return *this;
 }
 
 bool Command::schedule() {
     // 如果没有工作命令，返回false
     // 子类有可能没有给m_work_command_赋值
-    // m_state = State::INIT;
-    // std::cout << "C++:" << getPtr() << std::endl;
-    // getPtr();
-    // if (isScheduled) {
-    //   return false;
-    // }
-    // setScheduleStatus(true);
-    m_isscheduled_ = Scheduler::GetInstance().schedule(getPtr());
-    // std::cout << "aaaa" << std::endl;
+    isScheduled_ = Scheduler::GetInstance().schedule(getPtr());
     Scheduler::GetInstance().tickle();
-    return m_isscheduled_;
+    return isScheduled_;
 }
 Command::ptr Command::getPtr() {
     try {
@@ -51,13 +41,11 @@ Command::ptr Command::withTimer(uint64_t ms) {
     return std::make_shared<TimerCommand>(ms, getPtr());
 }
 
-int Command::getThreadId() { return getThreadId(); }
-
-bool Command::isFinisheddec() { return m_stop_flag_ || isFinished() || gloabl_stop_; }
+bool Command::isFinishedDec() { return stopFlag_ || isFinished() || globalStop_; }
 void Command::cancel() {
-    m_stop_flag_ = true;
-    m_state = Command::State::FINISHED;
-    if (!has_timer_)
+    stopFlag_ = true;
+    state_ = Command::State::FINISHED;
+    if (!hasTimer_)
         schedule();
     else
         Scheduler::GetInstance().tickle();

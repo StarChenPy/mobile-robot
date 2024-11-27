@@ -16,12 +16,12 @@ ConditionalComamand::ConditionalComamand(std::function<bool()> condition, Comman
     : m_condition_(condition), m_on_true_command_(on_true_command), m_on_false_command_(on_false_command) {}
 
 void ConditionalComamand::initialize() {
-    m_work_command_ = m_condition_() ? m_on_true_command_ : m_on_false_command_;
-    m_work_command_->initialize();
+    workCommand_ = m_condition_() ? m_on_true_command_ : m_on_false_command_;
+    workCommand_->initialize();
 }
-void ConditionalComamand::execute() { m_work_command_->execute(); }
-void ConditionalComamand::end() { m_work_command_->end(); }
+void ConditionalComamand::execute() { workCommand_->execute(); }
+void ConditionalComamand::end() { workCommand_->end(); }
 
-bool ConditionalComamand::isFinished() { return m_work_command_->isFinished(); }
+bool ConditionalComamand::isFinished() { return workCommand_->isFinished(); }
 
 } // namespace robot

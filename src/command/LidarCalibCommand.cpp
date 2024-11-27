@@ -8,12 +8,12 @@ void LidarCalibCommand::initialize() {
     Robot::GetInstance().setRightMotorSpeed(0);
     Robot::GetInstance().setLeftMotorSpeed(0);
     // sleep(1);
-    is_finished = false;
+    isFinished_ = false;
 }
 void LidarCalibCommand::execute() {
     std::vector<LidarData> lidar_data;
     Robot::GetInstance().lidar_read->getLidarData(lidar_data);
-    is_finished = Robot::GetInstance().lidar_calib->LidarCalibTask(lidar_data, calib_d);
+    isFinished_ = Robot::GetInstance().lidar_calib->LidarCalibTask(lidar_data, calib_d);
     double R_setpoint = Robot::GetInstance().lidar_calib->get_R_setpoint();
     double L_setpoint = Robot::GetInstance().lidar_calib->get_L_setpoint();
     std::cout << "R_setpoint = " << R_setpoint << " L_setpoint = " << L_setpoint << std::endl;
@@ -26,10 +26,10 @@ void LidarCalibCommand::execute() {
     Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
 
     int time = robot::getCurrentMs();
-    int dt = time - m_last_time;
-    m_last_time = time;
+    int dt = time - lastTime_;
+    lastTime_ = time;
     // std::cout << "LidarCalibCommand execute dt = " << dt << std::endl;
-    // is_finished = true;
+    // isFinished_ = true;
 }
 void LidarCalibCommand::end() {
     std::cout << "LidarCalibCommand end!" << std::endl;
@@ -43,19 +43,19 @@ bool LidarCalibCommand::isFinished() {
     uint8_t command_status;
     LABVIEW::LidarCalibStatusShareAddress->read(command_status);
     if (command_status == COMMEND_CANCEL) {
-        is_finished = true;
+        isFinished_ = true;
     }
     if (Robot::GetInstance().getStopSignal()) {
         stopAll();
     }
-    return is_finished || Robot::GetInstance().getStopSignal();
+    return isFinished_ || Robot::GetInstance().getStopSignal();
 }
 
 Command::ptr createLidarCalibCommand(double d) { return std::make_shared<LidarCalibCommand>(d)->withTimer(100); }
 
 Command::ptr LidarReadCalibDG(double d) {
     ParallelDeadlineGroup::ptr DG = std::make_shared<ParallelDeadlineGroup>();
-    DG->addCommands(std::make_shared<LidarReadCommand>()->withTimer(100));
+    DG->addCommand(std::make_shared<LidarReadCommand>()->withTimer(100));
     DG->setDeadlineCommand(std::make_shared<LidarCalibCommand>(d)->withTimer(100));
     return DG;
 }
