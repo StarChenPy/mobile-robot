@@ -1,26 +1,27 @@
 
 #pragma once
-#include "RobotCfg.h"
-#include "params.h"
 #include "system/FuncClass/FuncHead.h"
+#include "util/RobotCfg.h"
+#include "util/params.h"
 
+namespace robot {
 class Robot {
   public:
     typedef std::shared_ptr<Robot> ptr;
 
     Robot();
 
-    int32_t read_left_enc();
-    int32_t read_right_enc();
-    int32_t read_turn_enc();
-    int32_t read_lift_enc();
-    void reset_left_enc();
-    void reset_right_enc();
-    void reset_turn_enc();
-    void reset_lift_enc();
-    void reset_all_enc();
+    static int32_t readLeftEnc();
+    static int32_t readRightEnc();
+    static int32_t readTurnEnc();
+    static int32_t readLiftEnc();
+    static void resetLeftEnc();
+    static void resetRightEnc();
+    static void resetTurnEnc();
+    static void resetLiftEnc();
+    static void resetAllEnc();
 
-    static Robot &GetInstance();
+    static Robot &getInstance();
 
   private:
     uint32_t seed_counter_ = 0;
@@ -143,3 +144,4 @@ class Robot {
     MovingAverageFilter::Ptr us_right_filter = std::make_shared<MovingAverageFilter>(5);
     MovingAverageFilter::Ptr us_left_filter = std::make_shared<MovingAverageFilter>(5);
 };
+}

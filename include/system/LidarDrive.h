@@ -29,7 +29,7 @@ namespace Sensor {
 
 class LiDAR {
   public:
-    typedef std::shared_ptr<LiDAR> Ptr;
+    typedef std::shared_ptr<LiDAR> ptr;
     LiDAR(std::string port);
     LiDAR();
     ~LiDAR();

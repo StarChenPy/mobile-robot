@@ -66,8 +66,8 @@ void SequentialCommandGroup::end() {
     }
     // }
     commands_.clear();
-    if (m_next_command_.get()) {
-        m_next_command_->schedule();
+    if (nextCommand_.get()) {
+        nextCommand_->schedule();
     }
     // std::cout <<  "SequentialCommandGroup:end" << std::endl;
 }

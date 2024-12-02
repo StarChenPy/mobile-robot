@@ -10,8 +10,8 @@
  */
 
 #pragma once
-#include "RobotCfg.h"
-#include "params.h"
+#include "util/RobotCfg.h"
+#include "util/params.h"
 
 using namespace std;
 

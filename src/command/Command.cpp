@@ -9,24 +9,18 @@
  *
  */
 #include "command/Command.h"
-#include "command/Scheduler.h"
 #include "command/TimerCommand.h"
+#include "util/Scheduler.h"
 #include <memory>
 
 namespace robot {
-Command::~Command() {}
-Command::Command(const Command &rhs) { isScheduled_ = false; }
-
-Command &Command::operator=(const Command &rhs) {
-    isScheduled_ = false;
-    return *this;
-}
+Command::~Command() = default;
 
 bool Command::schedule() {
     // 如果没有工作命令，返回false
     // 子类有可能没有给m_work_command_赋值
-    isScheduled_ = Scheduler::GetInstance().schedule(getPtr());
-    Scheduler::GetInstance().tickle();
+    isScheduled_ = Scheduler::getInstance().schedule(getPtr());
+    Scheduler::getInstance().tickle();
     return isScheduled_;
 }
 Command::ptr Command::getPtr() {
@@ -48,6 +42,6 @@ void Command::cancel() {
     if (!hasTimer_)
         schedule();
     else
-        Scheduler::GetInstance().tickle();
+        Scheduler::getInstance().tickle();
 }
 } // namespace robot

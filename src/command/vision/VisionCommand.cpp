@@ -1,19 +1,14 @@
-#include "command/Vision/VisionCommand.h"
-#include "share.h"
+#include "command/vision/VisionCommand.h"
 #include "system/SysParams.h"
 
 Vision::Vision(int index, int frame_width, int frame_height) {
     VisionCalInit();
     capture_.open(index);
     mnnInit("/home/pi/Pick/last.mnn"); //注意路径是否正确
-    // mnnInit("/../../../last.mnn");
     capture_.set(cv::CAP_PROP_FRAME_WIDTH, frame_width);
     capture_.set(cv::CAP_PROP_FRAME_HEIGHT, frame_height);
     if (!capture_.isOpened()) {
         std::cerr << "Error: Camera " << index << " is not opened." << std::endl;
-        LABVIEW::FruitsInfo vision_err;
-        vision_err.num = 0xFF;
-        LABVIEW::FruitsDataShareAddress->write(vision_err);
     }
 }
 
@@ -27,9 +22,6 @@ bool Vision::saveImage(cv::Mat &cv_mat, std::string filename) {
 bool Vision::readFrame() {
     if (!capture_.isOpened()) {
         std::cerr << "Camera is not Opened!" << std::endl;
-        LABVIEW::FruitsInfo vision_err;
-        vision_err.num = 0xFF;
-        LABVIEW::FruitsDataShareAddress->write(vision_err);
         return false;
     }
     capture_ >> frame_;
@@ -137,27 +129,6 @@ std::vector<BoxInfo> Vision::runMnn(bool save, std::string filename) {
     // saveImage(mnn_image_, filename);
     cv::Mat pimg = preprocess(m_mnn_image, mat_objection_);
 
-    // std::cout << "image cols: " << mnn_image_.cols << " image rows: " <<
-    // mnn_image_.rows << " image channels: "  << mnn_image_.channels()<<
-    // std::endl;
-
-    uint8_t *imageArray = imageToArray(m_mnn_image);
-    if (imageArray == nullptr) {
-        std::cerr << "数组分配失败！" << std::endl;
-    } else {
-        LABVIEW::ImageDataShareAddress->write(imageArray);
-        // 将数组还原为图像
-        // uint8_t* imageOut = new uint8_t[480 * 640 * 3];
-        // LABVIEW::ImageDataShareAddress->read(imageOut);
-        // cv::Mat restoredImage = arrayToImage(imageOut, 480, 640, 3);
-        // saveImage("imageOut.jpg", restoredImage);
-
-        // cv::Mat restoredImage = arrayToImage(imageArray, mnn_image_.rows,
-        // mnn_image_.cols, mnn_image_.channels());
-        // // 保存还原的图像
-        // saveImage("restored_image.jpg", restoredImage);
-    }
-
     box_collection_ = mnnDecode(pimg, net_, session_, mat_objection_.inpSize);
     if (!box_collection_.empty()) {
         nms(box_collection_, 0.50);
@@ -175,38 +146,20 @@ std::vector<BoxInfo> Vision::runMnn(bool save, std::string filename) {
 
 std::vector<cv::Point2f> Vision::getFruitXh(std::vector<BoxInfo> &boxes) {
     fruit_xh_.clear();
-    // 从文件中读取 homography 矩阵
-    // cv::FileStorage fs("homography.xml", cv::FileStorage::READ);
-    // cv::Mat homography;
-    // fs["homography"] >> homography;
-    // fs.release();
 
     // 图像中的四个点（像素坐标）
     std::vector<cv::Point2f> imagePoints;
-    imagePoints.push_back(cv::Point2f(ImgCalData.Image.P1.x, ImgCalData.Image.P1.y));
-    imagePoints.push_back(cv::Point2f(ImgCalData.Image.P2.x, ImgCalData.Image.P2.y));
-    imagePoints.push_back(cv::Point2f(ImgCalData.Image.P3.x, ImgCalData.Image.P3.y));
-    imagePoints.push_back(cv::Point2f(ImgCalData.Image.P4.x, ImgCalData.Image.P4.y));
+    imagePoints.emplace_back(ImgCalData.Image.P1.x, ImgCalData.Image.P1.y);
+    imagePoints.emplace_back(ImgCalData.Image.P2.x, ImgCalData.Image.P2.y);
+    imagePoints.emplace_back(ImgCalData.Image.P3.x, ImgCalData.Image.P3.y);
+    imagePoints.emplace_back(ImgCalData.Image.P4.x, ImgCalData.Image.P4.y);
 
     // 这些点在实际世界中的对应坐标
     std::vector<cv::Point2f> objectPoints;
-    objectPoints.push_back(cv::Point2f(ImgCalData.Object.P1.x, ImgCalData.Object.P1.y));
-    objectPoints.push_back(cv::Point2f(ImgCalData.Object.P2.x,
-                                       ImgCalData.Object.P2.y)); //对应实际坐标
-    objectPoints.push_back(cv::Point2f(ImgCalData.Object.P3.x, ImgCalData.Object.P3.y));
-    objectPoints.push_back(cv::Point2f(ImgCalData.Object.P4.x, ImgCalData.Object.P4.y));
-    // std::vector<cv::Point2f> imagePoints;
-    // imagePoints.push_back(cv::Point2f(55.375, 140));
-    // imagePoints.push_back(cv::Point2f(264, 137));
-    // imagePoints.push_back(cv::Point2f(241, 235));
-    // imagePoints.push_back(cv::Point2f(88, 236));
-
-    // // 这些点在实际世界中的对应坐标
-    // std::vector<cv::Point2f> objectPoints;
-    // objectPoints.push_back(cv::Point2f(7.0f, 14.0f));
-    // objectPoints.push_back(cv::Point2f(-10.0f, 14.0f));  //对应实际坐标
-    // objectPoints.push_back(cv::Point2f(10.0f, 0.0f));
-    // objectPoints.push_back(cv::Point2f(7.0f, 0.0f));
+    objectPoints.emplace_back(ImgCalData.Object.P1.x, ImgCalData.Object.P1.y);
+    objectPoints.emplace_back(ImgCalData.Object.P2.x, ImgCalData.Object.P2.y); //对应实际坐标
+    objectPoints.emplace_back(ImgCalData.Object.P3.x, ImgCalData.Object.P3.y);
+    objectPoints.emplace_back(ImgCalData.Object.P4.x, ImgCalData.Object.P4.y);
 
     // 计算单应性矩阵
     cv::Mat homography = cv::findHomography(imagePoints, objectPoints);
@@ -233,81 +186,6 @@ void Vision::print() {
                   << " cx = " << cx << " cy = " << cy << std::endl;
         std::cout << "real_X = " << real[i].x << " real_H = " << real[i].y << std::endl;
     }
-}
-
-void Vision::updateIdentifyDataShare() {
-    std::vector<BoxInfo> boxs = getBoxes();
-    std::vector<cv::Point2f> real = getFruitXh(boxs);
-    int index = 0;
-    float s = 0.0;
-    LABVIEW::IdentifyInfo info;
-    LABVIEW::FruitsInfo fruits;
-
-    fruits.num = boxs.size();
-    for (int i = 0; i < boxs.size(); i++) {
-        if (boxs[i].score > s) {
-            s = boxs[i].score;
-            index = i;
-        }
-        if (i == 0) {
-            // fruits.fruits_1(boxs[i],real[i]);
-            fruits.fruits_1.box_info.x1 = boxs[i].x1;
-            fruits.fruits_1.box_info.y1 = boxs[i].y1;
-            fruits.fruits_1.box_info.x2 = boxs[i].x2;
-            fruits.fruits_1.box_info.y2 = boxs[i].y2;
-            fruits.fruits_1.box_info.score = boxs[i].score;
-            fruits.fruits_1.box_info.label = boxs[i].label;
-            fruits.fruits_1.XH.X = real[i].x;
-            fruits.fruits_1.XH.H = real[i].y;
-        } else if (i == 1) {
-            fruits.fruits_2.box_info.x1 = boxs[i].x1;
-            fruits.fruits_2.box_info.y1 = boxs[i].y1;
-            fruits.fruits_2.box_info.x2 = boxs[i].x2;
-            fruits.fruits_2.box_info.y2 = boxs[i].y2;
-            fruits.fruits_2.box_info.score = boxs[i].score;
-            fruits.fruits_2.box_info.label = boxs[i].label;
-            fruits.fruits_2.XH.X = real[i].x;
-            fruits.fruits_2.XH.H = real[i].y;
-        } else if (i == 2) {
-            fruits.fruits_3.box_info.x1 = boxs[i].x1;
-            fruits.fruits_3.box_info.y1 = boxs[i].y1;
-            fruits.fruits_3.box_info.x2 = boxs[i].x2;
-            fruits.fruits_3.box_info.y2 = boxs[i].y2;
-            fruits.fruits_3.box_info.score = boxs[i].score;
-            fruits.fruits_3.box_info.label = boxs[i].label;
-            fruits.fruits_3.XH.X = real[i].x;
-            fruits.fruits_3.XH.H = real[i].y;
-        } else if (i == 3) {
-            fruits.fruits_4.box_info.x1 = boxs[i].x1;
-            fruits.fruits_4.box_info.y1 = boxs[i].y1;
-            fruits.fruits_4.box_info.x2 = boxs[i].x2;
-            fruits.fruits_4.box_info.y2 = boxs[i].y2;
-            fruits.fruits_4.box_info.score = boxs[i].score;
-            fruits.fruits_4.box_info.label = boxs[i].label;
-            fruits.fruits_4.XH.X = real[i].x;
-            fruits.fruits_4.XH.H = real[i].y;
-        } else if (i == 4) {
-            fruits.fruits_5.box_info.x1 = boxs[i].x1;
-            fruits.fruits_5.box_info.y1 = boxs[i].y1;
-            fruits.fruits_5.box_info.x2 = boxs[i].x2;
-            fruits.fruits_5.box_info.y2 = boxs[i].y2;
-            fruits.fruits_5.box_info.score = boxs[i].score;
-            fruits.fruits_5.box_info.label = boxs[i].label;
-            fruits.fruits_5.XH.X = real[i].x;
-            fruits.fruits_5.XH.H = real[i].y;
-        }
-    }
-    LABVIEW::FruitsDataShareAddress->write(fruits);
-
-    info.box_info.x1 = boxs[index].x1;
-    info.box_info.y1 = boxs[index].y1;
-    info.box_info.x2 = boxs[index].x2;
-    info.box_info.y2 = boxs[index].y2;
-    info.box_info.score = boxs[index].score;
-    info.box_info.label = boxs[index].label;
-    info.XH.X = real[index].x;
-    info.XH.H = real[index].y;
-    LABVIEW::IdentifyDataShareAddress->write(info);
 }
 
 //测试
@@ -353,55 +231,41 @@ void Vision::saveImage(const std::string &filename, const cv::Mat &image) {
 }
 
 void IdentifyFruitCommand::initialize() {
-    uint8_t updata_status = COMMEND_WAIT;
-    LABVIEW::IdentifyStatusShareAddress->write(updata_status);
-
     Vision::instance().clearBoxes();
     Vision::instance().clearResult();
 }
 void IdentifyFruitCommand::execute() {
-    static int lable_last = 0;
+    static int label_last = 0;
     static int counter = 0;
     Vision::instance().runMnn(true,
                               "/home/pi/Pick/result.jpg"); //注意路径*********
     if (Vision::instance().getBoxes().empty())
         return;
     BoxInfo result = findHighestLabelWithThreshold(Vision::instance().getBoxes());
-    if (result.label == lable_last) {
-        // std::cout << "fruit class: " << kClassNames[result[i].label] <<
-        // std::endl;
+    if (result.label == label_last) {
         counter++;
     } else {
         counter = 0;
     }
-    lable_last = result.label;
+    label_last = result.label;
     if (counter > 0) {
-        is_finished_ = true;
+        isFinished_ = true;
         Vision::instance().setResult(result);
     }
 
     // 打印中心坐标
     Vision::instance().print();
-    Vision::instance().updateIdentifyDataShare();
 }
 void IdentifyFruitCommand::end() {
     std::cout << "IdentifyFruitCommand end!!!" << std::endl;
-    uint8_t updata_status = COMMEND_END;
-    LABVIEW::IdentifyStatusShareAddress->write(updata_status);
 }
 bool IdentifyFruitCommand::isFinished() {
-    uint8_t command_status;
-    LABVIEW::IdentifyStatusShareAddress->read(command_status);
-    if (command_status == COMMEND_CANCEL) {
-        is_finished_ = true;
-    }
-    return is_finished_;
+    return isFinished_;
 }
 
 BoxInfo IdentifyFruitCommand::findHighestLabelWithThreshold(const std::vector<BoxInfo> &boxes, float threshold) {
     BoxInfo result;
     int maxLabel = std::numeric_limits<int>::min(); // 使用最小的整数初始化
-    // bool found = false;
 
     for (const auto &box : boxes) {
         if (box.score > threshold && box.label > maxLabel) {

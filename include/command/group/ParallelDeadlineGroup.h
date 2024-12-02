@@ -11,7 +11,7 @@
 
 #pragma once
 #include "CommandGroupBase.h"
-#include "command/Scheduler.h"
+#include "util/Scheduler.h"
 #include <memory>
 #include <vector>
 
@@ -29,14 +29,14 @@ class ParallelDeadlineGroup : public CommandGroupBase {
     virtual ~ParallelDeadlineGroup() {}
 
   public:
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
+    void initialize();
+    void execute();
+    void end();
+    bool isFinished();
     void disableScheduleDeadlineCommand();
     void enableScheduleDeadlineCommand();
     void setDeadlineCommand(Command::ptr command, bool schedule = true);
-    Command::ptr reset() override;
+    Command::ptr reset();
 
   protected:
     Command::ptr m_deadline_command_;

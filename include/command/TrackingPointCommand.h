@@ -1,5 +1,5 @@
 /**
- * @file UpdataOdomCommand.h
+ * @file UpdateOdomCommand.h
  * @author Zijian.Yan (jiapeng.lin@high-genius.com)
  * @brief
  * @version 0.1
@@ -10,10 +10,10 @@
  */
 
 #pragma once
-#include "RobotCfg.h"
-#include "RobotGenius.h"
-#include "params.h"
 #include "system/Robot.h"
+#include "util/RobotCfg.h"
+#include "RobotGenius.h"
+#include "util/params.h"
 using namespace std;
 using namespace robot;
 

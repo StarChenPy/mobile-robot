@@ -1,49 +1,49 @@
 #include "system/Robot.h"
-#include "params.h"
+#include "util/params.h"
 // #include "RobotCfg.h"
 
 Robot::Robot() {
     ParamsInit();
 
-    left_pid_ = std::make_shared<PID>(PIDDT);
-    right_pid_ = std::make_shared<PID>(PIDDT);
-    turn_pid_ = std::make_shared<PID>(PIDDT);
-    lift_pid_ = std::make_shared<PID>(PIDDT);
-    lift_distance_pid_ = std::make_shared<PID>(PIDDT);
-    turn_distance_pid_ = std::make_shared<PID>(PIDDT);
-    ir_angle_pid_ = std::make_shared<PID>(PIDDT);
-    ir_distance_pid_ = std::make_shared<PID>(PIDDT);
-    us_angle_pid_ = std::make_shared<PID>(PIDDT);
-    us_distance_pid_ = std::make_shared<PID>(PIDDT);
+    left_pid_ = std::make_shared<PID>(PID_DT);
+    right_pid_ = std::make_shared<PID>(PID_DT);
+    turn_pid_ = std::make_shared<PID>(PID_DT);
+    lift_pid_ = std::make_shared<PID>(PID_DT);
+    lift_distance_pid_ = std::make_shared<PID>(PID_DT);
+    turn_distance_pid_ = std::make_shared<PID>(PID_DT);
+    ir_angle_pid_ = std::make_shared<PID>(PID_DT);
+    ir_distance_pid_ = std::make_shared<PID>(PID_DT);
+    us_angle_pid_ = std::make_shared<PID>(PID_DT);
+    us_distance_pid_ = std::make_shared<PID>(PID_DT);
 
-    single_ir_angle_pid_ = std::make_shared<PID>(PIDDT);
-    single_ir_distance_pid_ = std::make_shared<PID>(PIDDT);
+    single_ir_angle_pid_ = std::make_shared<PID>(PID_DT);
+    single_ir_distance_pid_ = std::make_shared<PID>(PID_DT);
 }
 
-int32_t Robot::read_left_enc() { return LeftENC->read(); }
+int32_t Robot::readLeftEnc() { return leftEnc->read(); }
 
-int32_t Robot::read_right_enc() { return RightENC->read(); }
+int32_t Robot::readRightEnc() { return rightEnc->read(); }
 
-int32_t Robot::read_turn_enc() { return TurnENC->read(); }
+int32_t Robot::readTurnEnc() { return turnEnc->read(); }
 
-int32_t Robot::read_lift_enc() { return LiftENC->read(); }
+int32_t Robot::readLiftEnc() { return liftEnc->read(); }
 
-void Robot::reset_left_enc() { LeftENC->reset(); }
+void Robot::resetLeftEnc() { leftEnc->reset(); }
 
-void Robot::reset_right_enc() { RightENC->reset(); }
+void Robot::resetRightEnc() { rightEnc->reset(); }
 
-void Robot::reset_turn_enc() { TurnENC->reset(); }
+void Robot::resetTurnEnc() { turnEnc->reset(); }
 
-void Robot::reset_lift_enc() { LiftENC->reset(); }
+void Robot::resetLiftEnc() { liftEnc->reset(); }
 
-void Robot::reset_all_enc() {
-    reset_left_enc();
-    reset_right_enc();
-    reset_turn_enc();
-    reset_lift_enc();
+void Robot::resetAllEnc() {
+    resetLeftEnc();
+    resetRightEnc();
+    resetTurnEnc();
+    resetLiftEnc();
 }
 
-Robot &Robot::GetInstance() {
+Robot &Robot::getInstance() {
     static Robot robot;
     return robot;
 }
@@ -56,7 +56,7 @@ void Robot::controlLeftMotor() {
 
     left_pid_->calculate();
 
-    LeftMotor->setSpeedAndDir((abs(left_pid_->output_)), left_pid_->output_ > 0, left_pid_->output_ < 0);
+    leftMotor->setSpeedAndDir((abs(left_pid_->output_)), left_pid_->output_ > 0, left_pid_->output_ < 0);
 }
 void Robot::controlRightMotor() {
     rightPidParam = RightMotorPIDParams.pid;
@@ -66,7 +66,7 @@ void Robot::controlRightMotor() {
 
     right_pid_->calculate();
 
-    RightMotor->setSpeedAndDir((abs(right_pid_->output_)), right_pid_->output_ > 0, right_pid_->output_ < 0);
+    rightMotor->setSpeedAndDir((abs(right_pid_->output_)), right_pid_->output_ > 0, right_pid_->output_ < 0);
 }
 void Robot::controlTurnMotor() {
     turnPidParam = TurnMotorPIDParams.pid;
@@ -76,7 +76,7 @@ void Robot::controlTurnMotor() {
 
     turn_pid_->calculate();
 
-    TurnMotor->setSpeedAndDir((abs(turn_pid_->output_)), turn_pid_->output_ > 0, turn_pid_->output_ < 0);
+    turnMotor->setSpeedAndDir((abs(turn_pid_->output_)), turn_pid_->output_ > 0, turn_pid_->output_ < 0);
 }
 void Robot::controlLiftMotor() {
     liftPidParam = LiftMotorPIDParams.pid;
@@ -86,7 +86,7 @@ void Robot::controlLiftMotor() {
 
     lift_pid_->calculate();
 
-    LiftMotor->setSpeedAndDir((abs(lift_pid_->output_)), lift_pid_->output_ > 0, lift_pid_->output_ < 0);
+    liftMotor->setSpeedAndDir((abs(lift_pid_->output_)), lift_pid_->output_ > 0, lift_pid_->output_ < 0);
 }
 void Robot::resetMotorsPID() {
     left_pid_->reset();
@@ -115,7 +115,7 @@ void Robot::resetLiftMotorPID() {
     lift_pid_temp_.last_enc_counter = 0;
 }
 
-bool Robot::getStopSignal() { return !StopLimit->read(); }
+bool Robot::getStopSignal() { return !stopLimit->read(); }
 
 void Robot::setLeftMotorSpeed(double speed) { left_pid_->set_point(speed); }
 void Robot::setRightMotorSpeed(double speed) { right_pid_->set_point(-speed); }
@@ -142,22 +142,22 @@ void Robot::setTurnMotorLastENCCounter(int32_t last_enc_counter) { turn_pid_temp
 void Robot::setLiftMotorLastENCCounter(int32_t last_enc_counter) { lift_pid_temp_.last_enc_counter = last_enc_counter; }
 
 void Robot::setLeftMotorSpeedWithoutPID() const {
-    LeftMotor->setSpeedAndDir(static_cast<uint8_t>(abs(left_speed_without_PID_)), left_speed_without_PID_ > 0,
+    leftMotor->setSpeedAndDir(static_cast<uint8_t>(abs(left_speed_without_PID_)), left_speed_without_PID_ > 0,
                               left_speed_without_PID_ < 0);
 }
 
 void Robot::setRightMotorSpeedWithoutPID() const {
-    RightMotor->setSpeedAndDir(static_cast<uint8_t>(abs(right_speed_without_PID_)), right_speed_without_PID_ > 0,
+    rightMotor->setSpeedAndDir(static_cast<uint8_t>(abs(right_speed_without_PID_)), right_speed_without_PID_ > 0,
                                right_speed_without_PID_ < 0);
 }
 
 void Robot::setTurnMotorSpeedWithoutPID() const {
-    TurnMotor->setSpeedAndDir(static_cast<uint8_t>(abs(turn_speed_without_PID_)), turn_speed_without_PID_ > 0,
+    turnMotor->setSpeedAndDir(static_cast<uint8_t>(abs(turn_speed_without_PID_)), turn_speed_without_PID_ > 0,
                               turn_speed_without_PID_ < 0);
 }
 
 void Robot::setLiftMotorSpeedWithoutPID() const {
-    LiftMotor->setSpeedAndDir(static_cast<uint8_t>(abs(lift_speed_without_PID_)), lift_speed_without_PID_ > 0,
+    liftMotor->setSpeedAndDir(static_cast<uint8_t>(abs(lift_speed_without_PID_)), lift_speed_without_PID_ > 0,
                               lift_speed_without_PID_ < 0);
 }
 
@@ -167,7 +167,7 @@ void Robot::LiftMotorDistancePID(int32_t setpoint) {
     lift_distance_pid_->set_gains(liftDistancePidParam.kp, liftDistancePidParam.ki, liftDistancePidParam.kd);
     lift_distance_pid_->set_output_limits(liftDistanceLimits.min, liftDistanceLimits.max);
     lift_distance_pid_->set_point(setpoint);
-    lift_distance_pid_->set_process(LiftENC->get());
+    lift_distance_pid_->set_process(liftEnc->get());
 
     lift_distance_pid_->calculate();
 
@@ -180,7 +180,7 @@ void Robot::setTurnMotorDistance(int32_t setpoint) {
     turn_distance_pid_->set_gains(turnDistancePidParam.kp, turnDistancePidParam.ki, turnDistancePidParam.kd);
     turn_distance_pid_->set_output_limits(turnDistanceLimits.min, turnDistanceLimits.max);
     turn_distance_pid_->set_point(setpoint);
-    turn_distance_pid_->set_process(TurnENC->get());
+    turn_distance_pid_->set_process(turnEnc->get());
 
     turn_distance_pid_->calculate();
 
@@ -194,8 +194,8 @@ double irChange(double x) {
 //红外校准
 bool Robot::calibrationIR(double distance, double angle_error, double distance_error, double left_right_e,
                           double offset) {
-    double right = ir_right_filter->filter(irChange(IR_right->read()));
-    double left = ir_left_filter->filter(irChange(IR_left->read()));
+    double right = ir_right_filter->filter(irChange(irRight->read()));
+    double left = ir_left_filter->filter(irChange(irLeft->read()));
 
     irAnglePidParam = IRCalAnglePIDParams.pid;
     irAngleLimits = IRCalAnglePIDParams.limit;
@@ -203,8 +203,8 @@ bool Robot::calibrationIR(double distance, double angle_error, double distance_e
     ir_angle_pid_->set_output_limits(irAngleLimits.min, irAngleLimits.max);
     ir_angle_pid_->set_point(offset);
 
-    std::cout << "right = " << irChange(IR_right->read()) << " filter right = " << right << std::endl;
-    std::cout << "left = " << irChange(IR_left->read()) << " filter left = " << left << std::endl;
+    std::cout << "right = " << irChange(irRight->read()) << " filter right = " << right << std::endl;
+    std::cout << "left = " << irChange(irLeft->read()) << " filter left = " << left << std::endl;
     ir_angle_pid_->set_process(right - left);
     ir_angle_pid_->calculate();
     irDistancePidParam = IRCalDisPIDParams.pid;
@@ -223,8 +223,8 @@ bool Robot::calibrationIR(double distance, double angle_error, double distance_e
     double R_speed = ir_distance_pid_->output_ + ir_angle_pid_->output_;
     std::cout << "L_speed: " << L_speed << " R_speed:" << R_speed << std::endl;
 
-    Robot::GetInstance().setLeftMotorSpeed(-L_speed); //传感器装在车前为-L_speed
-    Robot::GetInstance().setRightMotorSpeed(-R_speed);
+    Robot::getInstance().setLeftMotorSpeed(-L_speed); //传感器装在车前为-L_speed
+    Robot::getInstance().setRightMotorSpeed(-R_speed);
     bool angle_in_limit = abs(left - right) < angle_error;
     bool distance_in_limit = abs((left + right) / 2 - distance) < distance_error;
     return angle_in_limit & distance_in_limit;
@@ -240,11 +240,11 @@ bool Robot::calibrationUS(double distance, double angle_error, double distance_e
     us_angle_pid_->set_output_limits(usAngleLimits.min, usAngleLimits.max);
     us_angle_pid_->set_point(offset);
 
-    Leftus->trig();
-    Rightus->trig();
+    leftUs->trig();
+    rightUs->trig();
 
-    double right = us_right_filter->filter(Rightus->echo() * 0.017);
-    double left = us_left_filter->filter(Leftus->echo() * 0.017);
+    double right = us_right_filter->filter(rightUs->echo() * 0.017);
+    double left = us_left_filter->filter(leftUs->echo() * 0.017);
 
     std::cout << "left = " << left << " right = " << right << std::endl;
     us_angle_pid_->set_process(right - left);
@@ -266,8 +266,8 @@ bool Robot::calibrationUS(double distance, double angle_error, double distance_e
     double R_speed = us_distance_pid_->output_ + us_angle_pid_->output_;
     std::cout << "L_speed: " << L_speed << " R_speed:" << R_speed << std::endl;
 
-    Robot::GetInstance().setLeftMotorSpeed(L_speed); //传感器装在车前为-L_speed
-    Robot::GetInstance().setRightMotorSpeed(R_speed);
+    Robot::getInstance().setLeftMotorSpeed(L_speed); //传感器装在车前为-L_speed
+    Robot::getInstance().setRightMotorSpeed(R_speed);
     bool angle_in_limit = abs(left - right) < angle_error;
     bool distance_in_limit = abs((left + right) / 2 - distance) < distance_error;
     return angle_in_limit & distance_in_limit;
@@ -300,8 +300,8 @@ bool Robot::calibrationSingleIR(double distance, double hold_phi, double angle_e
     single_ir_angle_pid_->set_process(cur_phi);
     single_ir_angle_pid_->calculate();
 
-    double right = ir_right_filter->filter(irChange(IR_right->read()));
-    std::cout << " right = " << irChange(IR_right->read()) << " filter right = " << right << std::endl;
+    double right = ir_right_filter->filter(irChange(irRight->read()));
+    std::cout << " right = " << irChange(irRight->read()) << " filter right = " << right << std::endl;
 
     singleIrDistancePidParam = SingleIRCalDisPIDParams.pid;
     singleIrDistanceLimits = SingleIRCalDisPIDParams.limit;
@@ -318,8 +318,8 @@ bool Robot::calibrationSingleIR(double distance, double hold_phi, double angle_e
     double L_speed = single_ir_distance_pid_->output_ - single_ir_angle_pid_->output_;
     double R_speed = single_ir_distance_pid_->output_ + single_ir_angle_pid_->output_;
 
-    Robot::GetInstance().setLeftMotorSpeed(-L_speed); //传感器装在车前为-L_speed
-    Robot::GetInstance().setRightMotorSpeed(-R_speed);
+    Robot::getInstance().setLeftMotorSpeed(-L_speed); //传感器装在车前为-L_speed
+    Robot::getInstance().setRightMotorSpeed(-R_speed);
     bool angle_in_limit = abs(hold_phi - cur_phi) < angle_error;
     bool distance_in_limit = abs(right - distance) < distance_error;
     return angle_in_limit & distance_in_limit;

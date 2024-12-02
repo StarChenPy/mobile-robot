@@ -10,17 +10,17 @@
  */
 
 #pragma once
-#include "RobotCfg.h"
-#include "RobotGenius.h"
-#include "params.h"
 #include "system/Robot.h"
+#include "util/RobotCfg.h"
+#include "RobotGenius.h"
+#include "util/params.h"
 
 using namespace std;
 using namespace robot;
 using namespace VMX;
 
 class EStopCommand : public CommandBase {
-  public:
+public:
     typedef std::shared_ptr<EStopCommand> ptr;
     EStopCommand() {}
     ~EStopCommand() {}
@@ -30,13 +30,13 @@ class EStopCommand : public CommandBase {
     void end() override;
     bool isFinished() override;
 
-  private:
+private:
     bool is_finished = false;
 };
 Command::ptr createEStopCommand();
 
 class StartCommand : public CommandBase {
-  public:
+public:
     typedef std::shared_ptr<StartCommand> Ptr;
     StartCommand() {}
     ~StartCommand() {}
@@ -46,7 +46,7 @@ class StartCommand : public CommandBase {
     void end() override;
     bool isFinished() override;
 
-  private:
+private:
     bool is_finished = false;
     int64_t m_last_time;
 };

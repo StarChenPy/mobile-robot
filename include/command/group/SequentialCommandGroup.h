@@ -25,11 +25,11 @@ class SequentialCommandGroup : public CommandGroupBase {
     virtual ~SequentialCommandGroup() {}
 
   public:
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
-    Command::ptr reset() override;
+    void initialize();
+    void execute();
+    void end();
+    bool isFinished();
+    Command::ptr reset();
 
   protected:
     Command::ptr m_current_command_;

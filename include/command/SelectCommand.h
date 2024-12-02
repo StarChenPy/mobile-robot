@@ -11,11 +11,12 @@
 #pragma once
 #include "Command.h"
 #include <memory>
+#include <map>
 
 namespace robot {
 template <typename T> class SelectCommand : public CommandBase {
   public:
-    typedef std::shared_ptr<SelectCommand> Ptr;
+    typedef std::shared_ptr<SelectCommand> ptr;
     // SelectCommand(std::function<T()> selector, std::pair<T, Command::ptr>...
     // commands_ptr) : m_selector_(std::move(selector)) {
     //   (commands_.insert(std::move(commands_ptr)), ...);

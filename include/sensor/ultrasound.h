@@ -15,7 +15,7 @@ namespace Sensor {
 
 class Ultrasound {
   public:
-    typedef std::shared_ptr<Ultrasound> Ptr;
+    typedef std::shared_ptr<Ultrasound> ptr;
     Ultrasound(int trig, int echo);
     Ultrasound(DO::ptr trig, Timer::ptr echo);
     ~Ultrasound() {}

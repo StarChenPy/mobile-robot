@@ -20,11 +20,10 @@ class ParallelRaceGroup : public CommandGroupBase {
     typedef std::shared_ptr<ParallelRaceGroup> ptr;
     template <class... Types> explicit ParallelRaceGroup(Types... commands) { (commands.push_back(commands), ...); }
     ParallelRaceGroup();
-    ~ParallelRaceGroup() = default;
     void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
+    bool isFinished() override ;
     Command::ptr reset() override;
 
   public:

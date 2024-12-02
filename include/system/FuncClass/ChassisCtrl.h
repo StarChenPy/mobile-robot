@@ -10,8 +10,8 @@
  */
 
 #pragma once
-#include "RobotCfg.h"
-#include "params.h"
+#include "util/RobotCfg.h"
+#include "util/params.h"
 using namespace std;
 
 class ChassisCtrl {
@@ -348,11 +348,11 @@ class ChassisCtrl {
     double m_setpoint2Speed_k; //光栅速度对于轮子运动速度的比值, Speed= k * m
                                //_setpoint
 
-    CtrlPID v_pid = VXPID;
+    CtrlPID v_pid = VX_PID;
     Error v_error = {0, 0, 0};
-    CtrlPID w_pid = VZPID;
+    CtrlPID w_pid = VZ_PID;
     Error w_error = {0, 0, 0};
-    CtrlPID ld_y_pid = VYPID;
+    CtrlPID ld_y_pid = VY_PID;
     Error ld_y_error = {0, 0, 0};
     CtrlPID cx_pid = {0.0, 0.04, 0, 3};
     Error cx_error = {0, 0, 0};

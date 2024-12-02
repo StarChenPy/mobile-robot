@@ -9,14 +9,26 @@
  *
  */
 #include "command/CommandBase.h"
-#include "command/Scheduler.h"
+#include "system/Robot.h"
 
 namespace robot {
-CommandBase::~CommandBase() {
-    if (isScheduled) {
-        cancel();
+    CommandBase::CommandBase() {
+        isGroup_ = false;
+        isScheduled = false;
+        isFinished_ = false;
     }
-}
-bool CommandBase::isFinished() { return true; }
-
+    CommandBase::~CommandBase() {
+        if (isScheduled) {
+            cancel();
+        }
+    }
+    void CommandBase::initialize() {
+        isFinished_ = false;
+    }
+    bool CommandBase::isFinished() {
+        if (Robot::getStopSignal()) {
+            stopAll();
+        }
+        return Robot::getStopSignal() || isFinished_;;
+    }
 } // namespace robot

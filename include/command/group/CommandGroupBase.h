@@ -22,16 +22,16 @@ class CommandGroupBase : public Command {
 
   public:
     CommandGroupBase();
-    template <typename... Rest> void AddCommands(Command::ptr first, Rest... rest) {
+    template <typename... Rest> void addCommand(Command::ptr first, Rest... rest) {
         addCommand(first);   // 添加第一个命令
         addCommand(rest...); // 递归调用展开剩余参数
     }
-    void addCommands() {}
-    void addCommands(const std::vector<Command::ptr>& commands);
+    void addCommand() {}
+    void addCommand(const std::vector<Command::ptr>& commands);
     void addCommand(const Command::ptr& command);
-    void addEndCommand(Command::ptr command) { m_next_command_ = command; }
+    void addEndCommand(Command::ptr command) { nextCommand_ = command; }
   protected:
     std::vector<Command::ptr> commands_;
-    Command::ptr m_next_command_;
+    Command::ptr nextCommand_;
 };
 } // namespace robot

@@ -18,34 +18,29 @@ ParallelRaceGroup::ParallelRaceGroup() {
     isGroup_ = true;
 }
 void ParallelRaceGroup::initialize() {
-    // std::cout << "ParallelRaceGroup initialize" << std::endl;
-    for (auto command : commands_) {
+    for (const auto& command : commands_) {
         command->schedule();
     }
     state_ = Command::State::PAUSED;
 }
 void ParallelRaceGroup::execute() {
-    // std::cout << "ParallelRaceGroup execute" << std::endl;
     state_ = Command::State::PAUSED;
 }
 
 void ParallelRaceGroup::end() {
-    for (auto command : commands_) {
+    for (const auto& command : commands_) {
         if (!command->isFinishedDec()) {
             command->cancel();
         }
-        // if (command->state_ != Command::State::STOP) {
-        // command->schedule();
-        // }
     }
     commands_.clear();
-    if (m_next_command_.get()) {
-        m_next_command_->schedule();
+    if (nextCommand_.get()) {
+        nextCommand_->schedule();
     }
 }
 bool ParallelRaceGroup::isFinished() {
     stop_command_index = 0;
-    for (auto command : commands_) {
+    for (const auto& command : commands_) {
         if (command->isFinishedDec()) {
             stop_command_index++;
             return true;

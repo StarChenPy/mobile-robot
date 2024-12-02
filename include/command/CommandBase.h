@@ -11,32 +11,30 @@
 
 #pragma once
 #include "Command.h"
-#include "Util.h"
 #include "command/group/CommandGroupBase.h"
+#include "util/Util.h"
 #include <iostream>
 #include <memory>
 namespace robot {
-class CommandBase : public Command {
-  public:
-    typedef std::shared_ptr<CommandBase> Ptr;
-    CommandBase() { isGroup_ = false; }
-    ~CommandBase() override;
+    class CommandBase : public Command {
+    protected:
+        typedef std::shared_ptr<CommandBase> ptr;
+        CommandBase();
+        ~CommandBase();
 
-  public:
-    /**
-     * @brief 将命令送进调度器队列
-     *
-     * @return true
-     * @return false
-     */
-    void initialize() override {}
-    void execute() override {}
-    void end() override {}
-    virtual void cancel() {}
-    bool isFinished() override;
+        /**
+         * @brief 将命令送进调度器队列
+         *
+         * @return true
+         * @return false
+         */
+        void initialize() override;
+        void execute() override {};
+        void end() override{};
+        bool isFinished() override;
 
-  protected:
-    bool isScheduled = false;
-};
+        bool isScheduled;
+        bool isFinished_;
+    };
 
 } // namespace robot

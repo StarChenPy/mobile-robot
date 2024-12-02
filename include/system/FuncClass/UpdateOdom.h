@@ -11,8 +11,8 @@
 
 #pragma once
 // #include "robotgenius/robot.h"
-#include "RobotCfg.h"
-#include "params.h"
+#include "util/RobotCfg.h"
+#include "util/params.h"
 // #include "system/Robot.h"
 using namespace std;
 // using namespace robot;

@@ -23,7 +23,7 @@ VMXPi &VMXPI::GetInstance(bool realtime, uint8_t ahrs_update_rate_hz) {
     return vmx;
 }
 
-// VMXPi& VMXPI::instance(bool realtime, uint8_t ahrs_update_rate_hz) {
+// VMXPi& VMXPI::getInstance(bool realtime, uint8_t ahrs_update_rate_hz) {
 //   static VMXPi vmx(realtime, ahrs_update_rate_hz);
 //   return vmx;
 // }
@@ -423,7 +423,7 @@ CAN::ReceiveStreamInfo CAN::readReceiveStream(std::string receive_stream_name) {
     }
     // {
     //  LOCK_GUARD(mtx);
-    // bool rt = VMXPI::instance().can.GetBlackboardEntry(
+    // bool rt = VMXPI::getInstance().can.GetBlackboardEntry(
     //     iter->second.can_rx_handles_, iter->second.recvice_message_id_,
     //     iter->second.messages_, iter->second.sys_timestamp_,
     //     iter->second.already_retrieved_, &m_errcode_);

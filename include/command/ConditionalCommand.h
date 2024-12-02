@@ -14,13 +14,13 @@
 #include <memory>
 
 namespace robot {
-class ConditionalComamand : public CommandBase {
+class ConditionalCommand : public CommandBase {
 
   public:
-    typedef std::shared_ptr<ConditionalComamand> Ptr;
-    ConditionalComamand(std::function<bool()> condition, CommandBase::Ptr on_true_command,
-                        CommandBase::Ptr on_false_command);
-    virtual ~ConditionalComamand() {}
+    typedef std::shared_ptr<ConditionalCommand> ptr;
+    ConditionalCommand(std::function<bool()> condition, CommandBase::ptr on_true_command,
+                       CommandBase::ptr on_false_command);
+    virtual ~ConditionalCommand() {}
 
   public:
     void initialize() override;
@@ -29,8 +29,8 @@ class ConditionalComamand : public CommandBase {
     bool isFinished() override;
 
   protected:
-    CommandBase::Ptr m_on_true_command_;
-    CommandBase::Ptr m_on_false_command_;
+    CommandBase::ptr m_on_true_command_;
+    CommandBase::ptr m_on_false_command_;
     std::function<bool()> m_condition_;
 };
 } // namespace robot

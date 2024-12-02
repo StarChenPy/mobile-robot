@@ -1,14 +1,11 @@
 
 #pragma once
-#include "params.h"
-#include "share.h"
-
-using namespace std;
+#include "util/params.h"
 
 struct LidarCalibError {
     PIDErrorParams Dis;
     PIDErrorParams Angle;
-    double LeftRightE;
+    double leftRightE{};
 };
 
 struct SensorCalibError {
@@ -98,10 +95,5 @@ extern CalImg ImgCalData;
 //雷达参数
 extern LidarInitParams LidarParams;
 
-void writeParams2Share();
-
 void VisionCalInit();
 void ParamsInit();
-
-void updataPIDParams();
-void updataLidarParams();

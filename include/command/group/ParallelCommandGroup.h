@@ -11,7 +11,7 @@
 #pragma once
 
 #include "CommandGroupBase.h"
-#include "command/Scheduler.h"
+#include "util/Scheduler.h"
 #include <memory>
 #include <vector>
 
@@ -25,14 +25,14 @@ class ParallelCommandGroup : public CommandGroupBase {
     template <class... Types> explicit ParallelCommandGroup(Types... commands) {
         (commands.push_back(commands), ...);
     }
-    ~ParallelCommandGroup() override = default;
+    ~ParallelCommandGroup() {};
 
   public:
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
-    Command::ptr reset() override;
+    void initialize();
+    void execute();
+    void end();
+    bool isFinished();
+    Command::ptr reset();
 };
 
 ParallelCommandGroup::Ptr createParallelCommandGroup();

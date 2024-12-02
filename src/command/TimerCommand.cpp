@@ -10,7 +10,7 @@
  */
 
 #include "command/TimerCommand.h"
-#include "command/Scheduler.h"
+#include "util/Scheduler.h"
 
 namespace robot {
 
@@ -26,9 +26,9 @@ void TimerCommand::initialize() {
     workCommand_->initialize();
     workCommand_->hasTimer_ = true;
     workCommand_->state_ = Command::State::PAUSED;
-    timer_ = std::make_shared<Timer>(m_ms_, &Scheduler::GetInstance());
+    timer_ = std::make_shared<Timer>(m_ms_, &Scheduler::getInstance());
     timer_->setCommand(getPtr());
-    Scheduler::GetInstance().addTimer(timer_);
+    Scheduler::getInstance().addTimer(timer_);
 }
 void TimerCommand::execute() {
     workCommand_->state_ = Command::State::RUNNING;

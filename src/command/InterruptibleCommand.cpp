@@ -9,7 +9,7 @@
  *
  */
 #include "command/InterruptibleCommand.h"
-#include "command/Scheduler.h"
+#include "util/Scheduler.h"
 namespace robot {
 InterruptibleCommand::InterruptibleCommand(Command::ptr primary_command, Command::ptr interrupt_condition,
                                            Command::ptr fallback_command) {

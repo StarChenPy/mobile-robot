@@ -10,8 +10,8 @@
  */
 
 #pragma once
-#include "RobotCfg.h"
-#include "params.h"
+#include "util/RobotCfg.h"
+#include "util/params.h"
 
 using namespace std;
 
@@ -19,12 +19,12 @@ class LidarCalibrate {
   public:
     typedef std::shared_ptr<LidarCalibrate> Ptr;
     LidarCalibrate() {
-        angle_pid = std::make_shared<PID>(CTRLDT);
-        distance_pid = std::make_shared<PID>(CTRLDT);
-        R_F_pid = std::make_shared<PID>(CTRLDT);
-        R_B_pid = std::make_shared<PID>(CTRLDT);
-        L_F_pid = std::make_shared<PID>(CTRLDT);
-        L_B_pid = std::make_shared<PID>(CTRLDT);
+        angle_pid = std::make_shared<PID>(CTRL_DT);
+        distance_pid = std::make_shared<PID>(CTRL_DT);
+        R_F_pid = std::make_shared<PID>(CTRL_DT);
+        R_B_pid = std::make_shared<PID>(CTRL_DT);
+        L_F_pid = std::make_shared<PID>(CTRL_DT);
+        L_B_pid = std::make_shared<PID>(CTRL_DT);
     }
     ~LidarCalibrate() {}
 
@@ -125,7 +125,7 @@ class LidarCalibrate {
         //   angle_pid->output_ = angle_pid_limits.min;
         // }
 
-        if (abs(R_L - L_L) > LidarCalibE.LeftRightE)
+        if (abs(R_L - L_L) > LidarCalibE.leftRightE)
             distance_pid->output_ = 0;
         R_Setpoint = -angle_pid->output_ - distance_pid->output_;
         L_Setpoint = angle_pid->output_ - distance_pid->output_;

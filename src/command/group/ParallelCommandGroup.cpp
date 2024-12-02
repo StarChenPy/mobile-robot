@@ -18,14 +18,12 @@ ParallelCommandGroup::ParallelCommandGroup() {
 }
 
 void ParallelCommandGroup::initialize() {
-    // std::cout << "ParallelCommandGroup initialize" << std::endl;
     for (auto command : commands_) {
         command->schedule();
     }
     state_ = Command::State::PAUSED;
 }
 void ParallelCommandGroup::execute() {
-    // std::cout << "ParallelCommandGroup execute" << std::endl;
     state_ = Command::State::PAUSED;
 }
 
@@ -47,8 +45,8 @@ void ParallelCommandGroup::end() {
         }
     }
     commands_.clear();
-    if (m_next_command_.get()) {
-        m_next_command_->schedule();
+    if (nextCommand_.get()) {
+        nextCommand_->schedule();
     }
 }
 Command::ptr ParallelCommandGroup::reset() {

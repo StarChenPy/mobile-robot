@@ -27,7 +27,7 @@ LiDAR::LiDAR() {
         }
 
         if (ports.empty()) {
-            printf("Not Lidar was detected. Please enter the lidar serial port.");
+            printf("Not lidar was detected. Please enter the lidar serial port.");
         } else {
             printf("Please enter the lidar port.");
         }
@@ -104,7 +104,7 @@ std::vector<LaserPoint> LiDAR::read() {
         if (m_laser_.doProcessSimple(m_scan_)) {
             return m_scan_.points;
         } else {
-            fprintf(stderr, "Failed to get Lidar Data\n");
+            fprintf(stderr, "Failed to get lidar Data\n");
             fflush(stderr);
         }
     }

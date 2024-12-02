@@ -15,7 +15,7 @@ void CommandGroupBase::addCommand(const Command::ptr& command) {
     }
 }
 
-void CommandGroupBase::addCommands(const std::vector<Command::ptr>& commands) {
+void CommandGroupBase::addCommand(const std::vector<Command::ptr>& commands) {
     for (auto & command : commands) {
         addCommand(command);
     }

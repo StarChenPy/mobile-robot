@@ -11,17 +11,17 @@
 #include "command/ConditionalCommand.h"
 namespace robot {
 
-ConditionalComamand::ConditionalComamand(std::function<bool()> condition, CommandBase::Ptr on_true_command,
-                                         CommandBase::Ptr on_false_command)
+ConditionalCommand::ConditionalCommand(std::function<bool()> condition, CommandBase::ptr on_true_command,
+                                       CommandBase::ptr on_false_command)
     : m_condition_(condition), m_on_true_command_(on_true_command), m_on_false_command_(on_false_command) {}
 
-void ConditionalComamand::initialize() {
+void ConditionalCommand::initialize() {
     workCommand_ = m_condition_() ? m_on_true_command_ : m_on_false_command_;
     workCommand_->initialize();
 }
-void ConditionalComamand::execute() { workCommand_->execute(); }
-void ConditionalComamand::end() { workCommand_->end(); }
+void ConditionalCommand::execute() { workCommand_->execute(); }
+void ConditionalCommand::end() { workCommand_->end(); }
 
-bool ConditionalComamand::isFinished() { return workCommand_->isFinished(); }
+bool ConditionalCommand::isFinished() { return workCommand_->isFinished(); }
 
 } // namespace robot

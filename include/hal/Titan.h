@@ -36,7 +36,7 @@ class Motor : public std::enable_shared_from_this<Motor> {
     bool setEnable();
     bool setDisable();
     explicit Motor(uint8_t index, uint16_t frequency = 20000);
-    bool setSpeedAndDir(uint8_t speed, bool dir0, bool dir1);
+    bool setSpeedAndDir(uint8_t speed, bool dir0, bool dir1) const;
     Motor::ptr getPtr();
 
   private:

@@ -9,29 +9,23 @@
  *
  */
 #pragma once
-#include "Timer.h"
-#include "Util.h"
-#include <memory>
+#include "util/Timer.h"
+#include "util/Util.h"
 namespace robot {
 
 class Command : public std::enable_shared_from_this<Command> {
   public:
     typedef std::shared_ptr<Command> ptr;
-    Command() = default;
+
     virtual ~Command();
 
-    Command(const Command &);
-    Command &operator=(const Command &);
-    Command(Command &&) = default;
-    Command &operator=(Command &&) = default;
     enum State { WAIT = 0, INIT = 1, RUNNING = 2, PAUSED = 3, FINISHED = 4, CANCELED = 5, STOP = 6 };
 
   public:
-    // virtual bool schedule() = 0;
     virtual void initialize() = 0;
     virtual void execute() = 0;
     virtual void end() = 0;
-    void cancel();
+    virtual void cancel();
     virtual bool isFinished() = 0;
     bool isFinishedDec();
     Command::ptr getPtr();

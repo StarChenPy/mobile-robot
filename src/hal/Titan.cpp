@@ -87,7 +87,7 @@ Motor::Motor(uint8_t index, uint16_t frequency) : m_index_(index) {
         std::cout << "Active Titan motor" << m_index_ << " failed" << std::endl;
     }
 }
-bool Motor::setSpeedAndDir(uint8_t speed, bool dir0, bool dir1) {
+bool Motor::setSpeedAndDir(uint8_t speed, bool dir0, bool dir1) const {
     // setEnable();
     uint32_t request_message_id = HG_SET_MOTOR_SPEED;
     VMXCANMessage msg;

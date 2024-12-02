@@ -3,22 +3,22 @@
 void EStopCommand::initialize() { is_finished = false; }
 void EStopCommand::execute() {
 
-    bool stopButton = StopLimit->read();
+    bool stopButton = stopLimit->read();
     if (!stopButton) {
-        LeftMotor->setSpeedAndDir(0, false, true);
-        RightMotor->setSpeedAndDir(0, false, true);
-        LiftMotor->setSpeedAndDir(0, false, true);
-        TurnMotor->setSpeedAndDir(0, false, true);
-        std::cout << "EStop Button is pushed!" << std::endl;
+        leftMotor->setSpeedAndDir(0, false, true);
+        rightMotor->setSpeedAndDir(0, false, true);
+        liftMotor->setSpeedAndDir(0, false, true);
+        turnMotor->setSpeedAndDir(0, false, true);
+        std::cout << "EStop titanButton is pushed!" << std::endl;
         is_finished = true;
     }
 }
 void EStopCommand::end() {
     stopAll();
-    LeftMotor->setSpeedAndDir(0, false, true);
-    RightMotor->setSpeedAndDir(0, false, true);
-    LiftMotor->setSpeedAndDir(0, false, true);
-    TurnMotor->setSpeedAndDir(0, false, true);
+    leftMotor->setSpeedAndDir(0, false, true);
+    rightMotor->setSpeedAndDir(0, false, true);
+    liftMotor->setSpeedAndDir(0, false, true);
+    turnMotor->setSpeedAndDir(0, false, true);
     std::cout << "EStopCommand done!" << std::endl;
 }
 bool EStopCommand::isFinished() { return is_finished; }
@@ -27,17 +27,17 @@ Command::ptr createEStopCommand() { return std::make_shared<EStopCommand>()->wit
 //开始按钮
 void StartCommand::initialize() {
     is_finished = false;
-    Robot::GetInstance().setRightMotorSpeed(0);
-    Robot::GetInstance().setLeftMotorSpeed(0);
-    Button->setEnable();
+    Robot::getInstance().setRightMotorSpeed(0);
+    Robot::getInstance().setLeftMotorSpeed(0);
+    titanButton->setEnable();
 }
 void StartCommand::execute() {
     uint64_t time = robot::getCurrentMs();
     m_last_time = time;
 
-    Button->read();
-    std::cout << "Start: " << Button->get(2) << std::endl;
-    if (Button->get(2)) {
+    titanButton->read();
+    std::cout << "Start: " << titanButton->get(2) << std::endl;
+    if (titanButton->get(2)) {
         is_finished = false;
     } else {
         is_finished = true;
@@ -48,9 +48,9 @@ void StartCommand::end() {
     std::cout << "Command Start!!!" << std::endl;
 }
 bool StartCommand::isFinished() {
-    if (Robot::GetInstance().getStopSignal()) {
+    if (Robot::getInstance().getStopSignal()) {
         stopAll();
     }
-    return is_finished || Robot::GetInstance().getStopSignal();
+    return is_finished || Robot::getInstance().getStopSignal();
 }
 Command::ptr createStartCommand() { return std::make_shared<StartCommand>()->withTimer(100); }

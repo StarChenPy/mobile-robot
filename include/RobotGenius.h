@@ -11,15 +11,15 @@
 
 #pragma once
 
+#include "util/Scheduler.h"
 #include "command/ConditionalCommand.h"
-#include "command/Scheduler.h"
 #include "command/SelectCommand.h"
 #include "command/TimerCommand.h"
 #include "command/group/ParallelCommandGroup.h"
 #include "command/group/ParallelDeadlineGroup.h"
 #include "command/group/ParallelRaceGroup.h"
 #include "command/group/SequentialCommandGroup.h"
-#include "control/PID.h"
+#include "util/PID.h"
 #include "hal/Titan.h"
 #include "hal/vmx.h"
 #include "sensor/ultrasound.h"

@@ -10,10 +10,10 @@
  */
 
 #pragma once
-#include "RobotCfg.h"
-#include "params.h"
 #include "system/LidarDrive.h"
 #include "system/SysParams.h"
+#include "util/RobotCfg.h"
+#include "util/params.h"
 #include <mutex>
 
 using namespace std;

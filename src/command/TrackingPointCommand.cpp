@@ -2,52 +2,37 @@
 
 // 坐标优先，走弧线
 void TrackingPointCommand::initialize() {
-    uint8_t updata_status = COMMEND_WAIT;
-    LABVIEW::TrackingPointStatusShareAddress->write(updata_status);
-
     is_finished = false;
-    Robot::GetInstance().chassis_ctrl->set_v_pidlimit(set_v);
-    Robot::GetInstance().chassis_ctrl->set_delta_d_max(E_dis);
-    Robot::GetInstance().chassis_ctrl->set_d_PHi_min(E_phi);
+    Robot::getInstance().chassis_ctrl->set_v_pidlimit(set_v);
+    Robot::getInstance().chassis_ctrl->set_delta_d_max(E_dis);
+    Robot::getInstance().chassis_ctrl->set_d_PHi_min(E_phi);
 }
 void TrackingPointCommand::execute() {
-    Pose cur = Robot::GetInstance().odom->getPose();
-    is_finished = Robot::GetInstance().chassis_ctrl->TrackingPointTask(target, cur);
-    double R_setpoint = Robot::GetInstance().chassis_ctrl->get_R_setpoint();
-    double L_setpoint = Robot::GetInstance().chassis_ctrl->get_L_setpoint();
-    Robot::GetInstance().setRightMotorSpeed(R_setpoint);
-    Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
+    Pose cur = Robot::getInstance().odom->getPose();
+    is_finished = Robot::getInstance().chassis_ctrl->TrackingPointTask(target, cur);
+    double R_setpoint = Robot::getInstance().chassis_ctrl->get_R_setpoint();
+    double L_setpoint = Robot::getInstance().chassis_ctrl->get_L_setpoint();
+    Robot::getInstance().setRightMotorSpeed(R_setpoint);
+    Robot::getInstance().setLeftMotorSpeed(L_setpoint);
 
     // 打印
-    Robot::GetInstance().odom->print();
+    Robot::getInstance().odom->print();
 
     int time = robot::getCurrentMs();
-    int dt = time - m_last_time;
     m_last_time = time;
-    // std::cout << "TrackingPointCommand execute dt = " << dt << std::endl;
-    // isFinished_ = true;
 }
 void TrackingPointCommand::end() {
     std::cout << "TrackingPointCommand end!" << std::endl;
-    Robot::GetInstance().setRightMotorSpeed(0);
-    Robot::GetInstance().setLeftMotorSpeed(0);
-    Pose cur = Robot::GetInstance().odom->getPose();
+    Robot::getInstance().setRightMotorSpeed(0);
+    Robot::getInstance().setLeftMotorSpeed(0);
+    Pose cur = Robot::getInstance().odom->getPose();
     std::cout << "End pose x = " << cur.x_ << " y = " << cur.y_ << " theta_ = " << cur.theta_ << std::endl;
-
-    uint8_t updata_status = COMMEND_END;
-    LABVIEW::TrackingPointStatusShareAddress->write(updata_status);
 }
 bool TrackingPointCommand::isFinished() {
-    uint8_t command_status;
-    LABVIEW::TrackingPointStatusShareAddress->read(command_status);
-    if (command_status == COMMEND_CANCEL) {
-        is_finished = true;
-    }
-    int time = robot::getCurrentMs();
-    if (Robot::GetInstance().getStopSignal()) {
+    if (Robot::getInstance().getStopSignal()) {
         stopAll();
     }
-    return is_finished || Robot::GetInstance().getStopSignal();
+    return is_finished || Robot::getInstance().getStopSignal();
 }
 // 指令封装
 Command::ptr createTrackingPointCommand(Pose target_pose) {
@@ -79,14 +64,10 @@ Command::ptr createTrackingVectorCommand(const vector<Pose> &points,
 
 // 角度优先，先旋转到目标点的航向角
 void TrackingXYCommand::initialize() {
-    uint8_t updata_status = COMMEND_WAIT;
-    LABVIEW::TrackingXYStatusShareAddress->write(updata_status);
-
     is_finished = false;
-    Pose InitPose = Robot::GetInstance().odom->getPose();
+    Pose InitPose = Robot::getInstance().odom->getPose();
     double dy = target.y_ - InitPose.y_;
     double dx = target.x_ - InitPose.x_;
-    // Init_PHi = std::atan2(dy, dx) * (180/M_PI);
     double targetPHi = std::atan2(dy, dx) * (180 / M_PI);
     double curPHi = InitPose.theta_;
 
@@ -120,55 +101,41 @@ void TrackingXYCommand::initialize() {
 
     std::cout << "Init_PHi = " << Init_PHi << std::endl;
 
-    Robot::GetInstance().chassis_ctrl->set_v_pidlimit(set_v);
-    Robot::GetInstance().chassis_ctrl->set_delta_d_max(E_dis);
-    Robot::GetInstance().chassis_ctrl->set_d_PHi_min(E_phi);
+    Robot::getInstance().chassis_ctrl->set_v_pidlimit(set_v);
+    Robot::getInstance().chassis_ctrl->set_delta_d_max(E_dis);
+    Robot::getInstance().chassis_ctrl->set_d_PHi_min(E_phi);
 }
 void TrackingXYCommand::execute() {
-    Pose cur = Robot::GetInstance().odom->getPose();
+    Pose cur = Robot::getInstance().odom->getPose();
     if (step == 0) {
-        flag = Robot::GetInstance().chassis_ctrl->RotateTask(Init_PHi, cur.theta_);
-        if (flag == true) {
+        flag = Robot::getInstance().chassis_ctrl->RotateTask(Init_PHi, cur.theta_);
+        if (flag) {
             step = 1;
         }
     } else if (step == 1) {
-        is_finished = Robot::GetInstance().chassis_ctrl->TrackingPointTask(target, cur);
+        is_finished = Robot::getInstance().chassis_ctrl->TrackingPointTask(target, cur);
     }
 
-    double R_setpoint = Robot::GetInstance().chassis_ctrl->get_R_setpoint();
-    double L_setpoint = Robot::GetInstance().chassis_ctrl->get_L_setpoint();
-    Robot::GetInstance().setRightMotorSpeed(R_setpoint);
-    Robot::GetInstance().setLeftMotorSpeed(L_setpoint);
-
-    // 打印
-    // Robot::instance().odom->print();
+    double R_setpoint = Robot::getInstance().chassis_ctrl->get_R_setpoint();
+    double L_setpoint = Robot::getInstance().chassis_ctrl->get_L_setpoint();
+    Robot::getInstance().setRightMotorSpeed(R_setpoint);
+    Robot::getInstance().setLeftMotorSpeed(L_setpoint);
 
     int time = robot::getCurrentMs();
-    int dt = time - m_last_time;
     m_last_time = time;
-    // std::cout << "TrackingXYCommand execute dt = " << dt << std::endl;
-    // isFinished_ = true;
 }
 void TrackingXYCommand::end() {
     std::cout << "TrackingXYCommand end!" << std::endl;
-    Robot::GetInstance().setRightMotorSpeed(0);
-    Robot::GetInstance().setLeftMotorSpeed(0);
-    Pose cur = Robot::GetInstance().odom->getPose();
+    Robot::getInstance().setRightMotorSpeed(0);
+    Robot::getInstance().setLeftMotorSpeed(0);
+    Pose cur = Robot::getInstance().odom->getPose();
     std::cout << "End pose x = " << cur.x_ << " y = " << cur.y_ << " theta_ = " << cur.theta_ << std::endl;
-
-    uint8_t updata_status = COMMEND_END;
-    LABVIEW::TrackingXYStatusShareAddress->write(updata_status);
 }
 bool TrackingXYCommand::isFinished() {
-    uint8_t command_status;
-    LABVIEW::TrackingXYStatusShareAddress->read(command_status);
-    if (command_status == COMMEND_CANCEL) {
-        is_finished = true;
-    }
-    if (Robot::GetInstance().getStopSignal()) {
+    if (Robot::getInstance().getStopSignal()) {
         stopAll();
     }
-    return is_finished || Robot::GetInstance().getStopSignal();
+    return is_finished || Robot::getInstance().getStopSignal();
 }
 // 指令封装
 Command::ptr createTrackingXYCommand(Pose target_pose) {
