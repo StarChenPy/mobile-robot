@@ -1,50 +1,43 @@
 #pragma once
 
-#include "command/CommandBase.h"
+#include "command/ICommand.h"
 #include "util/params.h"
 
 namespace robot {
-    class MotorCommand : public CommandBase {
-        public:
-        typedef std::shared_ptr<MotorCommand> ptr;
-
-        MotorCommand();
-
-        void initialize() override;
-        bool isFinished() override;
-
-        static Command::ptr create();
-
-        protected:
-        bool isFinished_ = false;
-    };
-
-    class LeftMotorCommand : public MotorCommand {
+    class LeftMotorCommand : public ICommand {
         public:
         LeftMotorCommand();
 
         void execute() override;
+
+        static ICommand::ptr create();
     };
 
-    class RightMotorCommand : public MotorCommand {
+    class RightMotorCommand : public ICommand {
         public:
         RightMotorCommand();
 
         void execute() override;
+
+        static ICommand::ptr create();
     };
 
-    class TurnMotorCommand : public MotorCommand {
+    class TurnMotorCommand : public ICommand {
         public:
         TurnMotorCommand();
 
         void execute() override;
+
+        static ICommand::ptr create();
     };
 
-    class LiftMotorCommand : public MotorCommand {
+    class LiftMotorCommand : public ICommand {
         public:
         LiftMotorCommand();
 
         void execute() override;
+
+        static ICommand::ptr create();
     };
 } // namespace robot
 

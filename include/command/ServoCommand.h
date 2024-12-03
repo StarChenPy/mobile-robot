@@ -17,21 +17,19 @@
 using namespace std;
 using namespace robot;
 
-class ClampServoCommand : public CommandBase {
+class ClampServoCommand : public ICommand {
   public:
     typedef std::shared_ptr<ClampServoCommand> Ptr;
+    
     ClampServoCommand(double val) : ClampServo_val(val) {}
     ClampServoCommand(double val, double cnt_limit) : ClampServo_val(val), counter_limit(cnt_limit) {}
-    ~ClampServoCommand() {}
+    ~ClampServoCommand() override = default;
 
-    void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    int64_t m_last_time = 0;
 
     int counter = 0;
     int counter_limit = 10;
@@ -39,80 +37,71 @@ class ClampServoCommand : public CommandBase {
 };
 
 // 指令封装  len:打开宽度，单位cm
-Command::ptr createClampServoCommand(double len);
-Command::ptr createClampServoCommand(double len, double cnt_limit);
+ICommand::ptr createClampServoCommand(double len);
+ICommand::ptr createClampServoCommand(double len, double cnt_limit);
 
-class TelescopicServoCommand : public CommandBase {
+class TelescopicServoCommand : public ICommand {
   public:
     typedef std::shared_ptr<TelescopicServoCommand> Ptr;
-    TelescopicServoCommand(double val) : TelescopicServo_val(val) {}
+    explicit TelescopicServoCommand(double val) : TelescopicServo_val(val) {}
     TelescopicServoCommand(double val, double cnt_limit) : TelescopicServo_val(val), counter_limit(cnt_limit) {}
-    ~TelescopicServoCommand() {}
+    ~TelescopicServoCommand() override = default;
 
-    void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    int64_t m_last_time = 0;
 
     int counter = 0;
-    int counter_limit = 10;
+    double counter_limit = 10;
     double TelescopicServo_val = TELESCOPIC_SERVO_MIN;
 };
 
 // 指令封装  dis:伸缩距离，单位cm
-Command::ptr createTelescopicServoCommand(double dis);
-Command::ptr createTelescopicServoCommand(double dis, double cnt_limit);
+ICommand::ptr createTelescopicServoCommand(double dis);
+ICommand::ptr createTelescopicServoCommand(double dis, double cnt_limit);
 
-class RaiseServoCommand : public CommandBase {
+class RaiseServoCommand : public ICommand {
   public:
     typedef std::shared_ptr<RaiseServoCommand> Ptr;
     RaiseServoCommand(double val) : RaiseServo_val(val) {}
     RaiseServoCommand(double val, double cnt_limit) : RaiseServo_val(val), counter_limit(cnt_limit) {}
     ~RaiseServoCommand() {}
 
-    void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    int64_t m_last_time = 0;
 
     int counter = 0;
-    int counter_limit = 10;
+    double counter_limit = 10;
     double RaiseServo_val = RAISE_SERVO_MIN;
 };
 
 // 指令封装  angle:抬起角度，单位：度
-Command::ptr createRaiseServoCommand(double angle);
-Command::ptr createRaiseServoCommand(double angle, double cnt_limit);
+ICommand::ptr createRaiseServoCommand(double angle);
+ICommand::ptr createRaiseServoCommand(double angle, double cnt_limit);
 
-class RotatingServoCommand : public CommandBase {
+class RotatingServoCommand : public ICommand {
   public:
     typedef std::shared_ptr<RotatingServoCommand> Ptr;
     RotatingServoCommand(double val) : RotatingServo_val(val) {}
     RotatingServoCommand(double val, double cnt_limit) : RotatingServo_val(val), counter_limit(cnt_limit) {}
-    ~RotatingServoCommand() {}
+    ~RotatingServoCommand() override = default;
 
-    void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    int64_t m_last_time = 0;
 
     int counter = 0;
-    int counter_limit = 10;
+    double counter_limit = 10;
     double RotatingServo_val = RAISE_SERVO_MIN;
 };
 
 // 指令封装  angle:角度，单位：度
-Command::ptr createRotatingServoCommand(double angle);
-Command::ptr createRotatingServoCommand(double angle, double cnt_limit);
+ICommand::ptr createRotatingServoCommand(double angle);
+ICommand::ptr createRotatingServoCommand(double angle, double cnt_limit);

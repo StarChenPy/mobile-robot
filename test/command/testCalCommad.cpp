@@ -15,8 +15,8 @@
 
 #include "command/MotorPIDCommand.h"
 #include "command/ButtonCommand.h"
-#include "command/CalCommand.h"
-#include "command/ZeroOdomCommand.h"
+#include "command/sensor/CalCommand.h"
+#include "command/sensor/ZeroOdomCommand.h"
 #include "command/UpdataOdomCommand.h"
 
 

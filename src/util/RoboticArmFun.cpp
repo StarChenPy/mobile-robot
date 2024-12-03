@@ -15,7 +15,7 @@ using namespace std;
 using namespace robot;
 
 //伸缩舵机逐步运行动作
-Command::ptr TelescopicCtrlAction(double start, double end){
+ICommand::ptr TelescopicCtrlAction(double start, double end){
     double d = 0.5;
     double cnt_limit = 1;
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
@@ -32,7 +32,7 @@ Command::ptr TelescopicCtrlAction(double start, double end){
 }
 
 //夹手舵机逐步运行动作
-Command::ptr ClampCtrlAction(double start, double end){
+ICommand::ptr ClampCtrlAction(double start, double end){
     double d_l = 1;
     double cnt_limit = 1;
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
@@ -49,7 +49,7 @@ Command::ptr ClampCtrlAction(double start, double end){
 }
 
 //抬手舵机逐步运行动作
-Command::ptr RaiseCtrlAction(double start, double end){
+ICommand::ptr RaiseCtrlAction(double start, double end){
     double d_angle = 5;
     double cnt_limit = 1;
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
@@ -66,7 +66,7 @@ Command::ptr RaiseCtrlAction(double start, double end){
 }
 
 //升降旋转置零动作
-Command::ptr ResetLiftAndTurn(double turn_speed){
+ICommand::ptr ResetLiftAndTurn(double turn_speed){
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
     sequential->addCommand(
             ResetLiftMotorCommand::create(10),         //重置升降
@@ -77,7 +77,7 @@ Command::ptr ResetLiftAndTurn(double turn_speed){
 }
 
 //抓手并行
-Command::ptr GripperServoPG(double telescopic, double raise, double clamp){
+ICommand::ptr GripperServoPG(double telescopic, double raise, double clamp){
     ParallelCommandGroup::ptr PG = std::make_shared<ParallelCommandGroup>();
     PG->addCommand(
             createRaiseServoCommand(raise),               //RAISE_ANGLE_MIN = 0.0   RAISE_ANGLE_MAX = 90.0
@@ -88,7 +88,7 @@ Command::ptr GripperServoPG(double telescopic, double raise, double clamp){
 }
 
 //升降旋转并行
-Command::ptr LiftAndTurnPG(double h, double angle){
+ICommand::ptr LiftAndTurnPG(double h, double angle){
     ParallelCommandGroup::ptr PG = std::make_shared<ParallelCommandGroup>();
     PG->addCommand(
             LiftMotorDistancePIDCommand::create(h),
@@ -98,7 +98,7 @@ Command::ptr LiftAndTurnPG(double h, double angle){
 }
 
 //重置机械臂
-Command::ptr ResetRoboticArm(){
+ICommand::ptr ResetRoboticArm(){
     SequentialCommandGroup::ptr LiftS = std::make_shared<SequentialCommandGroup>();
     LiftS->addCommand(
             ResetLiftMotorCommand::create(15),         //重置升降
@@ -115,7 +115,7 @@ Command::ptr ResetRoboticArm(){
 
 
 //车辆移动机械臂状态
-Command::ptr CarMoveStatus(){
+ICommand::ptr CarMoveStatus(){
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
     sequential->addCommand(
             LiftMotorDistancePIDCommand::create(-1),       //升高最高
@@ -129,7 +129,7 @@ Command::ptr CarMoveStatus(){
 }
 
 //车辆移动机械臂状态并行
-Command::ptr CarMoveStatusPG(){
+ICommand::ptr CarMoveStatusPG(){
     ParallelCommandGroup::ptr PG = std::make_shared<ParallelCommandGroup>();
     PG->addCommand(
             GripperServoPG(5, 0, CLAMP_LEN_MAX),
@@ -142,7 +142,7 @@ Command::ptr CarMoveStatusPG(){
 
 
 //初始状态
-Command::ptr InitStatus(){
+ICommand::ptr InitStatus(){
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
     sequential->addCommand(
             LiftMotorDistancePIDCommand::create(-20),
@@ -155,7 +155,7 @@ Command::ptr InitStatus(){
 }
 
 // 限高
-Command::ptr HeightLimitStatus(){
+ICommand::ptr HeightLimitStatus(){
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
     sequential->addCommand(
             LiftMotorDistancePIDCommand::create(-1),
@@ -169,7 +169,7 @@ Command::ptr HeightLimitStatus(){
 }
 
 //看水果抓手状态
-Command::ptr VisionServoStatus(){
+ICommand::ptr VisionServoStatus(){
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
     sequential->addCommand(
             createRaiseServoCommand(45),       //RAISE_ANGLE_MIN = 0.0   RAISE_ANGLE_MAX = 90.0
@@ -181,7 +181,7 @@ Command::ptr VisionServoStatus(){
 
 
 //看水果机械臂状态
-Command::ptr VisionStatus(){
+ICommand::ptr VisionStatus(){
     SequentialCommandGroup::ptr sequential = std::make_shared<SequentialCommandGroup>();
     sequential->addCommand(
             LiftMotorDistancePIDCommand::create(-1),
@@ -192,7 +192,7 @@ Command::ptr VisionStatus(){
     return sequential;
 }
 
-Command::ptr VisionStatusPG(){
+ICommand::ptr VisionStatusPG(){
     ParallelCommandGroup::ptr PG = std::make_shared<ParallelCommandGroup>();
     PG->addCommand(
             GripperServoPG(-3.8, 50, CLAMP_LEN_MAX),
@@ -209,7 +209,7 @@ Command::ptr VisionStatusPG(){
 
 
 //抓水果动作
-Command::ptr PickFruitStatus(int layer){
+ICommand::ptr PickFruitStatus(int layer){
     double h;
     double raise = 90;
     double telescopic = TELESCOPIC_DIS_MIN;
@@ -244,7 +244,7 @@ Command::ptr PickFruitStatus(int layer){
 }
 
 //抓水果动作
-Command::ptr PickFruitSG(){
+ICommand::ptr PickFruitSG(){
     double telescopic = -2;
     double clamp = 7;
 
@@ -263,7 +263,7 @@ Command::ptr PickFruitSG(){
 
 
 //抓篮子
-Command::ptr PickBasketAction(){
+ICommand::ptr PickBasketAction(){
     double pick_h = -2.0;
     double down_h = pick_h - 21;
     double raise = 115;
@@ -295,7 +295,7 @@ Command::ptr PickBasketAction(){
 }
 
 //放篮子
-Command::ptr PutBasketAction(){
+ICommand::ptr PutBasketAction(){
     double h = -24;
     double raise = 14;
     double telescopic = 9;
@@ -326,7 +326,7 @@ Command::ptr PutBasketAction(){
 }
 
 //放篮子
-Command::ptr PutFruit2BasketAction(){
+ICommand::ptr PutFruit2BasketAction(){
     double h = -15;
     double raise = 14;
     double telescopic = 9;
@@ -347,7 +347,7 @@ Command::ptr PutFruit2BasketAction(){
 
 
 //放水果进篮子
-Command::ptr PutFruit2BasketAction_1(int DiJiGe , int ZuoYou){
+ICommand::ptr PutFruit2BasketAction_1(int DiJiGe , int ZuoYou){
     double turn_angle;
     double raise;
     double telescopic;
@@ -414,7 +414,7 @@ Command::ptr PutFruit2BasketAction_1(int DiJiGe , int ZuoYou){
 
 
 //放水果进篮子并行
-Command::ptr PutFruit2BasketPG(int DiJiGe , int ZuoYou){
+ICommand::ptr PutFruit2BasketPG(int DiJiGe , int ZuoYou){
     double turn_angle;
     double raise;
     double telescopic;

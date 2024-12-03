@@ -4,7 +4,7 @@
 #include "command/TrackingPointCommand.h"
 #include "command/UpdataOdomCommand.h"
 #include "command/RotateCommand.h"
-#include "command/ZeroOdomCommand.h"
+#include "command/sensor/ZeroOdomCommand.h"
 
 
 int main() {

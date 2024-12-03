@@ -1,10 +1,8 @@
-#ifndef MOBILE_ROBOT_MOTORDISTANCEPIDCOMMAND_H
-#define MOBILE_ROBOT_MOTORDISTANCEPIDCOMMAND_H
-
-#include "command/CommandBase.h"
+#pragma once
+#include "command/ICommand.h"
 #include "util/params.h"
 namespace robot {
-    class LiftMotorDistancePIDCommand : public CommandBase {
+    class LiftMotorDistancePIDCommand : public ICommand {
     public:
         typedef std::shared_ptr<LiftMotorDistancePIDCommand> ptr;
         /**
@@ -15,12 +13,11 @@ namespace robot {
          */
         LiftMotorDistancePIDCommand(int32_t distance, double distanceError, uint8_t verificationTimes);
 
-        void initialize() override;
         void execute() override;
         void end() override;
         bool isFinished() override;
 
-        static Command::ptr create(double h, double distanceError = LIFT_MOTOR_DISTANCE_ERROR, uint8_t verificationTimes = LIFT_MOTOR_DISTANCE_COUNTER);
+        static ICommand::ptr create(double h, double distanceError = LIFT_MOTOR_DISTANCE_ERROR, uint8_t verificationTimes = LIFT_MOTOR_DISTANCE_COUNTER);
 
     private:
         bool isFinished_;
@@ -30,7 +27,7 @@ namespace robot {
         uint8_t verificationTimes_;
     };
 
-    class TurnMotorDistancePIDCommand : public CommandBase {
+    class TurnMotorDistancePIDCommand : public ICommand {
     public:
         typedef std::shared_ptr<TurnMotorDistancePIDCommand> ptr;
         /**
@@ -45,7 +42,7 @@ namespace robot {
         void end() override;
         bool isFinished() override;
 
-        static Command::ptr create(double angle, double distanceError = TURN_MOTOR_DISTANCE_ERROR, uint8_t verificationTimes = TURN_MOTOR_DISTANCE_COUNTER);
+        static ICommand::ptr create(double angle, double distanceError = TURN_MOTOR_DISTANCE_ERROR, uint8_t verificationTimes = TURN_MOTOR_DISTANCE_COUNTER);
 
     private:
         bool isFinished_;
@@ -57,7 +54,7 @@ namespace robot {
 
 // *------------------------------------ 下面是 Reset 命令 ------------------------------------* //
 
-    class ResetLiftMotorCommand : public CommandBase {
+    class ResetLiftMotorCommand : public ICommand {
     public:
         typedef std::shared_ptr<ResetLiftMotorCommand> ptr;
         /**
@@ -70,7 +67,7 @@ namespace robot {
         void end() override;
         bool isFinished() override;
 
-        static Command::ptr create(int32_t speed = 10);
+        static ICommand::ptr create(int32_t speed = 10);
 
     private:
         bool isFinished_ = false;
@@ -79,7 +76,7 @@ namespace robot {
         int32_t counter_ = 0;
     };
 
-    class ResetTurnMotorCommand : public CommandBase {
+    class ResetTurnMotorCommand : public ICommand {
     public:
         typedef std::shared_ptr<ResetTurnMotorCommand> ptr;
         /**
@@ -92,7 +89,7 @@ namespace robot {
         void end() override;
         bool isFinished() override;
 
-        static Command::ptr create(int32_t speed = 10);
+        static ICommand::ptr create(int32_t speed = 10);
 
     private:
         bool isFinished_ = false;
@@ -101,5 +98,3 @@ namespace robot {
         int32_t counter_ = 0;
     };
 } // namespace robot
-
-#endif // MOBILE_ROBOT_MOTORDISTANCEPIDCOMMAND_H

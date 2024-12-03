@@ -2,30 +2,22 @@
 #include "system/Robot.h"
 
 namespace robot {
-    MotorCommand::MotorCommand() {
-        isFinished_ = false;
-    }
-    void MotorCommand::initialize() {
-        isFinished_ = false;
-    }
-    bool MotorCommand::isFinished() {
-        if (Robot::getStopSignal()) {
-            stopAll();
-        }
-        return isFinished_ || Robot::getStopSignal();
-    }
-    Command::ptr MotorCommand::create() {
-        return std::make_shared<MotorCommand>()->withTimer(20);
-    }
-
     LeftMotorCommand::LeftMotorCommand() = default;
     void LeftMotorCommand::execute() {
         Robot::getInstance().setLeftMotorSpeedWithoutPID();
     }
 
-    RightMotorCommand::RightMotorCommand() = default;
+    ICommand::ptr LeftMotorCommand::create() {
+        return std::make_shared<LeftMotorCommand>()->withTimer(20);
+    }
+
+RightMotorCommand::RightMotorCommand() = default;
     void RightMotorCommand::execute() {
         Robot::getInstance().setRightMotorSpeedWithoutPID();
+    }
+
+    ICommand::ptr RightMotorCommand::create() {
+        return std::make_shared<RightMotorCommand>()->withTimer(20);
     }
 
     TurnMotorCommand::TurnMotorCommand() = default;
@@ -33,8 +25,16 @@ namespace robot {
         Robot::getInstance().setTurnMotorSpeedWithoutPID();
     }
 
+    ICommand::ptr TurnMotorCommand::create() {
+        return std::make_shared<TurnMotorCommand>()->withTimer(20);
+    }
+
     LiftMotorCommand::LiftMotorCommand() = default;
     void LiftMotorCommand::execute() {
         Robot::getInstance().setLiftMotorSpeedWithoutPID();
+    }
+
+    ICommand::ptr LiftMotorCommand::create() {
+        return std::make_shared<LiftMotorCommand>()->withTimer(20);
     }
 } // namespace robot

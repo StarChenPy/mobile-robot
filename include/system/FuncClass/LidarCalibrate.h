@@ -200,12 +200,6 @@ class LidarCalibrate {
         if (len == 0) {
             return false;
         }
-        // std::cout << "len: " << len <<std::endl;
-        // if(len < 10){    //当没有雷达数据
-        //   R_Setpoint = 0;
-        //   L_Setpoint = 0;
-        //   return true;
-        // }
         for (int i = 0; i < len; i++) {
             Polar temp = lidar_sample[i];
             if (i < len / 2) {                                                   //在雷达前方的点
@@ -258,12 +252,10 @@ class LidarCalibrate {
     }
 
     bool LidarAlongRightWallTask(double speed, const vector<LidarData> &lidar_data, double calib_d) {
-        bool result = false;
+        bool result;
         d_wall = calib_d;
         std::vector<Polar> lidar_sample = Sampling(lidar_data, 45, 80);
         result = LidarAlongRightWall(speed, lidar_sample);
-        // std::vector<Polar> lidar_filter = LidarFilter(lidar_sample, 20);
-        // result = LidarAlongRightWall(speed, lidar_filter);
         return result;
     }
 

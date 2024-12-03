@@ -1,8 +1,6 @@
 #include "util/Config.h"
 #include "util/Util.h"
 #include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 namespace robot {
 
@@ -23,7 +21,7 @@ static void listAllMember(const std::string &prefix, const YAML::Node &node,
         std::cout << "Config invalid name: " << prefix << " : " << node << std::endl;
         return;
     }
-    output.push_back(std::make_pair(prefix, node));
+    output.emplace_back(prefix, node);
     if (node.IsMap()) {
         for (auto it = node.begin(); it != node.end(); ++it) {
             listAllMember(prefix.empty() ? it->first.Scalar() : prefix + "." + it->first.Scalar(), it->second, output);
@@ -66,7 +64,7 @@ void Config::loadFromConfDir(const std::string &path, bool force) {
 
     for (auto &i : files) {
         {
-            struct stat st;
+            struct stat st{};
             lstat(i.c_str(), &st);
             robot::Mutex::Lock lock(s_mutex);
             if (!force && s_file2modifytime[i] == (uint64_t)st.st_mtime) {
@@ -87,8 +85,8 @@ void Config::loadFromConfDir(const std::string &path, bool force) {
 void Config::visit(std::function<void(ConfigVarBase::ptr)> cb) {
     RWMutexType::ReadLock lock(GetMutex());
     ConfigVarMap &m = GetDatas();
-    for (auto it = m.begin(); it != m.end(); ++it) {
-        cb(it->second);
+    for (auto & it : m) {
+        cb(it.second);
     }
 }
 

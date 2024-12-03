@@ -2,7 +2,7 @@
 #include "command/MotorPIDCommand.h"
 #include "command/UpdataOdomCommand.h"
 #include "command/RotateCommand.h"
-#include "command/ZeroOdomCommand.h"
+#include "command/sensor/ZeroOdomCommand.h"
 #include "command/LidarReadCommand.h"
 #include "command/LidarCalibCommand.h"
 

@@ -19,7 +19,7 @@ using namespace robot;
 
 class Vision {
   public:
-    Vision(int index, int frame_width = 640, int frame_height = 480);
+    explicit Vision(int index, int frame_width = 640, int frame_height = 480);
     bool saveImage(cv::Mat &cv_mat, std::string filename = "result.jpg");
     bool readFrame();
     std::vector<BoxInfo> mnnDecode(cv::Mat &cv_mat, std::shared_ptr<MNN::Interpreter> &net, MNN::Session *session,
@@ -65,7 +65,7 @@ class Vision {
                                    "yellow grape", "lianwuguo"}; //只供打印用，改变这个数组并不会改变输出结果label
 };
 
-class IdentifyFruitCommand : public CommandBase {
+class IdentifyFruitCommand : public ICommand {
   public:
     typedef std::shared_ptr<IdentifyFruitCommand> Ptr;
     void initialize() override;
@@ -79,4 +79,4 @@ class IdentifyFruitCommand : public CommandBase {
     bool isFinished_ = false;
 };
 
-Command::ptr createIdentifyFruitCommand();
+ICommand::ptr createIdentifyFruitCommand();

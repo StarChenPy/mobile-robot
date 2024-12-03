@@ -10,7 +10,7 @@
  */
 
 #include "command/MotorPIDCommand.h"
-#include "command/ENCComand.h"
+#include "command/sensor/ENCComand.h"
 #include "robotgenius/RobotGenius.h"
 
 

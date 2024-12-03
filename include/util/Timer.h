@@ -18,7 +18,7 @@
 #include <vector>
 
 namespace robot {
-class Command;
+class ICommand;
 class TimerManager;
 
 /**
@@ -29,11 +29,11 @@ class Timer : public std::enable_shared_from_this<Timer> {
     friend class TimerManager;
 
   public:
-    typedef std::shared_ptr<Timer> Ptr;
-    Timer(uint64_t ms, std::shared_ptr<Command> command, bool recurring, TimerManager *manager);
+    typedef std::shared_ptr<Timer> ptr;
+    Timer(uint64_t ms, std::shared_ptr<ICommand> command, bool recurring, TimerManager *manager);
     Timer(uint64_t ms, TimerManager *manager);
-    Timer(uint64_t next);
-    void setCommand(std::shared_ptr<Command> command);
+    explicit Timer(uint64_t next);
+    void setCommand(std::shared_ptr<ICommand> command);
     bool cancel();
 
     bool isPause() const { return m_pause_; }
@@ -53,7 +53,7 @@ class Timer : public std::enable_shared_from_this<Timer> {
          * @return true
          * @return false
          */
-        bool operator()(const Timer::Ptr &lhs, const Timer::Ptr &rhs) const;
+        bool operator()(const Timer::ptr &lhs, const Timer::ptr &rhs) const;
     };
 
   private:
@@ -64,7 +64,7 @@ class Timer : public std::enable_shared_from_this<Timer> {
     ///  精确的执行事件
     uint64_t m_next_ = 0;
     ///  回调函数
-    std::shared_ptr<Command> m_command_;
+    std::shared_ptr<ICommand> m_command_;
     ///  定时器管理器
     TimerManager *m_manager_ = nullptr;
     bool m_pause_ = false;
@@ -80,12 +80,12 @@ class TimerManager {
      * @brief 构造函数
      *
      */
-    TimerManager() {}
+    TimerManager() = default;
     /**
      * @brief 析构函数
      *
      */
-    virtual ~TimerManager() {}
+    virtual ~TimerManager() = default;
     /**
      * @brief 添加定时器
      *
@@ -94,15 +94,15 @@ class TimerManager {
      * @param recurring 是否循环定时器
      * @return Timer::ptr
      */
-    Timer::Ptr addTimer(uint64_t ms, std::shared_ptr<Command> command, bool recurring = false);
-    void addTimer(Timer::Ptr timer);
+    Timer::ptr addTimer(uint64_t ms, std::shared_ptr<ICommand> command, bool recurring = false);
+    void addTimer(Timer::ptr timer);
     uint64_t getNextTimer();
     /**
      * @brief 获取需要执行的定时器的回调函数列表
      *
      * @param cbs 回调函数容器
      */
-    void listExpiredCb(std::vector<std::shared_ptr<Command>> &cbs);
+    void listExpiredCb(std::vector<std::shared_ptr<ICommand>> &cbs);
     /**
      * @brief 是否有定时器
      *
@@ -123,7 +123,7 @@ class TimerManager {
      * @param val
      * @param lock
      */
-    void addTimer(Timer::Ptr val, RWMutexType::WriteLock &lock);
+    void addTimer(Timer::ptr val, RWMutexType::WriteLock &lock);
 
   private:
     /**
@@ -138,14 +138,14 @@ class TimerManager {
      * @brief 判断需要运行的定时器
      *
      */
-    void handleExpiredTimers(std::vector<Timer::Ptr> &expired, uint64_t now_ms,
-                             std::set<robot::Timer::Ptr, robot::Timer::Comparator>::iterator &it);
+    void handleExpiredTimers(std::vector<Timer::ptr> &expired, uint64_t now_ms,
+                             std::set<robot::Timer::ptr, robot::Timer::Comparator>::iterator &it);
 
   protected:
     ///  锁
     RWMutexType m_mutex_;
     ///  定时器集合
-    std::set<Timer::Ptr, Timer::Comparator> m_timers_;
+    std::set<Timer::ptr, Timer::Comparator> m_timers_;
     ///  是否触发onTimerInsertedAtFront
     bool m_tickled_ = false;
     ///  上次执行时间

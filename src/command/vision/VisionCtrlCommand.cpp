@@ -1,7 +1,7 @@
 #include "command/vision/VisionCtrlCommand.h"
 
 void VisionCtrlCommand::initialize() {
-    is_finished = false;
+    isFinished_ = false;
     Robot::getInstance().setRightMotorSpeed(0);
     Robot::getInstance().setLeftMotorSpeed(0);
     Vision::instance().clearBoxes();
@@ -17,15 +17,15 @@ void VisionCtrlCommand::execute() {
     double L_setpoint = 0;
     if (!boxs.empty()) {
         int cap_cx = Vision::instance().getCapCx();
-        for (int i = 0; i < boxs.size(); i++) {
-            if (boxs[i].label == fruit_label) {
-                int fruit_cx = (boxs[i].x1 + boxs[i].x2) / 2;
-                is_finished = Robot::getInstance().chassis_ctrl->VisionCtrlTask(fruit_cx, cap_cx);
+        for (auto & box : boxs) {
+            if (box.label == fruit_label) {
+                int fruit_cx = (box.x1 + box.x2) / 2;
+                isFinished_ = Robot::getInstance().chassis_ctrl->VisionCtrlTask(fruit_cx, cap_cx);
                 // Robot::getInstance().chassis_ctrl->VisionCtrlTask(fruit_cx,
                 // cap_cx_);
                 R_setpoint = Robot::getInstance().chassis_ctrl->get_R_setpoint();
                 L_setpoint = Robot::getInstance().chassis_ctrl->get_L_setpoint();
-                std::cout << "fruit class: " << Class_names[boxs[i].label] << std::endl;
+                std::cout << "fruit class: " << Class_names[box.label] << std::endl;
                 break;
             }
         }
@@ -35,29 +35,17 @@ void VisionCtrlCommand::execute() {
 
     Robot::getInstance().setRightMotorSpeed(R_setpoint);
     Robot::getInstance().setLeftMotorSpeed(L_setpoint);
-
-    int time = robot::getCurrentMs();
-    int dt = time - m_last_time;
-    m_last_time = time;
-    // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
-    // isFinished_ = true;
 }
 void VisionCtrlCommand::end() {
     std::cout << "VisionCtrlCommand end!" << std::endl;
     Robot::getInstance().setRightMotorSpeed(0);
     Robot::getInstance().setLeftMotorSpeed(0);
 }
-bool VisionCtrlCommand::isFinished() {
-    if (Robot::getInstance().getStopSignal()) {
-        stopAll();
-    }
-    return is_finished || Robot::getInstance().getStopSignal();
-}
 
-Command::ptr createVisionCtrlCommand(int label) { return std::make_shared<VisionCtrlCommand>(label)->withTimer(200); }
+ICommand::ptr createVisionCtrlCommand(int label) { return std::make_shared<VisionCtrlCommand>(label)->withTimer(200); }
 
 void VisionIdentifyCommand::initialize() {
-    is_finished = false;
+    isFinished_ = false;
     Vision::instance().clearBoxes();
     Vision::instance().clearResult();
 }
@@ -71,40 +59,22 @@ void VisionIdentifyCommand::execute() {
     Vision::instance().print();
 
     if (!boxs.empty()) {
-        for (int i = 0; i < boxs.size(); i++) {
-            if (boxs[i].label == fruit_label) {
-                // int cx = (boxs[i].x1 + boxs[i].x2) / 2;
-                // int cy = (boxs[i].y1 + boxs[i].y2) / 2;
-                // cv::Point2f XH = vision::getInstance().getXh(cx, cy);
-                // std::cout << "X: " << XH.x << " H: " << XH.y << std::endl;
-                is_finished = true;
-                break;
+        for (auto & box : boxs) {
+            if (box.label == fruit_label) {
             }
         }
     } else {
         std::cout << "!!!No fruit: " << Class_names[fruit_label] << std::endl;
     }
-
-    int time = robot::getCurrentMs();
-    int dt = time - m_last_time;
-    m_last_time = time;
-    // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
-    // isFinished_ = true;
 }
 void VisionIdentifyCommand::end() { std::cout << "VisionIdentifyCommand end!" << std::endl; }
-bool VisionIdentifyCommand::isFinished() {
-    if (Robot::getInstance().getStopSignal()) {
-        stopAll();
-    }
-    return is_finished || Robot::getInstance().getStopSignal();
-}
 
-Command::ptr createVisionIdentifyCommand(int label) {
+ICommand::ptr createVisionIdentifyCommand(int label) {
     return std::make_shared<VisionIdentifyCommand>(label)->withTimer(200);
 }
 
 void VisionMoveCommand::initialize() {
-    is_finished = false;
+    isFinished_ = false;
     InitPose = Robot::getInstance().odom->getPose();
     Robot::getInstance().setRightMotorSpeed(0);
     Robot::getInstance().setLeftMotorSpeed(0);
@@ -125,35 +95,23 @@ void VisionMoveCommand::initialize() {
 }
 void VisionMoveCommand::execute() {
     Pose cur = Robot::getInstance().odom->getPose();
-    is_finished = Robot::getInstance().chassis_ctrl->TrackingPointTask(target, cur);
+    isFinished_ = Robot::getInstance().chassis_ctrl->TrackingPointTask(target, cur);
     double R_setpoint = Robot::getInstance().chassis_ctrl->get_R_setpoint();
     double L_setpoint = Robot::getInstance().chassis_ctrl->get_L_setpoint();
 
     Robot::getInstance().setRightMotorSpeed(R_setpoint);
     Robot::getInstance().setLeftMotorSpeed(L_setpoint);
-
-    int time = robot::getCurrentMs();
-    int dt = time - m_last_time;
-    m_last_time = time;
-    // std::cout << "VisionCtrlCommand execute dt = " << dt << std::endl;
-    // isFinished_ = true;
 }
 void VisionMoveCommand::end() {
     std::cout << "VisionMoveCommand end!" << std::endl;
     Robot::getInstance().setRightMotorSpeed(0);
     Robot::getInstance().setLeftMotorSpeed(0);
 }
-bool VisionMoveCommand::isFinished() {
-    if (Robot::getInstance().getStopSignal()) {
-        stopAll();
-    }
-    return is_finished || Robot::getInstance().getStopSignal();
-}
 
-Command::ptr createVisionMoveCommand(int label) { return std::make_shared<VisionMoveCommand>(label)->withTimer(100); }
+ICommand::ptr createVisionMoveCommand(int label) { return std::make_shared<VisionMoveCommand>(label)->withTimer(100); }
 
 void VisionHeightCtrlCommand::initialize() {
-    is_finished = false;
+    isFinished_ = false;
     Robot::getInstance().setLiftMotorSpeed(0);
     std::vector<BoxInfo> boxs = Vision::instance().getBoxes();
     std::vector<cv::Point2f> FruitPoints = Vision::instance().getFruitXh(boxs);
@@ -182,12 +140,6 @@ void VisionHeightCtrlCommand::initialize() {
 void VisionHeightCtrlCommand::execute() {
     Robot::getInstance().LiftMotorDistancePID(m_setpoint);
     std::cout << "Lift ENC: " << liftEnc->get() << " Lift set_point_: " << m_setpoint << std::endl;
-
-    int time = robot::getCurrentMs();
-    int dt = time - m_last_time;
-    m_last_time = time;
-    // std::cout << "VisionHeightCtrlCommand execute dt = " << dt << std::endl;
-    // isFinished_ = true;
 }
 void VisionHeightCtrlCommand::end() {
     std::cout << "VisionHeightCtrlCommand end!" << std::endl;
@@ -199,9 +151,9 @@ bool VisionHeightCtrlCommand::isFinished() {
     } else {
         m_conter = 0;
     }
-    return Robot::getInstance().getStopSignal() || m_conter > LIFT_MOTOR_DISTANCE_COUNTER;
+    return Robot::getStopSignal() || m_conter > LIFT_MOTOR_DISTANCE_COUNTER;
 }
 
-Command::ptr createVisionHeightCtrlCommand(int label) {
+ICommand::ptr createVisionHeightCtrlCommand(int label) {
     return std::make_shared<VisionHeightCtrlCommand>(label)->withTimer(100);
 }

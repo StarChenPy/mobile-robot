@@ -1,6 +1,4 @@
 #include "system/SysParams.h"
-#include "system/Robot.h"
-using namespace std;
 
 // 电机速度环
 PIDCtrlParams LeftMotorPIDParams;
@@ -155,7 +153,7 @@ void ParamsInit() {
 
     //标定数据
     VisionCalInit();
-    // Robot::getInstance().chassis_ctrl->set_v_pidlimit(VxPIDParams.limit);
+    // robot::getInstance().chassis_ctrl->set_v_pidlimit(VxPIDParams.limit);
 
     LidarParams.InitAngle = LIDAR_INIT_ANGLE;
     LidarParams.CalAngle = LIDAR_CALIB_ANGLE;

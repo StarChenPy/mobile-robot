@@ -1,22 +1,11 @@
-/**
- * @file Timer.cpp
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief 定时模块
- * @version 0.1
- * @date 2024-04-18
- *
- * @copyright Copyright (c) 2024
- *
- */
-
 #include "util/Timer.h"
-#include "command/Command.h"
+#include "command/ICommand.h"
 
 namespace robot {
 
 Timer::Timer(uint64_t next) : m_next_(next) {}
 
-bool Timer::Comparator::operator()(const Timer::Ptr &lhs, const Timer::Ptr &rhs) const {
+bool Timer::Comparator::operator()(const Timer::ptr &lhs, const Timer::ptr &rhs) const {
     if (!lhs && !rhs) {
         return false;
     }
@@ -35,7 +24,7 @@ bool Timer::Comparator::operator()(const Timer::Ptr &lhs, const Timer::Ptr &rhs)
     return lhs.get() < rhs.get();
 }
 
-Timer::Timer(uint64_t ms, Command::ptr command, bool recurring, TimerManager *manager)
+Timer::Timer(uint64_t ms, ICommand::ptr command, bool recurring, TimerManager *manager)
     : m_ms_(ms), m_command_(command), m_recurring_(recurring), m_manager_(manager) {
     m_next_ = getCurrentMs() + m_ms_;
 }
@@ -46,7 +35,7 @@ Timer::Timer(uint64_t ms, TimerManager *manager) {
     m_manager_ = manager;
     m_next_ = getCurrentMs() + m_ms_;
 }
-void Timer::setCommand(Command::ptr command) { m_command_ = command; }
+void Timer::setCommand(ICommand::ptr command) { m_command_ = command; }
 bool Timer::cancel() {
     TimerManager::RWMutexType::WriteLock lock(m_manager_->m_mutex_);
     if (m_command_) {
@@ -59,14 +48,14 @@ bool Timer::cancel() {
     return false;
 }
 
-Timer::Ptr TimerManager::addTimer(uint64_t ms, Command::ptr command, bool recurring) {
-    Timer::Ptr timer(new Timer(ms, command, recurring, this));
+Timer::ptr TimerManager::addTimer(uint64_t ms, ICommand::ptr command, bool recurring) {
+    Timer::ptr timer(new Timer(ms, command, recurring, this));
     RWMutexType::WriteLock lock(m_mutex_);
     addTimer(timer, lock);
     return timer;
 }
 
-void TimerManager::addTimer(Timer::Ptr val) {
+void TimerManager::addTimer(Timer::ptr val) {
     RWMutexType::WriteLock lock(m_mutex_);
     addTimer(val, lock);
 }
@@ -78,7 +67,7 @@ uint64_t TimerManager::getNextTimer() {
     if (m_timers_.empty()) {
         return ~0ull;
     }
-    const Timer::Ptr &next = *m_timers_.begin();
+    const Timer::ptr &next = *m_timers_.begin();
     uint64_t now_ms = getCurrentMs();
     // HGSYS_LOG_INFO(g_logger) << "m_next_=" << next->m_next_
     //                         << " nows_ms=" << now_ms;
@@ -89,7 +78,7 @@ uint64_t TimerManager::getNextTimer() {
     }
 }
 
-void TimerManager::addTimer(Timer::Ptr val, RWMutexType::WriteLock &lock) {
+void TimerManager::addTimer(Timer::ptr val, RWMutexType::WriteLock &lock) {
     ///  set进行inster后返回一个pair，第一个为位置，第二个为是否成功
     auto it = m_timers_.insert(val).first;
     bool at_front = (it == m_timers_.begin()) && !m_tickled_;
@@ -115,8 +104,8 @@ bool TimerManager::hasTimer() {
 }
 
 void TimerManager::handleExpiredTimers(
-    std::vector<Timer::Ptr> &expired, uint64_t now_ms,
-    std::set<robot::Timer::Ptr, robot::Timer::Comparator>::iterator &it) {
+        std::vector<Timer::ptr> &expired, uint64_t now_ms,
+        std::set<robot::Timer::ptr, robot::Timer::Comparator>::iterator &it) {
     expired.clear();
     RWMutexType::ReadLock lock(m_mutex_);
     if (m_timers_.empty()) {
@@ -127,7 +116,7 @@ void TimerManager::handleExpiredTimers(
     if (!rollover && ((*m_timers_.begin())->m_next_ > now_ms)) {
         return;
     }
-    Timer::Ptr now_timer(new Timer(now_ms));
+    Timer::ptr now_timer(new Timer(now_ms));
 
     it = rollover ? m_timers_.end() : m_timers_.lower_bound(now_timer);
     ///  超时的可能有多个计时器，it是为了取出最后一个超时的定时器，结合begin就能知道是哪些计时器超时了
@@ -137,10 +126,10 @@ void TimerManager::handleExpiredTimers(
     expired.insert(expired.begin(), m_timers_.begin(), it);
     // lock.unlock();
 }
-void TimerManager::listExpiredCb(std::vector<Command::ptr> &cbs) {
+void TimerManager::listExpiredCb(std::vector<ICommand::ptr> &cbs) {
     uint64_t now_ms = getCurrentMs();
 
-    std::vector<Timer::Ptr> expired;
+    std::vector<Timer::ptr> expired;
     // {
     //     RWMutexType::ReadLock lock(m_mutex_);
     //     if (m_timers_.empty()) {
@@ -155,7 +144,7 @@ void TimerManager::listExpiredCb(std::vector<Command::ptr> &cbs) {
     if (!rollover && ((*m_timers_.begin())->m_next_ > now_ms)) {
         return;
     }
-    Timer::Ptr now_timer(new Timer(now_ms));
+    Timer::ptr now_timer(new Timer(now_ms));
 
     auto it = rollover ? m_timers_.end() : m_timers_.lower_bound(now_timer);
     ///  超时的可能有多个计时器，it是为了取出最后一个超时的定时器，结合begin就能知道是哪些计时器超时了
@@ -172,7 +161,7 @@ void TimerManager::listExpiredCb(std::vector<Command::ptr> &cbs) {
         // std::cout << "timer->m_command_->getWorkCommandState()="
         //           << timer->m_command_->getWorkCommandState() << std::endl;
         // if (timer->m_command_->getWorkCommandState() ==
-        // Command::State::RUNNING)
+        // ICommand::State::RUNNING)
         // {
         //   std::cout << "timer is running" << std::endl;
         //   continue;

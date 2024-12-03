@@ -1,7 +1,3 @@
-//
-// Created by 34253 on 2024/11/28.
-//
-
 #include "command/motor/MotorDistancePIDCommand.h"
 #include "system/Robot.h"
 
@@ -13,7 +9,6 @@ namespace robot {
         distanceError_ = distanceError;
         verificationTimes_ = verificationTimes;
     }
-    void LiftMotorDistancePIDCommand::initialize() {}
     void LiftMotorDistancePIDCommand::execute() {
         Robot::getInstance().LiftMotorDistancePID(distance_);
         std::cout << "Lift ENC: " << liftEnc->get() << " Lift set_point_: " << distance_ << std::endl;
@@ -30,7 +25,7 @@ namespace robot {
         }
         return Robot::getStopSignal() || counter_ > verificationTimes_ || isFinished_;
     }
-    Command::ptr LiftMotorDistancePIDCommand::create(double distance, double distanceError, uint8_t verificationTimes) {
+    ICommand::ptr LiftMotorDistancePIDCommand::create(double distance, double distanceError, uint8_t verificationTimes) {
         if (distance > 0) {
             distance = 0;
             std::cout << "升降电机输入不可为正数" << std::endl;
@@ -62,7 +57,7 @@ namespace robot {
         }
         return Robot::getStopSignal() || counter_ > verificationTimes_ || isFinished_;
     }
-    Command::ptr TurnMotorDistancePIDCommand::create(double angle, double distanceError, uint8_t verificationTimes) {
+    ICommand::ptr TurnMotorDistancePIDCommand::create(double angle, double distanceError, uint8_t verificationTimes) {
         if (angle > 270 || angle < -270) {
             angle = 0;
             std::cout << "旋转电机输入不可大于270°，小于-270°!" << std::endl;
@@ -112,7 +107,7 @@ namespace robot {
         }
         return Robot::getStopSignal() || isFinished_;
     }
-    Command::ptr ResetLiftMotorCommand::create(int32_t speed) {
+    ICommand::ptr ResetLiftMotorCommand::create(int32_t speed) {
         return std::make_shared<ResetLiftMotorCommand>(speed)->withTimer(100);
     }
 
@@ -150,7 +145,7 @@ namespace robot {
     bool ResetTurnMotorCommand::isFinished() {
         return Robot::getStopSignal() || isFinished_;
     }
-    Command::ptr ResetTurnMotorCommand::create(int32_t speed) {
+    ICommand::ptr ResetTurnMotorCommand::create(int32_t speed) {
         return std::make_shared<ResetTurnMotorCommand>(speed)->withTimer(100);
     }
 } // namespace robot

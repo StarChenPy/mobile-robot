@@ -1,14 +1,3 @@
-/**
- * @file util.cpp
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief 常用模块
- * @version 0.1
- * @date 2022-09-07
- *
- * @copyright Copyright (c) 2022
- *
- */
-
 #include <csignal>
 #include <cstring>
 #include <dirent.h>

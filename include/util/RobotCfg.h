@@ -2,7 +2,7 @@
 #include "system/LidarDrive.h"
 
 #include "hal/Titan.h"
-#include "sensor/ultrasound.h"
+#include "system/Ultrasound.h"
 #include <shared_mutex>
 #include <unistd.h>
 
@@ -14,7 +14,7 @@ using namespace std;
 using namespace robot;
 using namespace VMX;
 using namespace Titan;
-using namespace Sensor;
+using namespace robot_sensor;
 
 // 底盘左轮电机
 extern Motor::ptr leftMotor;
@@ -54,7 +54,7 @@ extern AI::ptr irLeft;
 extern AI::ptr irRight;
 
 // 激光雷达
-extern Sensor::LiDAR::ptr lidar;
+extern robot_sensor::LiDAR::ptr lidar;
 
 // Start按钮灯光
 extern PWM::ptr startLed;

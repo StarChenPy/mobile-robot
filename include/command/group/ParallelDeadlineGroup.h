@@ -10,39 +10,37 @@
  */
 
 #pragma once
-#include "CommandGroupBase.h"
+#include "ICommandGroup.h"
 #include "util/Scheduler.h"
 #include <memory>
 #include <vector>
 
 namespace robot {
 
-class ParallelDeadlineGroup : public CommandGroupBase {
+class ParallelDeadlineGroup : public ICommandGroup {
   public:
     typedef std::shared_ptr<ParallelDeadlineGroup> ptr;
+    /**
+     * 并行执行命令组
+     * 在指定命令结束后结束
+     */
     ParallelDeadlineGroup();
-    template <class... Types> explicit ParallelDeadlineGroup(Types... commands) {
-        (commands_.push_back(commands), ...);
-        m_deadline_command_ = *commands_.begin();
-        commands_.erase(commands_.begin());
-    }
-    virtual ~ParallelDeadlineGroup() {}
+    ~ParallelDeadlineGroup() override = default;
 
   public:
-    void initialize();
-    void execute();
-    void end();
-    bool isFinished();
+    void initialize() override;
+    void execute() override;
+    void end() override;
+    bool isFinished() override;
+
     void disableScheduleDeadlineCommand();
     void enableScheduleDeadlineCommand();
-    void setDeadlineCommand(Command::ptr command, bool schedule = true);
-    Command::ptr reset();
+    void setDeadlineCommand(ICommand::ptr command, bool schedule = true);
 
+    static ParallelDeadlineGroup::ptr create();
   protected:
-    Command::ptr m_deadline_command_;
+    ICommand::ptr deadlineCommand_;
     bool isScheduleDeadlineCommand_ = true;
 };
-
-ParallelDeadlineGroup::ptr createParallelDeadlineGroup();
 
 } // namespace robot

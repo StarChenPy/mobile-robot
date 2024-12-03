@@ -1,87 +1,82 @@
-/**
- * @file LidarAlongWallCommand.h
- * @author Zijian.Yan (jiapeng.lin@high-genius.com)
- * @brief
- * @version 0.1
- * @date 2024-08-07
- *
- * @copyright Copyright (c) 2024
- *
- */
-
 #pragma once
 #include "system/Robot.h"
 #include "util/RobotCfg.h"
 #include "RobotGenius.h"
 #include "util/params.h"
 
-// #include "command/LidarReadCommand.h"
-using namespace std;
-using namespace robot;
+namespace robot {
+    class AlongWallCommandBase : public ICommand {
+    public:
+        AlongWallCommandBase(double distanceFromWall, double speed) : distanceFromWall_(distanceFromWall), speed_(speed) {}
+        ~AlongWallCommandBase() override = default;
 
-class AlongRightWallCommand : public CommandBase {
-  public:
-    typedef std::shared_ptr<AlongRightWallCommand> Ptr;
-    AlongRightWallCommand(double v, double d) : speed(v), calib_d(d) {}
-    ~AlongRightWallCommand() {}
+        void initialize() override;
+        void execute() override;
+        void end() override;
 
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
+    protected:
+        virtual bool executeWallTask(double speed, const std::vector<LidarData>& lidar_data, double distanceFromWall) = 0;
 
-  private:
-    bool is_finished = false;
-    int64_t m_last_time;
-    double calib_d = 30;
-    double speed = 5;
-};
+    private:
+        double distanceFromWall_;
+        double speed_;
+    };
 
-class AlongLeftWallCommand : public CommandBase {
-  public:
-    typedef std::shared_ptr<AlongLeftWallCommand> Ptr;
-    AlongLeftWallCommand(double v, double d) : speed(v), calib_d(d) {}
-    ~AlongLeftWallCommand() {}
+    class AlongRightWallCommand : public AlongWallCommandBase {
+    public:
+        typedef std::shared_ptr<AlongRightWallCommand> ptr;
+        /**
+         * 以一定速度沿着右墙行走
+         * @param distanceFromWall 离墙距离
+         * @param speed 行走速度
+         */
+        AlongRightWallCommand(double distanceFromWall, double speed);
+        ~AlongRightWallCommand() override = default;
 
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
+        bool executeWallTask(double speed, const std::vector<LidarData> &lidar_data, double distanceFromWall) override;
 
-  private:
-    bool is_finished = false;
-    int64_t m_last_time;
-    double calib_d = 30;
-    double speed = 5;
-};
+        static ICommand::ptr create(double distanceFromWall, double speed = 5);
+    private:
+        double distanceFromWall_ = 0;
+        double speed_ = 0;
+    };
 
-class isReachXCommand : public CommandBase {
-  public:
-    typedef std::shared_ptr<isReachXCommand> Ptr;
-    isReachXCommand(Pose pose) : EndPose(pose) {}
-    ~isReachXCommand() {}
+    class AlongLeftWallCommand : public AlongWallCommandBase {
+    public:
+        typedef std::shared_ptr<AlongLeftWallCommand> ptr;
+        /**
+         * 以一定速度沿着左墙行走
+         * @param distanceFromWall 离墙距离
+         * @param speed 行走速度
+         */
+        explicit AlongLeftWallCommand(double distanceFromWall, double speed);
+        ~AlongLeftWallCommand() override = default;
 
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
+        bool executeWallTask(double speed, const std::vector<LidarData> &lidar_data, double distanceFromWall) override;
 
-  private:
-    bool is_finished = false;
-    uint8_t m_sleep_time;
-    int64_t m_last_time;
+        static ICommand::ptr create(double distanceFromWall, double speed = 5);
+    private:
+        double distanceFromWall_ = 0;
+        double speed_ = 0;
+    };
 
-    Pose EndPose;
-    double d_min = 4;
-};
+    class IsReachXCommand : public ICommand {
+    public:
+        typedef std::shared_ptr<IsReachXCommand> ptr;
 
-Command::ptr createLidarAlongRightWallCommand(double speed, double d);
-Command::ptr LidarReadAlongRightWallCommandDG(double speed, double d);
+        explicit IsReachXCommand(Pose pose) : endPose_(pose) {}
+        ~IsReachXCommand() override = default;
 
-Command::ptr createLidarAlongLeftWallCommand(double speed, double d);
-Command::ptr LidarReadAlongLeftWallCommandDG(double speed, double d);
+        void initialize() override;
+        void execute() override;
+        void end() override;
 
-Command::ptr MoveAlongRightWallRG(Pose pose, double d_wall);
-Command::ptr MoveAlongLeftWallRG(Pose pose, double d_wall);
-Command::ptr MoveAlongRightWallRG(Pose pose, double d_wall, double speed);
-Command::ptr MoveAlongLeftWallRG(Pose pose, double d_wall, double speed);
+        static ICommand::ptr create(Pose pose);
+    private:
+        Pose endPose_;
+        double errorRange_ = 4;
+    };
+
+    template <typename AlongWallCommandType>
+    ICommand::ptr moveAlongWall(Pose pose, double d_wall, double speed);
+} // namespace robot

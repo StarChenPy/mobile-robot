@@ -9,18 +9,17 @@
  *
  */
 #pragma once
-#include "CommandBase.h"
+#include "ICommand.h"
 #include <functional>
 #include <memory>
 
 namespace robot {
-class ConditionalCommand : public CommandBase {
-
+class ConditionalCommand : public ICommand {
   public:
     typedef std::shared_ptr<ConditionalCommand> ptr;
-    ConditionalCommand(std::function<bool()> condition, CommandBase::ptr on_true_command,
-                       CommandBase::ptr on_false_command);
-    virtual ~ConditionalCommand() {}
+
+    ConditionalCommand(std::function<bool()> condition, ICommand::ptr onTrueCommand, ICommand::ptr onFalseCommand);
+    ~ConditionalCommand() override = default;
 
   public:
     void initialize() override;
@@ -28,9 +27,9 @@ class ConditionalCommand : public CommandBase {
     void end() override;
     bool isFinished() override;
 
-  protected:
-    CommandBase::ptr m_on_true_command_;
-    CommandBase::ptr m_on_false_command_;
-    std::function<bool()> m_condition_;
+private:
+    ICommand::ptr onTrueCommand_;
+    ICommand::ptr onFalseCommand_;
+    std::function<bool()> condition_;
 };
 } // namespace robot

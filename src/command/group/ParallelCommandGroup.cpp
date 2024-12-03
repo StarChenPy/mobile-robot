@@ -1,64 +1,42 @@
-/**
- * @file ParallelCommandGroup.cpp
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief
- * @version 0.1
- * @date 2024-04-15
- *
- * @copyright Copyright (c) 2024
- *
- */
 #include "command/group/ParallelCommandGroup.h"
 
 namespace robot {
-
-ParallelCommandGroup::ParallelCommandGroup() {
-    commands_.clear();
-    isGroup_ = true;
-}
-
-void ParallelCommandGroup::initialize() {
-    for (auto command : commands_) {
-        command->schedule();
-    }
-    state_ = Command::State::PAUSED;
-}
-void ParallelCommandGroup::execute() {
-    state_ = Command::State::PAUSED;
-}
-
-bool ParallelCommandGroup::isFinished() {
-    for (auto command : commands_) {
-        if (!command->isFinished()) {
-            return false;
-        }
-    }
-    return true;
-}
-void ParallelCommandGroup::end() {
-    for (auto command : commands_) {
-        if (!command->isFinished()) {
-            command->cancel();
-        }
-        if (command->state_ != Command::State::STOP) {
+    void ParallelCommandGroup::initialize() {
+        for (const auto& command : commands_) {
             command->schedule();
         }
+        state_ = ICommand::State::PAUSED;
     }
-    commands_.clear();
-    if (nextCommand_.get()) {
-        nextCommand_->schedule();
+
+    void ParallelCommandGroup::execute() {
+        state_ = ICommand::State::PAUSED;
     }
-}
-Command::ptr ParallelCommandGroup::reset() {
-    ParallelCommandGroup::Ptr PG = createParallelCommandGroup();
-    for (auto command : commands_) {
-        command = command->reset();
-        PG->addCommand(command);
+
+    bool ParallelCommandGroup::isFinished() {
+        for (const auto& command : commands_) {
+            if (!command->isFinished()) {
+                return false;
+            }
+        }
+        return true;
     }
-    return PG;
-}
-ParallelCommandGroup::Ptr createParallelCommandGroup() {
-    ParallelCommandGroup::Ptr parallel_command_group = std::make_shared<ParallelCommandGroup>();
-    return parallel_command_group;
-}
+
+    void ParallelCommandGroup::end() {
+        for (const auto& command : commands_) {
+            if (!command->isFinished()) {
+                command->cancel();
+            }
+            if (command->state_ != ICommand::State::STOP) {
+                command->schedule();
+            }
+        }
+        commands_.clear();
+        if (nextCommand_.get()) {
+            nextCommand_->schedule();
+        }
+    }
+
+    ICommandGroup::ptr ParallelCommandGroup::create() {
+        return std::make_shared<ParallelCommandGroup>();
+    }
 } //  namespace robot

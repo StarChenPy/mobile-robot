@@ -23,10 +23,7 @@
 #include <unistd.h>
 #include <vector>
 
-using namespace std;
-using namespace ydlidar;
-namespace Sensor {
-
+namespace robot_sensor {
 class LiDAR {
   public:
     typedef std::shared_ptr<LiDAR> ptr;
@@ -49,6 +46,6 @@ class LiDAR {
     float frequency = 8.0;
 };
 
-} //  namespace Sensor
+} //  namespace robot_sensor
 
 #endif //

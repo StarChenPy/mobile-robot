@@ -1,5 +1,5 @@
 #include "command/group/ParallelRaceGroup.h"
-#include "command/UpdateOdomCommand.h"
+#include "command/sensor/UpdateOdomCommand.h"
 #include "command/motor/MotorDistancePIDCommand.h"
 #include "command/motor/MotorPIDCommand.h"
 #include "util/Log.h"
@@ -9,8 +9,8 @@ int main(int argc, char *argv[]) {
     Scheduler::getInstance(2, false).start();
     LOG(INFO) << "调度器已启动";
 
-    robot::ParallelRaceGroup::ptr sequential = robot::createParallelRaceGroup();
-    sequential->addCommand(createUpdataOdomCommand(),
+    robot::ICommandGroup::ptr sequential = make_shared<ParallelRaceGroup>();
+    sequential->addCommand(UpdateOdomCommand::create(),
                            LiftMotorPIDCommand::create(),
                            ResetLiftMotorCommand::create(10));
     LOG(INFO) << "命令组已启动";

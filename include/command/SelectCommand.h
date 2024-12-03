@@ -1,27 +1,14 @@
-/**
- * @file SelectCommand.h
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief
- * @version 0.1
- * @date 2024-04-13
- *
- * @copyright Copyright (c) 2024
- *
- */
 #pragma once
-#include "Command.h"
+#include "ICommand.h"
 #include <memory>
 #include <map>
 
 namespace robot {
-template <typename T> class SelectCommand : public CommandBase {
+template <typename T> class SelectCommand : public ICommand {
   public:
     typedef std::shared_ptr<SelectCommand> ptr;
-    // SelectCommand(std::function<T()> selector, std::pair<T, Command::ptr>...
-    // commands_ptr) : m_selector_(std::move(selector)) {
-    //   (commands_.insert(std::move(commands_ptr)), ...);
-    // }
-    SelectCommand(std::function<T()> selector, std::vector<std::pair<T, std::unique_ptr<Command>>> &&commands)
+
+    SelectCommand(std::function<T()> selector, std::vector<std::pair<T, std::unique_ptr<ICommand>>> &&commands)
         : m_selector_(std::move(selector)) {
         for (auto &command : commands) {
             m_commands_.insert(std::move(command));
@@ -40,11 +27,9 @@ template <typename T> class SelectCommand : public CommandBase {
     void execute() override { workCommand_->execute(); }
     void end() override { workCommand_->end(); }
 
-    bool isFinished() override { return workCommand_->isFinished(); }
-
   private:
     std::function<T()> m_selector_;
-    std::map<T, Command::ptr> m_commands_;
+    std::map<T, ICommand::ptr> m_commands_;
 };
 template <typename T> void SelectCommand<T>::initialize() {
     auto key = m_selector_();

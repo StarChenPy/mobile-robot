@@ -19,35 +19,38 @@ using namespace std;
 using namespace robot;
 using namespace VMX;
 
-class EStopCommand : public CommandBase {
-public:
-    typedef std::shared_ptr<EStopCommand> ptr;
-    EStopCommand() {}
-    ~EStopCommand() {}
+namespace robot {
+    class EStopCommand : public ICommand {
+    public:
+        typedef std::shared_ptr<EStopCommand> ptr;
 
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
+        /**
+         * 急停按钮
+         */
+        EStopCommand() = default;
+        ~EStopCommand() override = default;
 
-private:
-    bool is_finished = false;
-};
-Command::ptr createEStopCommand();
+        void initialize() override;
+        void execute() override;
+        void end() override;
 
-class StartCommand : public CommandBase {
-public:
-    typedef std::shared_ptr<StartCommand> Ptr;
-    StartCommand() {}
-    ~StartCommand() {}
+        static ICommand::ptr create();
+    };
 
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
+    class StartCommand : public ICommand {
+    public:
+        typedef std::shared_ptr<StartCommand> ptr;
 
-private:
-    bool is_finished = false;
-    int64_t m_last_time;
-};
-Command::ptr createStartCommand();
+        /**
+         * 启动按钮
+         */
+        StartCommand() = default;
+        ~StartCommand() override = default;
+
+        void initialize() override;
+        void execute() override;
+        void end() override;
+
+        static ICommand::ptr create();
+    };
+}

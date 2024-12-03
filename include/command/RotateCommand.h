@@ -1,41 +1,27 @@
-/**
- * @file RotateCommand.h
- * @author Zijian.Yan (jiapeng.lin@high-genius.com)
- * @brief
- * @version 0.1
- * @date 2024-08-07
- *
- * @copyright Copyright (c) 2024
- *
- */
-
 #pragma once
 #include "system/Robot.h"
 #include "util/RobotCfg.h"
 #include "RobotGenius.h"
 #include "util/params.h"
-using namespace std;
-using namespace robot;
 
-class RotateCommand : public CommandBase {
-  public:
-    typedef std::shared_ptr<RotateCommand> Ptr;
-    RotateCommand(double angle) : target_angle(angle) {}
-    // RotateCommand(double angle, double w) : target_angle(angle), Vz_max(w) {}
-    ~RotateCommand() {}
+namespace robot {
+    class RotateCommand : public ICommand {
+    public:
+        typedef std::shared_ptr<RotateCommand> Ptr;
+        RotateCommand(double angle) : targetAngle_(angle) {}
+        // RotateCommand(double angle, double w) : targetAngle_(angle), Vz_max(w) {}
+        ~RotateCommand() {}
 
-    void initialize() override;
-    void execute() override;
-    void end() override;
-    bool isFinished() override;
+        void initialize() override;
+        void execute() override;
+        void end() override;
 
-  private:
-    bool is_finished = false;
-    int64_t m_last_time;
+        static ICommand::ptr create(double angle);
+    private:
+        int64_t lastTime_ = 0;
 
-    double Init_Phi;
-    double target_angle;
-    // double Vz_max = 360;
-};
-
-Command::ptr createRotateCommand(double angle);
+        double initPhi_ = 0;
+        double targetAngle_;
+        // double Vz_max = 360;
+    };
+} // namespace robot

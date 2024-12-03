@@ -1,6 +1,6 @@
 #include "system/LidarDrive.h"
 
-namespace Sensor {
+namespace robot_sensor {
 
 LiDAR::LiDAR(std::string port) : m_port_(port) {
     ydlidar::os_init();
@@ -113,4 +113,4 @@ std::vector<LaserPoint> LiDAR::read() {
 
 bool LiDAR::isOk() { return ydlidar::os_isOk(); }
 
-} //  namespace Sensor
+} //  namespace robot_sensor

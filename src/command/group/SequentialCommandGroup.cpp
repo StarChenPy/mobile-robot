@@ -12,76 +12,49 @@
 #include "command/group/SequentialCommandGroup.h"
 
 namespace robot {
-
-void SequentialCommandGroup::initialize() {
-    // std::cout << "SequentialCommandGroup initialize" << std::endl;
-    m_is_finished_ = false;
-    if (commands_.empty()) {
-        m_is_finished_ = true;
-        return;
+    void SequentialCommandGroup::initialize() {
+        isFinished_ = false;
+        if (commands_.empty()) {
+            isFinished_ = true;
+            return;
+        }
+        currentCommandIndex_ = 0;
+        currentCommand_ = commands_[currentCommandIndex_];
+        currentCommand_->schedule();
     }
-    m_current_command_index_ = 0;
-    // std::cout << m_current_command_index_ << std::endl;
-    m_current_command_ = commands_[m_current_command_index_];
-    m_current_command_->schedule();
-    // m_current_command_->initialize();
-    // m_current_command_->state_ = Command::State::RUNNING;
-}
 
-void SequentialCommandGroup::execute() {
-    // std::cout << "SequentialCommandGroup execute" << std::endl;
-    if (!m_current_command_)
-        return;
-    if (m_current_command_->isFinished()) {
+    void SequentialCommandGroup::execute() {
+        if (!currentCommand_)
+            return;
+        if (currentCommand_->isFinished()) {
 
-        if (m_current_command_index_ + 1 < commands_.size()) {
-            // std::cout << "m_current_command_index_" << commands_.size() <<
-            // " " << m_current_command_index_ << " " << m_current_command_ <<
-            // std::endl;
-            m_current_command_index_++;
-            m_current_command_ = commands_[m_current_command_index_];
-            // std::cout << "m_current_command_index_" <<
-            // m_current_command_index_ << " " << m_current_command_ <<
-            // std::endl; m_current_command_->state_ = Command::State::INIT;
-            if (m_current_command_ && m_current_command_->state_ != Command::State::STOP) {
-                m_current_command_->schedule();
+            if (currentCommandIndex_ + 1 < commands_.size()) {
+                currentCommandIndex_++;
+                currentCommand_ = commands_[currentCommandIndex_];
+                if (currentCommand_ && currentCommand_->state_ != ICommand::State::STOP) {
+                    currentCommand_->schedule();
+                }
+            } else {
+                isFinished_ = true;
             }
-        } else {
-            m_is_finished_ = true;
+        }
+        if (state_ != ICommand::State::STOP && !isFinished_) {
+            state_ = ICommand::State::PAUSED;
         }
     }
-    if (state_ != Command::State::STOP && !m_is_finished_) {
-        state_ = Command::State::PAUSED;
-    }
-}
 
-void SequentialCommandGroup::end() {
-    // std::cout << "SequentialCommandGroup end" << std::endl;
-    // for (int index = m_current_command_index_; index < commands_.size();
-    // index++) {
-    if (commands_[m_current_command_index_]->state_ != Command::State::STOP &&
-        commands_[m_current_command_index_]->state_ != Command::State::FINISHED) {
-        commands_[m_current_command_index_]->cancel();
-        // commands_[index]->schedule();
+    void SequentialCommandGroup::end() {
+        if (commands_[currentCommandIndex_]->state_ != ICommand::State::STOP &&
+            commands_[currentCommandIndex_]->state_ != ICommand::State::FINISHED) {
+            commands_[currentCommandIndex_]->cancel();
+        }
+        commands_.clear();
+        if (nextCommand_.get()) {
+            nextCommand_->schedule();
+        }
     }
-    // }
-    commands_.clear();
-    if (nextCommand_.get()) {
-        nextCommand_->schedule();
+
+    ICommandGroup::ptr SequentialCommandGroup::create() {
+        return std::make_shared<SequentialCommandGroup>();
     }
-    // std::cout <<  "SequentialCommandGroup:end" << std::endl;
-}
-bool SequentialCommandGroup::isFinished() { return m_is_finished_; }
-Command::ptr SequentialCommandGroup::reset() {
-    SequentialCommandGroup::Ptr Seq = createSequentialCommandGroup();
-    for (auto command : commands_) {
-        command = command->reset();
-        Seq->addCommand(command);
-    }
-    return Seq;
-}
-std::shared_ptr<SequentialCommandGroup> createSequentialCommandGroup() {
-    SequentialCommandGroup::Ptr sequential_command_group = std::make_shared<SequentialCommandGroup>();
-    return sequential_command_group;
-}
 } //  namespace robot

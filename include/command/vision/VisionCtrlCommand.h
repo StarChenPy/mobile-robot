@@ -1,14 +1,3 @@
-/**
- * @file VisionCtrlCommand.h
- * @author Zijian.Yan (jiapeng.lin@high-genius.com)
- * @brief
- * @version 0.1
- * @date 2024-08-21
- *
- * @copyright Copyright (c) 2024
- *
- */
-
 #pragma once
 #include "system/Robot.h"
 #include "util/RobotCfg.h"
@@ -19,7 +8,7 @@
 using namespace std;
 using namespace robot;
 
-class VisionCtrlCommand : public CommandBase {
+class VisionCtrlCommand : public ICommand {
   public:
     typedef std::shared_ptr<VisionCtrlCommand> Ptr;
     VisionCtrlCommand(int label) : fruit_label(label) {}
@@ -28,12 +17,8 @@ class VisionCtrlCommand : public CommandBase {
     void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
-
     int fruit_label;
 
     const char
@@ -46,7 +31,7 @@ class VisionCtrlCommand : public CommandBase {
              "purple grape", "yellow grape", "lianwuguo"}; //只供打印用，改变这个数组并不会改变输出结果label
 };
 
-class VisionIdentifyCommand : public CommandBase {
+class VisionIdentifyCommand : public ICommand {
   public:
     typedef std::shared_ptr<VisionIdentifyCommand> Ptr;
     VisionIdentifyCommand(int label) : fruit_label(label) {}
@@ -55,12 +40,8 @@ class VisionIdentifyCommand : public CommandBase {
     void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
-
     int fruit_label;
 
     const char
@@ -73,7 +54,7 @@ class VisionIdentifyCommand : public CommandBase {
              "purple grape", "yellow grape", "lianwuguo"}; //只供打印用，改变这个数组并不会改变输出结果label
 };
 
-class VisionMoveCommand : public CommandBase {
+class VisionMoveCommand : public ICommand {
   public:
     typedef std::shared_ptr<VisionMoveCommand> Ptr;
     VisionMoveCommand(int label) : fruit_label(label) {}
@@ -82,12 +63,8 @@ class VisionMoveCommand : public CommandBase {
     void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
-
     int fruit_label;
     Pose InitPose;
     Pose target;
@@ -102,7 +79,7 @@ class VisionMoveCommand : public CommandBase {
              "purple grape", "yellow grape", "lianwuguo"}; //只供打印用，改变这个数组并不会改变输出结果label
 };
 
-class VisionHeightCtrlCommand : public CommandBase {
+class VisionHeightCtrlCommand : public ICommand {
   public:
     typedef std::shared_ptr<VisionHeightCtrlCommand> Ptr;
     VisionHeightCtrlCommand(int label) : fruit_label(label) {}
@@ -114,9 +91,6 @@ class VisionHeightCtrlCommand : public CommandBase {
     bool isFinished() override;
 
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
-
     int fruit_label;
     double Height_target;
     int32_t m_setpoint = 0;
@@ -132,7 +106,7 @@ class VisionHeightCtrlCommand : public CommandBase {
              "purple grape", "yellow grape", "lianwuguo"}; //只供打印用，改变这个数组并不会改变输出结果label
 };
 
-Command::ptr createVisionCtrlCommand(int label);
-Command::ptr createVisionIdentifyCommand(int label);
-Command::ptr createVisionMoveCommand(int label);
-Command::ptr createVisionHeightCtrlCommand(int label);
+ICommand::ptr createVisionCtrlCommand(int label);
+ICommand::ptr createVisionIdentifyCommand(int label);
+ICommand::ptr createVisionMoveCommand(int label);
+ICommand::ptr createVisionHeightCtrlCommand(int label);

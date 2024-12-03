@@ -9,9 +9,9 @@
  * 
  */
 
-#include "command/CalCommand.h"
+#include "command/sensor/CalCommand.h"
 #include "command/MotorPIDCommand.h"
-#include "command/ENCComand.h"
+#include "command/sensor/ENCComand.h"
 
 
 // int main() {

@@ -9,33 +9,30 @@
  *
  */
 #pragma once
-#include "CommandGroupBase.h"
+#include "ICommandGroup.h"
 #include <memory>
 #include <vector>
 
 namespace robot {
 
-class SequentialCommandGroup : public CommandGroupBase {
+class SequentialCommandGroup : public ICommandGroup {
   public:
-    typedef std::shared_ptr<SequentialCommandGroup> Ptr;
-    SequentialCommandGroup() {}
-    template <class... Types> explicit SequentialCommandGroup(Types... commands) {
-        (commands.push_back(commands), ...);
-    }
-    virtual ~SequentialCommandGroup() {}
+    typedef std::shared_ptr<SequentialCommandGroup> ptr;
+    /**
+     * 顺序执行命令组
+     * 最后一个命令结束后结束
+     */
+    SequentialCommandGroup() = default;
+    ~SequentialCommandGroup() override = default;
 
   public:
-    void initialize();
-    void execute();
-    void end();
-    bool isFinished();
-    Command::ptr reset();
+    void initialize() override;
+    void execute() override;
+    void end() override;
 
+    static ICommandGroup::ptr create();
   protected:
-    Command::ptr m_current_command_;
-    uint64_t m_current_command_index_ = 0;
-    bool m_is_finished_ = false;
+    ICommand::ptr currentCommand_;
+    uint64_t currentCommandIndex_ = 0;
 };
-std::shared_ptr<SequentialCommandGroup> createSequentialCommandGroup();
-
 } // namespace robot

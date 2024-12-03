@@ -14,28 +14,27 @@
 
 namespace robot {
 
-TimerCommand::TimerCommand(uint64_t ms, Command::ptr command) : m_ms_(ms) {
+TimerCommand::TimerCommand(uint64_t ms, ICommand::ptr command) : m_ms_(ms) {
     workCommand_ = command;
-    workCommand_->state_ = Command::State::PAUSED;
+    workCommand_->state_ = ICommand::State::PAUSED;
 }
-Command::ptr TimerCommand::reset() {
-    workCommand_ = workCommand_->reset();
-    return std::make_shared<TimerCommand>(m_ms_, workCommand_);
-}
+
 void TimerCommand::initialize() {
     workCommand_->initialize();
     workCommand_->hasTimer_ = true;
-    workCommand_->state_ = Command::State::PAUSED;
+    workCommand_->state_ = ICommand::State::PAUSED;
     timer_ = std::make_shared<Timer>(m_ms_, &Scheduler::getInstance());
     timer_->setCommand(getPtr());
     Scheduler::getInstance().addTimer(timer_);
 }
+
 void TimerCommand::execute() {
-    workCommand_->state_ = Command::State::RUNNING;
+    workCommand_->state_ = ICommand::State::RUNNING;
     workCommand_->execute();
-    workCommand_->state_ = Command::State::PAUSED;
-    state_ = Command::State::PAUSED;
+    workCommand_->state_ = ICommand::State::PAUSED;
+    state_ = ICommand::State::PAUSED;
 }
+
 void TimerCommand::end() {
     if (!workCommand_->isFinished()) {
         workCommand_->cancel();
@@ -50,7 +49,6 @@ void TimerCommand::end() {
 }
 
 bool TimerCommand::isFinished() {
-    // std::cout << workCommand_->isFinished() << std::endl;
     return workCommand_->isFinished();
 }
 

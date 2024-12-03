@@ -17,7 +17,7 @@
 using namespace std;
 using namespace robot;
 
-class TrackingPointCommand : public CommandBase {
+class TrackingPointCommand : public ICommand {
   public:
     typedef std::shared_ptr<TrackingPointCommand> Ptr;
     TrackingPointCommand(Pose target_pose) : target(target_pose) {}
@@ -29,7 +29,6 @@ class TrackingPointCommand : public CommandBase {
     void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
     bool is_finished = false;
@@ -40,7 +39,7 @@ class TrackingPointCommand : public CommandBase {
     double E_phi = 0.5;
 };
 
-class TrackingXYCommand : public CommandBase {
+class TrackingXYCommand : public ICommand {
   public:
     typedef std::shared_ptr<TrackingXYCommand> Ptr;
     TrackingXYCommand(Pose target_pose) : target(target_pose) {}
@@ -52,7 +51,6 @@ class TrackingXYCommand : public CommandBase {
     void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
   private:
     bool is_finished = false;
@@ -67,14 +65,14 @@ class TrackingXYCommand : public CommandBase {
     bool flag = false;
 };
 
-Command::ptr createTrackingPointCommand(Pose target_pose);
-// Command::ptr createTrackingPointCommand(Pose target_pose, double v);
-Command::ptr createTrackingPointCommand(Pose target_pose, double v, double e_dis = 2, double e_phi = 0.5);
-Command::ptr createTrackingVectorCommand(const vector<Pose> &points);
-Command::ptr createTrackingVectorCommand(const vector<Pose> &points, double v);
+ICommand::ptr createTrackingPointCommand(Pose target_pose);
+// ICommand::ptr createTrackingPointCommand(Pose target_pose, double v);
+ICommand::ptr createTrackingPointCommand(Pose target_pose, double v, double e_dis = 2, double e_phi = 0.5);
+ICommand::ptr createTrackingVectorCommand(const vector<Pose> &points);
+ICommand::ptr createTrackingVectorCommand(const vector<Pose> &points, double v);
 
-Command::ptr createTrackingXYCommand(Pose target_pose);
-// Command::ptr createTrackingXYCommand(Pose target_pose, double v);
-Command::ptr createTrackingXYCommand(Pose target_pose, double v, double e_dis = 2, double e_phi = 0.5);
-Command::ptr createTrackingVectorXYCommand(const vector<Pose> &points);
-Command::ptr createTrackingVectorXYCommand(const vector<Pose> &points, double v);
+ICommand::ptr createTrackingXYCommand(Pose target_pose);
+// ICommand::ptr createTrackingXYCommand(Pose target_pose, double v);
+ICommand::ptr createTrackingXYCommand(Pose target_pose, double v, double e_dis = 2, double e_phi = 0.5);
+ICommand::ptr createTrackingVectorXYCommand(const vector<Pose> &points);
+ICommand::ptr createTrackingVectorXYCommand(const vector<Pose> &points, double v);

@@ -8,20 +8,33 @@
  * @copyright Copyright (c) 2024
  *
  */
+#include <utility>
+
 #include "command/ConditionalCommand.h"
 namespace robot {
 
-ConditionalCommand::ConditionalCommand(std::function<bool()> condition, CommandBase::ptr on_true_command,
-                                       CommandBase::ptr on_false_command)
-    : m_condition_(condition), m_on_true_command_(on_true_command), m_on_false_command_(on_false_command) {}
+    ConditionalCommand::ConditionalCommand(std::function<bool()> condition, ICommand::ptr onTrueCommand,
+                                           ICommand::ptr onFalseCommand) {
+        condition_ = std::move(condition);
+        onTrueCommand_ = std::move(onTrueCommand);
+        onFalseCommand_ = std::move(onFalseCommand);
+    }
 
-void ConditionalCommand::initialize() {
-    workCommand_ = m_condition_() ? m_on_true_command_ : m_on_false_command_;
-    workCommand_->initialize();
-}
-void ConditionalCommand::execute() { workCommand_->execute(); }
-void ConditionalCommand::end() { workCommand_->end(); }
+    void ConditionalCommand::initialize() {
+        workCommand_ = condition_() ? onTrueCommand_ : onFalseCommand_;
+        workCommand_->initialize();
+    }
 
-bool ConditionalCommand::isFinished() { return workCommand_->isFinished(); }
+    void ConditionalCommand::execute() {
+        workCommand_->execute();
+    }
+
+    void ConditionalCommand::end() {
+        workCommand_->end();
+    }
+
+    bool ConditionalCommand::isFinished() {
+        return workCommand_->isFinished();
+    }
 
 } // namespace robot

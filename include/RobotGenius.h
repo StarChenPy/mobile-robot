@@ -22,7 +22,7 @@
 #include "util/PID.h"
 #include "hal/Titan.h"
 #include "hal/vmx.h"
-#include "sensor/ultrasound.h"
+#include "system//Ultrasound.h"
 #include <cstdio>
 #include <iostream>
 #include <map>

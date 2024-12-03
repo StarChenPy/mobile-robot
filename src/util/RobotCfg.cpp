@@ -43,7 +43,7 @@ AI::ptr irLeft = std::make_shared<AI>(22);
 AI::ptr irRight = std::make_shared<AI>(23);
 
 // 激光雷达
-Sensor::LiDAR::ptr lidar = std::make_shared<Sensor::LiDAR>("/dev/ttyUSB0");
+robot_sensor::LiDAR::ptr lidar = std::make_shared<robot_sensor::LiDAR>("/dev/ttyUSB0");
 
 // Start按钮灯光
 PWM::ptr startLed = std::make_shared<PWM>(21);

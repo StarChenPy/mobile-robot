@@ -287,4 +287,4 @@ std::vector<BoxInfo> IdentifyFruitCommand::findLabelsWithThreshold(const std::ve
     return result;
 }
 
-Command::ptr createIdentifyFruitCommand() { return std::make_shared<IdentifyFruitCommand>()->withTimer(200); }
+ICommand::ptr createIdentifyFruitCommand() { return std::make_shared<IdentifyFruitCommand>()->withTimer(200); }

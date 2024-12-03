@@ -17,20 +17,17 @@
 using namespace std;
 using namespace robot;
 
-class UpdateOdomCommand : public CommandBase {
+class UpdateOdomCommand : public ICommand {
   public:
     typedef std::shared_ptr<UpdateOdomCommand> Ptr;
-    UpdateOdomCommand() {}
-    ~UpdateOdomCommand() {}
+    UpdateOdomCommand() = default;
+    ~UpdateOdomCommand() override = default;
 
     void initialize() override;
     void execute() override;
     void end() override;
-    bool isFinished() override;
 
+    static ICommand::ptr create();
   private:
-    bool is_finished = false;
-    int64_t m_last_time;
+    int64_t lastTime_ = 0;
 };
-
-Command::ptr createUpdataOdomCommand();
