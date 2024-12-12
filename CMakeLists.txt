@@ -7,9 +7,6 @@ project(mobile-robot LANGUAGES C CXX)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_MAKE_PROGRAM ninja)
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_CXX_COMPILER clang++)
 
 # 设置可执行文件输出路径
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -17,12 +14,12 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/lib)
 
 # 设置C++标准和编译选项
-set(CMAKE_CXX_STANDARD 17)         # 使用C++17标准
+set(CMAKE_CXX_STANDARD 17)         # 使用C++20标准
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-O0")         # 不进行优化，便于调试
 
 # 设置C标准和编译选项
-set(CMAKE_C_STANDARD 17)         # 使用C17标准
+set(CMAKE_C_STANDARD 17)         # 使用C20标准
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "-O0")         # 不进行优化，便于调试
 

@@ -1,18 +1,7 @@
-/**
- * @file ConditionalCommand.cpp
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief
- * @version 0.1
- * @date 2024-04-13
- *
- * @copyright Copyright (c) 2024
- *
- */
+#include "command/ConditionalCommand.h"
 #include <utility>
 
-#include "command/ConditionalCommand.h"
 namespace robot {
-
     ConditionalCommand::ConditionalCommand(std::function<bool()> condition, ICommand::ptr onTrueCommand,
                                            ICommand::ptr onFalseCommand) {
         condition_ = std::move(condition);
@@ -35,6 +24,11 @@ namespace robot {
 
     bool ConditionalCommand::isFinished() {
         return workCommand_->isFinished();
+    }
+
+    ICommand::ptr ConditionalCommand::create(const std::function<bool()>& condition, const ICommand::ptr& onTrueCommand,
+                                             const ICommand::ptr& onFalseCommand) {
+        return std::make_shared<ConditionalCommand>(condition, onTrueCommand, onFalseCommand);
     }
 
 } // namespace robot

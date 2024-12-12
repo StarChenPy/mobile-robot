@@ -20,7 +20,6 @@ namespace robot {
         static ICommand::ptr create(double h, double distanceError = LIFT_MOTOR_DISTANCE_ERROR, uint8_t verificationTimes = LIFT_MOTOR_DISTANCE_COUNTER);
 
     private:
-        bool isFinished_;
         int32_t counter_;
         int32_t distance_;
         double distanceError_;
@@ -45,7 +44,6 @@ namespace robot {
         static ICommand::ptr create(double angle, double distanceError = TURN_MOTOR_DISTANCE_ERROR, uint8_t verificationTimes = TURN_MOTOR_DISTANCE_COUNTER);
 
     private:
-        bool isFinished_;
         int32_t counter_;
         int32_t distance_;
         double distanceError_;
@@ -65,12 +63,10 @@ namespace robot {
 
         void execute() override;
         void end() override;
-        bool isFinished() override;
 
         static ICommand::ptr create(int32_t speed = 10);
 
     private:
-        bool isFinished_ = false;
         int32_t speed_ = 0;
         int32_t maxCounter_ = 10;
         int32_t counter_ = 0;
@@ -87,12 +83,10 @@ namespace robot {
 
         void execute() override;
         void end() override;
-        bool isFinished() override;
 
         static ICommand::ptr create(int32_t speed = 10);
 
     private:
-        bool isFinished_ = false;
         int32_t speed_ = 0;
         int32_t maxCounter_ = 10;
         int32_t counter_ = 0;

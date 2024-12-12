@@ -2,7 +2,7 @@
 #include "command/lidar/LidarAlongWallCommand.h"
 #include "command/lidar/LidarCalibCommand.h"
 #include "command/lidar/LidarReadCommand.h"
-#include "command/RoboticArmFun.h"
+#include "util/RoboticArmFun.h"
 #include "command/RotateCommand.h"
 #include "command/ServoCommand.h"
 #include "command/TrackingPointCommand.h"
@@ -10,7 +10,7 @@
 #include "VisionCtrlCommand.h"
 #include "command/sensor/ZeroOdomCommand.h"
 #include "command/motor/MotorPIDCommand.h"
-#include "util/RobotCfg.h"
+#include "system/RobotCfg.h"
 
 namespace robot {
     //视觉第一三列校准

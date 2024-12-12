@@ -22,8 +22,8 @@
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-#include "util/Mutex.h"
-#include "util/Thread.h"
+#include "system/Mutex.h"
+#include "system/Thread.h"
 #include "util/Util.h"
 
 namespace robot {

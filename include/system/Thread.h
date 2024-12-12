@@ -24,7 +24,7 @@ namespace robot {
 
 class Thread {
   public:
-    typedef std::shared_ptr<Thread> ptr_;
+    typedef std::shared_ptr<Thread> ptr;
     /**
      * @brief 构造函数
      *

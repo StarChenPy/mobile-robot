@@ -7,7 +7,7 @@
 
 class Log {
 public:
-    static void init(char *projectName);
+    static void init(char *projectName, const std::string& path = "./logs");
     static void shutdown();
 };
 

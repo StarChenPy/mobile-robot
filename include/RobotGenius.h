@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "util/Scheduler.h"
+#include "system/Scheduler.h"
 #include "command/ConditionalCommand.h"
 #include "command/SelectCommand.h"
 #include "command/TimerCommand.h"
@@ -30,4 +30,5 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
+#include <glog/logging.h>
 #define MAKE_SHARED(Type, ...) std::make_shared<Type>(__VA_ARGS__)

@@ -2,6 +2,7 @@
 
 namespace robot {
     void ParallelRaceGroup::initialize() {
+        ICommand::initialize();
         for (const auto& command : commands_) {
             command->schedule();
         }
@@ -13,6 +14,7 @@ namespace robot {
     }
 
     void ParallelRaceGroup::end() {
+        ICommand::end();
         for (const auto& command : commands_) {
             if (!command->isFinished()) {
                 command->cancel();

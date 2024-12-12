@@ -107,3 +107,36 @@ cmake --build . --target robot -j 3
 ``````
 
 编译结束后，在项目根目录下的 `bin` 文件夹中会出现编译结果
+
+## 项目运行
+
+在编译完成后，在 `bin` 目录下，会出现可执行文件。
+
+由于会访问IO，需使用 `sudo` 命令来提权运行。
+
+### 调试
+
+如果需要GDB调试，你可能需要关闭部分系统安全选项，否则可能会有权限不足的问题。
+
+#### 步骤：
+
+1. 编辑 sysctl 配置文件：
+
+   ```bash
+   sudo vim /etc/sysctl.conf
+   ```
+
+2. 按 `i` 进入编辑模式，添加以下两行：
+
+   ```bash
+   fs.protected_fifos=0
+   fs.protected_regular=0
+   ```
+
+3. 保存并退出（按 `:` 然后输入 `wq`）。
+
+4. 重新加载 sysctl 配置：
+
+   ```bash
+   sudo sysctl -p
+   ```

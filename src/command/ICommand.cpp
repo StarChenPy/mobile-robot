@@ -1,15 +1,5 @@
-/**
- * @file ICommand.cpp
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief
- * @version 0.1
- * @date 2024-04-12
- *
- * @copyright Copyright (c) 2024
- *
- */
 #include "command/ICommand.h"
-#include "util/Scheduler.h"
+#include "system/Scheduler.h"
 #include "command/TimerCommand.h"
 #include "system/Robot.h"
 
@@ -37,6 +27,15 @@ ICommand::ptr ICommand::getPtr() {
 
 ICommand::ptr ICommand::withTimer(uint64_t ms) {
     return std::make_shared<TimerCommand>(ms, getPtr());
+}
+
+void ICommand::initialize() {
+    LOG(INFO) << abi::__cxa_demangle(typeid(*this).name(), nullptr, nullptr, nullptr) << " 正在初始化";
+    isFinished_ = false;
+}
+
+void ICommand::end() {
+    LOG(INFO) << abi::__cxa_demangle(typeid(*this).name(), nullptr, nullptr, nullptr) << " 正在结束";
 }
 
 void ICommand::cancel() {

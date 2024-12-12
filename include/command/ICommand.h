@@ -9,7 +9,7 @@
  *
  */
 #pragma once
-#include "util/Timer.h"
+#include "system/Timer.h"
 #include "util/Util.h"
 namespace robot {
     class ICommand : public std::enable_shared_from_this<ICommand> {
@@ -21,9 +21,9 @@ namespace robot {
         ICommand();
         virtual ~ICommand();
 
-        virtual void initialize() {};
+        virtual void initialize();
         virtual void execute() = 0;
-        virtual void end() {};
+        virtual void end();
         virtual void cancel();
         virtual bool isFinished();
 

@@ -1,5 +1,5 @@
 #include "command/motor/MotorPIDCommand.h"
-#include "util/RobotCfg.h"
+#include "system/RobotCfg.h"
 
 void LeftMotorPIDCommand::execute() {
     Robot::getInstance().setLeftMotorProcess(leftEnc->read());
@@ -7,8 +7,8 @@ void LeftMotorPIDCommand::execute() {
     Robot::getInstance().setLeftMotorLastENCCounter(leftEnc->get());
 }
 void LeftMotorPIDCommand::end() {
+    ICommand::end();
     Robot::getInstance().setLeftMotorSpeed(0);
-    std::cout << "LeftMotorPIDCommand end" << std::endl;
 }
 ICommand::ptr LeftMotorPIDCommand::create() {
     return std::make_shared<LeftMotorPIDCommand>()->withTimer(20);
@@ -20,8 +20,8 @@ void RightMotorPIDCommand::execute() {
     Robot::getInstance().setRightMotorLastENCCounter(rightEnc->get());
 }
 void RightMotorPIDCommand::end() {
+    ICommand::end();
     Robot::getInstance().setRightMotorSpeed(0);
-    std::cout << "RightMotorPIDCommand end" << std::endl;
 }
 ICommand::ptr RightMotorPIDCommand::create() {
     return std::make_shared<RightMotorPIDCommand>()->withTimer(20);
@@ -33,8 +33,8 @@ void TurnMotorPIDCommand::execute() {
     Robot::getInstance().setTurnMotorLastENCCounter(turnEnc->get());
 }
 void TurnMotorPIDCommand::end() {
+    ICommand::end();
     Robot::getInstance().setTurnMotorSpeed(0);
-    std::cout << "TurnMotorPIDCommand end" << std::endl;
 }
 ICommand::ptr TurnMotorPIDCommand::create() {
     return std::make_shared<TurnMotorPIDCommand>()->withTimer(20);
@@ -46,8 +46,8 @@ void LiftMotorPIDCommand::execute() {
     Robot::getInstance().setLiftMotorLastENCCounter(liftEnc->get());
 }
 void LiftMotorPIDCommand::end() {
+    ICommand::end();
     Robot::getInstance().setLiftMotorSpeed(0);
-    std::cout << "LiftMotorPIDCommand end" << std::endl;
 }
 ICommand::ptr LiftMotorPIDCommand::create() {
     return std::make_shared<LiftMotorPIDCommand>()->withTimer(20);

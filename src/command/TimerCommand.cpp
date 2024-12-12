@@ -1,21 +1,12 @@
-/**
- * @file TimerCommand.cpp
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief 定时命令
- * @version 0.1
- * @date 2024-04-23
- *
- * @copyright Copyright (c) 2024
- *
- */
+#include <utility>
 
 #include "command/TimerCommand.h"
-#include "util/Scheduler.h"
+#include "system/Scheduler.h"
 
 namespace robot {
 
-TimerCommand::TimerCommand(uint64_t ms, ICommand::ptr command) : m_ms_(ms) {
-    workCommand_ = command;
+TimerCommand::TimerCommand(uint64_t ms, ICommand::ptr command) : cycle(ms) {
+    workCommand_ = std::move(command);
     workCommand_->state_ = ICommand::State::PAUSED;
 }
 
@@ -23,7 +14,7 @@ void TimerCommand::initialize() {
     workCommand_->initialize();
     workCommand_->hasTimer_ = true;
     workCommand_->state_ = ICommand::State::PAUSED;
-    timer_ = std::make_shared<Timer>(m_ms_, &Scheduler::getInstance());
+    timer_ = std::make_shared<Timer>(cycle, &Scheduler::getInstance());
     timer_->setCommand(getPtr());
     Scheduler::getInstance().addTimer(timer_);
 }

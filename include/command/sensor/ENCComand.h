@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util/RobotCfg.h"
+#include "system/RobotCfg.h"
 #include "RobotGenius.h"
 #include "util/params.h"
 

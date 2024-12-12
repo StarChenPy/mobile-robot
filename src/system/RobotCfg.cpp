@@ -1,4 +1,4 @@
-#include "util/RobotCfg.h"
+#include "system/RobotCfg.h"
 using namespace std;
 using namespace robot;
 using namespace VMX;

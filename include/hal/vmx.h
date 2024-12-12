@@ -48,7 +48,7 @@ std::string getHALVersion();
  * @return true
  * @return false
  */
-bool HicurrdioSupportOutput();
+bool HiCurrDioSupportOutput();
 /**
  * @brief 获取模拟通道最高可采集电压值
  *
@@ -81,51 +81,6 @@ float getYaw();
  *
  */
 void zeroYaw();
-float getCompassHeading();
-bool isCalibrating();
-bool isConnected();
-double getByteCount();
-double getUpdateCount();
-long getLastSensorTimestamp();
-float getWorldLinearAccelX();
-float getWorldLinearAccelY();
-float getWorldLinearAccelZ();
-bool isMoving();
-bool isRotating();
-float getBarometricPressure();
-float getAltitude();
-bool isAltitudeValid();
-float getFusedHeading();
-bool isMagneticDisturbance();
-bool isMagnetometerCalibrated();
-float getQuaternionW();
-float getQuaternionX();
-float getQuaternionY();
-float getQuaternionZ();
-void resetDisplacement();
-void updateDisplacement(float accel_x_g, float accel_y_g, int update_rate_hz, bool is_moving);
-float getVelocityX();
-float getVelocityY();
-float getVelocityZ();
-float getDisplacementX();
-float getDisplacementY();
-float getDisplacementZ();
-double getAngle();
-double getRate();
-void reset();
-float getRawGyroX();
-float getRawGyroY();
-float getRawGyroZ();
-float getRawAccelX();
-float getRawAccelY();
-float getRawAccelZ();
-float getRawMagX();
-float getRawMagY();
-float getRawMagZ();
-float getPressure();
-float getTempC();
-
-int getBoardYawAxis();
 
 /**
  * @brief Channel类,所有通道的基类
@@ -166,7 +121,7 @@ class Channel {
      * @return true
      * @return false
      */
-    virtual bool Activate(const VMXResourceConfig &res_cfg) = 0;
+    virtual bool activate(const VMXResourceConfig &res_cfg) = 0;
 
   public:
     /**
@@ -201,7 +156,7 @@ class SingleChannel : public Channel {
      *
      */
     virtual ~SingleChannel() {}
-    bool Activate(const VMXResourceConfig &res_cfg) override;
+    bool activate(const VMXResourceConfig &res_cfg) override;
 
   protected:
     ///  通道信息
@@ -217,7 +172,7 @@ class DualChannel : public Channel {
     typedef std::shared_ptr<DualChannel> ptr;
     DualChannel();
     ~DualChannel() {}
-    bool Activate(const VMXResourceConfig &res_cfg) override;
+    bool activate(const VMXResourceConfig &res_cfg) override;
 
   protected:
     VMXChannelInfo m_info[2];
@@ -228,7 +183,7 @@ class QuadChannel : public Channel {
     typedef std::shared_ptr<QuadChannel> ptr;
     QuadChannel();
     ~QuadChannel() {}
-    bool Activate(const VMXResourceConfig &res_cfg) override;
+    bool activate(const VMXResourceConfig &res_cfg) override;
 
   protected:
     VMXChannelInfo m_info[4];
@@ -270,7 +225,7 @@ class ENC : public DualChannel, std::enable_shared_from_this<ENC> {
 
   private:
     //  编码器索引
-    uint8_t m_index_;
+    uint8_t m_index_{};
     int32_t m_counter_ = 0;  //<  编码器计数值
     EncoderConfig m_config_; //  编码器配置
 };
@@ -366,7 +321,7 @@ class DO : public SingleChannel, std::enable_shared_from_this<DO> {
     explicit DO(uint8_t index, DIOConfig::OutputMode output_mode = DIOConfig::OutputMode::PUSHPULL);
     ~DO() {}
 
-    void write(bool sigal);
+    void write(bool signal);
     bool get() { return m_sigal_; }
 
     void setPulse(uint32_t pulse_period_microseconds = 15);
@@ -431,11 +386,11 @@ class CAN : public std::enable_shared_from_this<CAN> {
     void flushRxFIFO();
     void flushTxFIFO();
     bool setMode(VMXCAN::VMXCANMode mode);
-    std::string printMsgInfo(VMXCANMessage msg);
+    static std::string printMsgInfo(VMXCANMessage msg);
     bool sendMessage(uint32_t SendMessageID, std::vector<uint8_t> data, int32_t period_ms = 0);
     bool sendMessage(uint32_t SendMessageID, uint8_t *data, int32_t period_ms = 0);
     bool createCANReceive(std::string receive_stream_name, uint32_t receive_message_id);
-    ReceiveStreamInfo readReceiveStream(std::string receive_stream_name);
+    ReceiveStreamInfo readReceiveStream(const std::string& receive_stream_name);
     std::vector<uint8_t> readReceiveStreamData(std::string receive_stream_name);
 
   private:

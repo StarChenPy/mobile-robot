@@ -1,25 +1,10 @@
-/**
- * @file UpdateOdomCommand.h
- * @author Zijian.Yan
- * @brief
- * @version 0.1
- * @date 2024-08-08
- *
- * @copyright Copyright (c) 2024
- *
- */
-
 #pragma once
-// #include "robotgenius/robot.h"
-#include "util/RobotCfg.h"
+#include "system/RobotCfg.h"
 #include "util/params.h"
-// #include "system/robot.h"
-using namespace std;
-// using namespace robot;
 
 class UpdateOdom {
-  public:
-    typedef std::shared_ptr<UpdateOdom> Ptr;
+public:
+    typedef std::shared_ptr<UpdateOdom> ptr;
     UpdateOdom() {
         //车辆底盘参数初始化
         round2len_k = M_PI * WHEEL_DIAMETER;
@@ -29,7 +14,7 @@ class UpdateOdom {
         grating2len_k = round2grating_k / round2len_k;
         len2grating_k = 1 / grating2len_k;
     }
-    ~UpdateOdom() {}
+    ~UpdateOdom() = default;
 
     //轮子数据
     struct Whell {
@@ -117,14 +102,14 @@ class UpdateOdom {
         }
     }
 
-  private:
+private:
     Pose m_pose;
     double Offset_gyro = 0;   //陀螺仪补偿值
     Whell Whell_R;            //右轮
     Whell Whell_L;            //左轮
     CarCtrlVal CtrlValOutput; //运动控制量输出
 
-  private:
+private:
     double len2round_k;     // 1cm对应的转数
     double round2len_k;     //一转对于多少cm
     double round2grating_k; //一转对应多少光栅数

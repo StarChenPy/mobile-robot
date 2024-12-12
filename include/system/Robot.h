@@ -1,7 +1,6 @@
-
 #pragma once
 #include "system/FuncClass/FuncHead.h"
-#include "util/RobotCfg.h"
+#include "RobotCfg.h"
 #include "util/params.h"
 
 namespace robot {
@@ -135,7 +134,7 @@ namespace robot {
         PIDOutputLimits singleIrDistanceLimits;
 
     public:
-        UpdateOdom::Ptr odom = std::make_shared<UpdateOdom>();
+        UpdateOdom::ptr odom = std::make_shared<UpdateOdom>();
         ChassisCtrl::Ptr chassis_ctrl = std::make_shared<ChassisCtrl>();
         LidarRead::Ptr lidar_read = std::make_shared<LidarRead>(LIDAR_INIT_ANGLE);
         LidarCalibrate::Ptr lidar_calib = std::make_shared<LidarCalibrate>();

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <glog/logging.h>
 
 namespace robot {
     class ICommandGroup: public ICommand {
@@ -13,10 +14,12 @@ namespace robot {
 
         /**
          * 向命令组添加命令
-         * @tparam ICommand 命令类型
+         * @tparam Rest 命令类型
          * @param commands  命令数组
          */
-        template <typename... ICommand> void addCommand(ICommand... commands) {
+        template<typename... Rest>
+        void addCommand(ICommand::ptr firstCommand, Rest... commands) {
+            addCommand(firstCommand);
             // 递归调用展开参数
             addCommand(commands...);
         }

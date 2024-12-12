@@ -7,7 +7,6 @@ namespace robot {
     }
 
     void ICommandGroup::addCommand(const ICommand::ptr& command) {
-        command->isFinished();
         auto it = std::find(commands_.begin(), commands_.end(), command);
         if (it == commands_.end()) {
             command->parent_ = getPtr();

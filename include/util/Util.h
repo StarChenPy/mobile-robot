@@ -27,7 +27,6 @@
 #include <unistd.h>
 #include <utility>
 #include <vector>
-#define millisecond int64_t
 
 namespace robot {
 

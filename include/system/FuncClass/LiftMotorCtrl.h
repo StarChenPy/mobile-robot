@@ -10,7 +10,7 @@
  */
 
 #pragma once
-#include "util/RobotCfg.h"
+#include "system/RobotCfg.h"
 #include "util/params.h"
 
 using namespace std;

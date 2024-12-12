@@ -33,7 +33,7 @@ bool Vision::readFrame() {
 std::vector<BoxInfo> Vision::mnnDecode(cv::Mat &cv_mat, std::shared_ptr<MNN::Interpreter> &net, MNN::Session *session,
                                        int INPUT_SIZE) {
     std::vector<int> dims{1, INPUT_SIZE, INPUT_SIZE, 3};
-    auto nhwc_Tensor = MNN::Tensor::create<float>(dims, NULL, MNN::Tensor::TENSORFLOW);
+    auto nhwc_Tensor = MNN::Tensor::create<float>(dims, nullptr, MNN::Tensor::TENSORFLOW);
     auto nhwc_data = nhwc_Tensor->host<float>();
     auto nhwc_size = nhwc_Tensor->size();
     std::memcpy(nhwc_data, cv_mat.data, nhwc_size);

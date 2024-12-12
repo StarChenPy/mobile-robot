@@ -1,6 +1,6 @@
 #pragma once
 #include "command/ICommand.h"
-#include "util/Timer.h"
+#include "system/Timer.h"
 #include <memory>
 #include <string>
 
@@ -11,7 +11,6 @@ class TimerCommand : public ICommand {
   public:
     typedef std::shared_ptr<TimerCommand> ptr;
     TimerCommand(uint64_t ms, ICommand::ptr command);
-    virtual ~TimerCommand() {}
 
   public:
     void initialize() override;
@@ -20,7 +19,7 @@ class TimerCommand : public ICommand {
     bool isFinished() override;
 
   private:
-    uint64_t m_ms_;
+    uint64_t cycle;
 };
 
 } // namespace robot
