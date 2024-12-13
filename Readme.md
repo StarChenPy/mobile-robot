@@ -4,12 +4,13 @@
 
 ## 环境部署
 
-本项目依赖于 `yaml-cpp、 `vmxpi_hal_cpp`、` ydlidar_sdk`、`opencv`、`boost`，在构建项目前，首先要部署依赖项目
+本项目依赖于 `yaml-cpp`、 `vmxpi_hal_cpp`、` ydlidar_sdk`、`opencv`、`boost`、`glog`，在构建项目前，首先要部署依赖项目
 
 - [jbeder/yaml-cpp: A YAML parser and emitter in C++](https://github.com/jbeder/yaml-cpp)
 - [YDLIDAR/YDLidar-SDK: Driver for receiving YD LiDAR data and more...](https://github.com/YDLIDAR/YDLidar-SDK)
 - [opencv/opencv: Open Source Computer Vision Library](https://github.com/opencv/opencv)
 - [boostorg/boost: Super-project for modularized Boost](https://github.com/boostorg/boost)
+- [google/glog: C++ implementation of the Google logging module](https://github.com/google/glog)
 
 ### 安装必要软件包
 
@@ -24,7 +25,7 @@ sudo apt install clang cmake ninja pkg-config
 
 ### 从源代码编译
 
-`yaml-cxx` 与 `ydlidar_sdk` 只能通过源代码编译的方式进行安装
+`yaml-cxx` 与 `ydlidar_sdk` 以及 `glog` 只能通过源代码编译的方式进行安装
 
 #### yaml-cpp
 
@@ -63,6 +64,27 @@ make
 # 安装
 sudo make install
 ``````
+
+#### glog
+
+``````bash
+# 克隆项目
+git clone https://github.com/google/glog.git
+# 进入项目根目录
+cd YDLidar-SDK
+# 创建构建文件夹
+mkdir build
+# 进入构建文件夹
+cd build
+# 创建编译配置
+cmake ..
+# 编译
+make
+# 安装
+sudo make install
+``````
+
+
 
 ### 通过 `apt install` 进行安装
 

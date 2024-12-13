@@ -9,8 +9,6 @@ int main(int argc, char *argv[]) {
     Scheduler::getInstance(2, false).start();
 
     ICommandGroup::ptr init = ParallelCommandGroup::create();
-    ICommandGroup::ptr init1 = ParallelCommandGroup::create();
-    ICommandGroup::ptr init2 = ParallelCommandGroup::create();
 
     init->addCommand(
             UpdateOdomCommand::create(),
@@ -20,7 +18,7 @@ int main(int argc, char *argv[]) {
             TurnMotorPIDCommand::create());
 
     ICommandGroup::ptr task = SequentialCommandGroup::create();
-    task->addCommand(armResetLiftAndTurn());
+    task->addCommand(resetLiftAndTurn());
 
     ICommandGroup::ptr root = ParallelRaceGroup::create();
     root->addCommand(init, task);

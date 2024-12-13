@@ -11,7 +11,7 @@ namespace robot_sensor {
 
         uint32_t echo();
         void trig(int32_t time = 100);
-        uint32_t get() {return m_data_;}
+        uint32_t get() const { return m_data_; }
     private:
         uint32_t m_data_;
         VMX::DO::ptr m_trig_;

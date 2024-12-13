@@ -1,15 +1,3 @@
-/**
- * @file LidarDrive.h
- * @author jiapeng.lin (jiapeng.lin@high-genius.com)
- * @brief 测试激光雷达数据读取
- * @version 0.1
- * @date 2024-05-01
- *
- * @copyright Copyright (c) 2024
- *
- */
-// #pragma once
-
 #ifndef LIDAR_DRIVE
 #define LIDAR_DRIVE
 
@@ -48,4 +36,4 @@ class LiDAR {
 
 } //  namespace robot_sensor
 
-#endif //
+#endif // LIDAR_DRIVE
